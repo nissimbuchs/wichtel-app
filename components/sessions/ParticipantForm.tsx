@@ -3,13 +3,15 @@
 import { useState } from 'react'
 
 interface ParticipantFormProps {
-  onAdd: (name: string, phoneNumber: string) => Promise<void>
+  onAdd: (name: string, phoneNumber: string, isOrganizer: boolean) => Promise<void>
   disabled?: boolean
+  hasOrganizer?: boolean
 }
 
-export function ParticipantForm({ onAdd, disabled }: ParticipantFormProps) {
+export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFormProps) {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [isOrganizer, setIsOrganizer] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -33,11 +35,12 @@ export function ParticipantForm({ onAdd, disabled }: ParticipantFormProps) {
         throw new Error('Ungültige Telefonnummer')
       }
 
-      await onAdd(name.trim(), phoneNumber.trim())
+      await onAdd(name.trim(), phoneNumber.trim(), isOrganizer)
 
       // Clear form
       setName('')
       setPhoneNumber('')
+      setIsOrganizer(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Fehler beim Hinzufügen')
     } finally {
@@ -81,6 +84,28 @@ export function ParticipantForm({ onAdd, disabled }: ParticipantFormProps) {
           Format: +41 oder 0041 oder Schweizer Nummer (079 123 45 67)
         </p>
       </div>
+
+      {/* Organizer Checkbox */}
+      {!hasOrganizer && (
+        <div className="flex items-start gap-3 p-4 bg-christmas-gold/10 rounded-lg border-2 border-christmas-gold/30">
+          <input
+            id="isOrganizer"
+            type="checkbox"
+            checked={isOrganizer}
+            onChange={(e) => setIsOrganizer(e.target.checked)}
+            disabled={disabled || loading}
+            className="mt-1 h-5 w-5 text-christmas-gold focus:ring-christmas-gold border-gray-300 rounded cursor-pointer"
+          />
+          <label htmlFor="isOrganizer" className="flex-1 cursor-pointer">
+            <span className="block text-sm font-bold text-gray-900">
+              🎅 Ich bin der Organisator
+            </span>
+            <span className="block text-xs text-gray-600 mt-1">
+              Als Organisator erhältst du einen direkten Link zu deiner Zuteilung (kein WhatsApp nötig)
+            </span>
+          </label>
+        </div>
+      )}
 
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">

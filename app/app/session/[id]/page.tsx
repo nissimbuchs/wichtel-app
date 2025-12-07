@@ -81,26 +81,6 @@ export default function SessionDetailPage() {
     await loadParticipants()
   }
 
-  async function handleAddMyself() {
-    // Check if organizer already exists
-    const organizerExists = participants.some(p => p.is_organizer)
-    if (organizerExists) {
-      alert('Du bist bereits in der Teilnehmerliste!')
-      return
-    }
-
-    const name = prompt('Dein Name:')
-    if (!name) return
-
-    const phoneNumber = prompt('Deine Telefonnummer:')
-    if (!phoneNumber) return
-
-    try {
-      await handleAddParticipant(name, phoneNumber, true)
-    } catch (error) {
-      alert('Fehler beim Hinzufügen')
-    }
-  }
 
   async function handleRemoveParticipant(participantId: string) {
     if (session?.status === 'drawn') {
@@ -299,28 +279,8 @@ export default function SessionDetailPage() {
                 <ParticipantForm
                   onAdd={handleAddParticipant}
                   disabled={session.status !== 'planning'}
+                  hasOrganizer={participants.some(p => p.is_organizer)}
                 />
-
-                {/* Add myself button */}
-                {session.status === 'planning' && !participants.some(p => p.is_organizer) && (
-                  <div className="mt-6">
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300"></div>
-                      </div>
-                      <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-white text-gray-500">oder</span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleAddMyself}
-                      className="mt-4 w-full bg-gradient-to-r from-christmas-gold to-christmas-gold-light text-white py-3 rounded-xl font-bold text-base hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md flex items-center justify-center gap-2"
-                    >
-                      <span>🎅</span>
-                      <span>Mich selbst hinzufügen (Organisator)</span>
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
 
