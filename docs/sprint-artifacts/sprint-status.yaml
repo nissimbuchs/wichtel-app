@@ -38,7 +38,7 @@ story_location: docs/sprint-artifacts
 development_status:
   # Epic 0: Technical Foundation
   epic-0: in-progress
-  story-01-supabase-setup-database-schema: ready-for-dev
+  story-01-supabase-setup-database-schema: review
   story-02-nextjs-tailwind-setup: backlog
   story-03-supabase-auth-integration: backlog
   epic-0-retrospective: optional
