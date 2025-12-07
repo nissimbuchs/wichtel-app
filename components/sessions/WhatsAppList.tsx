@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import type { ParticipantAdmin } from '@/types/database.types'
 import { generateWhatsAppUrl, openWhatsApp } from '@/services/whatsappService'
 import { createClient } from '@/services/supabase/client'
-import { SelfSendConfirmationModal } from './SelfSendConfirmationModal'
 import { CompletionModal } from './CompletionModal'
 
 interface WhatsAppListProps {
@@ -15,8 +14,6 @@ interface WhatsAppListProps {
 
 export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppListProps) {
   const [sentParticipants, setSentParticipants] = useState<Set<string>>(new Set())
-  const [showSelfSendModal, setShowSelfSendModal] = useState(false)
-  const [selectedParticipant, setSelectedParticipant] = useState<ParticipantAdmin | null>(null)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const supabase = createClient()
 
@@ -36,10 +33,8 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
   }, [sentParticipants.size, participants.length])
 
   async function handleSendWhatsApp(participant: ParticipantAdmin) {
-    // Check if it's the organizer
+    // Organizers use the info-box link instead
     if (participant.is_organizer) {
-      setSelectedParticipant(participant)
-      setShowSelfSendModal(true)
       return
     }
 
@@ -58,6 +53,12 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
     await markAsSent(participant.id)
   }
 
+  async function handleOrganizerRevealClick(participant: ParticipantAdmin) {
+    const revealUrl = `${window.location.origin}/reveal/${participant.participant_token}`
+    window.open(revealUrl, '_blank')
+    await markAsSent(participant.id)
+  }
+
   async function markAsSent(participantId: string) {
     const { error } = await supabase
       .from('participants')
@@ -70,27 +71,39 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
     }
   }
 
-  async function handleSelfSendConfirm() {
-    if (selectedParticipant) {
-      await sendWhatsApp(selectedParticipant)
-      setShowSelfSendModal(false)
-      setSelectedParticipant(null)
-    }
-  }
-
-  async function handleSelfSendSkip() {
-    if (selectedParticipant) {
-      await markAsSent(selectedParticipant.id)
-      setShowSelfSendModal(false)
-      setSelectedParticipant(null)
-    }
-  }
-
   const sentCount = sentParticipants.size
   const totalCount = participants.length
+  const organizer = participants.find((p) => p.is_organizer)
 
   return (
     <div className="space-y-6">
+      {/* Organizer Info-Box */}
+      {organizer && (
+        <div className="bg-gradient-to-br from-christmas-gold/20 to-christmas-gold-light/20 rounded-2xl shadow-lg p-8 border-2 border-christmas-gold/50">
+          <div className="flex items-start gap-4">
+            <div className="text-5xl flex-shrink-0">🎅</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                Deine persönliche Zuteilung
+              </h3>
+              <p className="text-gray-700 mb-4 text-base leading-relaxed">
+                Als Organisator kannst du hier direkt deine Zuteilung sehen, ohne WhatsApp zu verwenden.
+              </p>
+              <button
+                onClick={() => handleOrganizerRevealClick(organizer)}
+                className="px-6 py-3 bg-gradient-to-r from-christmas-gold to-christmas-gold-light text-white rounded-xl font-bold text-base hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md flex items-center gap-2"
+              >
+                <span>🎁</span>
+                <span>Meine Zuteilung anzeigen</span>
+              </button>
+              <p className="text-sm text-gray-600 mt-3 font-medium">
+                💡 Hinweis: Dieser Link ist nur für dich!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
         {/* Header with Progress */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -182,32 +195,26 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
 
                 <button
                   onClick={() => handleSendWhatsApp(participant)}
-                  disabled={isSent}
+                  disabled={isSent || participant.is_organizer}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap ${
                     isSent
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                      : participant.is_organizer
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                       : 'bg-gradient-to-r from-christmas-green to-christmas-green-light text-white hover:scale-105 hover:shadow-lg shadow-md'
                   }`}
                 >
-                  {isSent ? '✓ Gesendet' : '💬 WhatsApp öffnen'}
+                  {isSent
+                    ? '✓ Gesendet'
+                    : participant.is_organizer
+                    ? '✓ Link verfügbar'
+                    : '💬 WhatsApp öffnen'}
                 </button>
               </div>
             )
           })}
         </div>
       </div>
-
-      {showSelfSendModal && selectedParticipant && (
-        <SelfSendConfirmationModal
-          participant={selectedParticipant}
-          onConfirm={handleSelfSendConfirm}
-          onSkip={handleSelfSendSkip}
-          onClose={() => {
-            setShowSelfSendModal(false)
-            setSelectedParticipant(null)
-          }}
-        />
-      )}
 
       {showCompletionModal && (
         <CompletionModal onClose={() => setShowCompletionModal(false)} />

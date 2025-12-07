@@ -41,16 +41,40 @@ export function SlotMachineReveal({
   function startAnimation() {
     setIsAnimating(true)
 
-    // Slot machine effect: cycle through names
-    const shuffledNames = [...allNames].sort(() => Math.random() - 0.5)
+    // Funny fictional Christmas characters
+    const funnyNames = [
+      '🎅 Weihnachtsmann',
+      '🧝 Wichtel Willi',
+      '☃️ Schneemann Olaf',
+      '🦌 Rentier Rudolph',
+      '🧝‍♀️ Elfe Ella',
+      '👼 Engel Gabriel',
+      '🌟 Sternchen',
+      '🔔 Glöckchen',
+    ]
+
+    // Mix real names with funny names for animation
+    const allNamesForAnimation = [...allNames, ...funnyNames]
+    const shuffledNames = allNamesForAnimation.sort(() => Math.random() - 0.5)
     let index = 0
 
-    // Animation phases with increasing delays
-    const speeds = [80, 80, 80, 80, 100, 100, 120, 140, 160, 200, 250, 300, 400]
+    // Animation phases with increasing delays (total ~6 seconds)
+    const speeds = [
+      60, 60, 60, 60, 60, 60, 60, 60,  // Fast start (8x60 = 480ms)
+      80, 80, 80, 80, 80, 80,          // Medium (6x80 = 480ms)
+      100, 100, 100, 100, 100,         // Slower (5x100 = 500ms)
+      120, 120, 120, 120,              // Even slower (4x120 = 480ms)
+      150, 150, 150, 150,              // Slowing down (4x150 = 600ms)
+      200, 200, 200,                   // Much slower (3x200 = 600ms)
+      250, 250, 250,                   // Very slow (3x250 = 750ms)
+      350, 350,                        // Nearly stopping (2x350 = 700ms)
+      500, 500,                        // Almost there (2x500 = 1000ms)
+      700,                             // Final slow (1x700 = 700ms)
+    ]
 
     function showNextName() {
       if (index >= speeds.length) {
-        // Animation complete - show final name
+        // Animation complete - show final name (always the REAL assigned name)
         setTimeout(() => {
           setCurrentName(assignedToName)
           setIsAnimating(false)
