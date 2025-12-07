@@ -25,15 +25,16 @@ export function SlotMachineReveal({
     // Check if user has seen this before
     const seenKey = `revealed_${token}`
     const hasSeen = localStorage.getItem(seenKey) === 'true'
-    setHasSeenBefore(hasSeen)
 
     if (!hasSeen) {
-      // Start animation
+      // First time - show animation
+      setHasSeenBefore(false)
       startAnimation()
-      // Mark as seen
+      // Mark as seen AFTER animation starts
       localStorage.setItem(seenKey, 'true')
     } else {
-      // Show directly
+      // Already seen - show directly
+      setHasSeenBefore(true)
       setCurrentName(assignedToName)
     }
   }, [token, assignedToName])
