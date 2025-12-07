@@ -90,53 +90,106 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
   const totalCount = participants.length
 
   return (
-    <div className="space-y-4">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900">WhatsApp versenden</h2>
-          <span className="text-sm font-medium text-gray-600">
-            Versendet: {sentCount} von {totalCount}
-          </span>
+    <div className="space-y-6">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+        {/* Header with Progress */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div className="flex items-center gap-3">
+            <span className="text-5xl">💬</span>
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">WhatsApp versenden</h2>
+              <p className="text-gray-600 text-sm mt-1">Sende jedem Teilnehmer seinen persönlichen Link</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <div className="text-2xl font-bold text-christmas-green">{sentCount}</div>
+              <div className="text-sm text-gray-600">von {totalCount}</div>
+            </div>
+            <div className="relative w-20 h-20">
+              <svg className="transform -rotate-90 w-20 h-20">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  className="text-christmas-ice"
+                />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray={`${2 * Math.PI * 32}`}
+                  strokeDashoffset={`${2 * Math.PI * 32 * (1 - sentCount / totalCount)}`}
+                  className="text-christmas-green transition-all duration-500"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700">
+                {Math.round((sentCount / totalCount) * 100)}%
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-2">
+        {/* Participant List */}
+        <div className="space-y-3">
           {participants.map((participant) => {
             const isSent = sentParticipants.has(participant.id)
 
             return (
               <div
                 key={participant.id}
-                className={`flex items-center justify-between p-4 rounded-lg border ${
-                  participant.is_organizer
-                    ? 'bg-organizer-bg border-yellow-200'
-                    : 'bg-white border-gray-200'
+                className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-xl border-2 transition-all ${
+                  isSent
+                    ? 'bg-christmas-green/5 border-christmas-green/30'
+                    : participant.is_organizer
+                    ? 'bg-gradient-to-r from-organizer-bg to-organizer-border/20 border-organizer-border'
+                    : 'bg-gray-50 border-gray-200 hover:border-christmas-gold/50 hover:shadow-md'
                 }`}
               >
-                <div className="flex items-center gap-3 flex-1">
-                  {isSent && <span className="text-green-600 text-xl">✓</span>}
-                  <div>
-                    <p className="font-medium text-gray-900">
+                <div className="flex items-center gap-4 flex-1 mb-3 sm:mb-0">
+                  {isSent && (
+                    <div className="flex-shrink-0 w-10 h-10 bg-christmas-green rounded-full flex items-center justify-center animate-bounce-slow">
+                      <span className="text-white text-xl font-bold">✓</span>
+                    </div>
+                  )}
+                  {!isSent && (
+                    <div className="flex-shrink-0 w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <span className="text-gray-500 text-xl">○</span>
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <p className="font-bold text-gray-900 text-lg flex items-center gap-2 flex-wrap">
                       {participant.name}
                       {participant.is_organizer && (
-                        <span className="ml-2 text-sm">
-                          👤 <span className="text-gray-600">(Du)</span>
+                        <span className="inline-flex items-center gap-1 bg-christmas-gold/20 text-christmas-gold-dark px-3 py-1 rounded-full text-xs font-bold">
+                          <span>👤</span>
+                          <span>Du</span>
                         </span>
                       )}
                     </p>
-                    <p className="text-sm text-gray-600">{participant.phone_number}</p>
+                    <p className="text-sm text-gray-600 flex items-center gap-1 mt-1">
+                      <span>📱</span>
+                      <span>{participant.phone_number}</span>
+                    </p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => handleSendWhatsApp(participant)}
                   disabled={isSent}
-                  className={`px-4 py-2 rounded-lg font-medium transition ${
+                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap ${
                     isSent
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                      : 'bg-green-50 border-2 border-green-600 text-green-700 hover:bg-green-100'
+                      : 'bg-gradient-to-r from-christmas-green to-christmas-green-light text-white hover:scale-105 hover:shadow-lg shadow-md'
                   }`}
                 >
-                  {isSent ? '📱 WhatsApp gesendet' : '📱 WhatsApp öffnen'}
+                  {isSent ? '✓ Gesendet' : '💬 WhatsApp öffnen'}
                 </button>
               </div>
             )

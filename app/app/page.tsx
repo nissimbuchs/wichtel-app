@@ -40,83 +40,102 @@ export default function AppPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-christmas-red mx-auto"></div>
-          <p className="mt-4 text-gray-600">Lädt...</p>
+          <div className="text-6xl mb-4 animate-bounce-slow">🎄</div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
+          <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
+    <div className="min-h-screen bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
+      <header className="bg-gradient-to-r from-christmas-red to-christmas-red-light shadow-christmas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-christmas-red">🎄 Wichtel App</h1>
-            <p className="text-sm text-gray-600 mt-1">{user?.email}</p>
+            <h1 className="text-4xl font-bold text-white drop-shadow-lg">🎄 Wichtel App</h1>
+            <p className="text-sm text-white/90 mt-2 font-medium">{user?.email}</p>
           </div>
           <button
             onClick={signOut}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm"
+            className="px-6 py-3 bg-white/20 backdrop-blur border-2 border-white/40 rounded-xl hover:bg-white/30 transition-all text-white font-semibold"
           >
             Abmelden
           </button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Meine Wichtel-Sessions</h2>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">Meine Wichtel-Sessions</h2>
+            <p className="text-gray-600 mt-1">Verwalte alle deine Wichtel-Veranstaltungen 🎁</p>
+          </div>
           <button
             onClick={createNewSession}
-            className="bg-christmas-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-christmas-red-light transition"
+            className="bg-gradient-to-r from-christmas-red to-christmas-red-light text-white px-8 py-4 rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300 text-lg shadow-lg"
           >
             + Neue Session
           </button>
         </div>
 
         {sessions.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <p className="text-gray-600 text-lg mb-4">Noch keine Sessions erstellt</p>
-            <p className="text-gray-500 mb-6">Erstelle deine erste Wichtel-Session in unter 5 Minuten!</p>
+          <div className="text-center py-16 bg-white rounded-3xl shadow-xl border-4 border-christmas-ice">
+            <div className="text-8xl mb-6 animate-wiggle">🎁</div>
+            <p className="text-gray-900 text-2xl font-bold mb-3">Noch keine Sessions erstellt</p>
+            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
+              Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude! ✨
+            </p>
             <button
               onClick={createNewSession}
-              className="bg-christmas-red text-white px-8 py-3 rounded-lg font-semibold hover:bg-christmas-red-light transition inline-block"
+              className="bg-gradient-to-r from-christmas-red to-christmas-red-light text-white px-10 py-4 rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300 inline-block text-xl"
             >
-              Jetzt starten 🎁
+              🎅 Jetzt starten
             </button>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {sessions.map((session) => (
               <div
                 key={session.id}
                 onClick={() => router.push(`/app/session/${session.id}`)}
-                className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+                className="bg-white p-7 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer border-2 border-christmas-ice/50 hover:border-christmas-gold/50 group"
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{session.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Erstellt am {new Date(session.created_at).toLocaleDateString('de-DE')}
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-christmas-red transition-colors">
+                      {session.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 flex items-center gap-2">
+                      <span>📅</span>
+                      {new Date(session.created_at).toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
                     </p>
                   </div>
+                </div>
+                <div className="flex items-center justify-between">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    className={`px-4 py-2 rounded-xl text-sm font-bold shadow-md ${
                       session.status === 'drawn'
-                        ? 'bg-green-100 text-green-800'
+                        ? 'bg-gradient-to-r from-christmas-green to-christmas-green-light text-white'
                         : session.status === 'completed'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                        : 'bg-gradient-to-r from-christmas-gold to-christmas-gold-light text-white'
                     }`}
                   >
                     {session.status === 'planning'
-                      ? 'In Planung'
+                      ? '📝 In Planung'
                       : session.status === 'drawn'
-                      ? 'Ausgelost'
-                      : 'Abgeschlossen'}
+                      ? '🎰 Ausgelost'
+                      : '✅ Abgeschlossen'}
+                  </span>
+                  <span className="text-3xl group-hover:scale-125 transition-transform">
+                    {session.status === 'planning' ? '🎄' : session.status === 'drawn' ? '🎁' : '🎉'}
                   </span>
                 </div>
               </div>

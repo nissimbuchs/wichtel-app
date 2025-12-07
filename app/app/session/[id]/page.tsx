@@ -100,10 +100,11 @@ export default function SessionDetailPage() {
 
   if (loading || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-christmas-red mx-auto"></div>
-          <p className="mt-4 text-gray-600">Lädt...</p>
+          <div className="text-6xl mb-4 animate-bounce-slow">🎄</div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
+          <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
         </div>
       </div>
     )
@@ -112,36 +113,36 @@ export default function SessionDetailPage() {
   const canDraw = participants.length >= 3 && session.status === 'planning'
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
+    <div className="min-h-screen bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
+      <header className="bg-gradient-to-r from-christmas-red to-christmas-red-light shadow-christmas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             onClick={() => router.push('/app')}
-            className="text-gray-600 hover:text-gray-900 mb-2 flex items-center gap-2"
+            className="text-white/90 hover:text-white mb-3 flex items-center gap-2 font-semibold transition-all hover:translate-x-1"
           >
-            ← Zurück
+            ← Zurück zu allen Sessions
           </button>
-          <div className="flex justify-between items-start">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-christmas-red">{session.name}</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Session-ID: {session.id.substring(0, 8)}...
+              <h1 className="text-4xl font-bold text-white drop-shadow-lg">{session.name}</h1>
+              <p className="text-sm text-white/80 mt-2 font-medium">
+                Session-ID: {session.id.substring(0, 8)}... • {participants.length} Teilnehmer
               </p>
             </div>
             <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
+              className={`px-5 py-2 rounded-xl text-base font-bold shadow-lg ${
                 session.status === 'drawn'
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-yellow-100 text-yellow-800'
+                  ? 'bg-white text-christmas-green'
+                  : 'bg-white/90 text-christmas-gold-dark'
               }`}
             >
-              {session.status === 'planning' ? 'In Planung' : 'Ausgelost'}
+              {session.status === 'planning' ? '📝 In Planung' : '🎰 Ausgelost'}
             </span>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {session.status === 'drawn' ? (
           // WhatsApp Send Mode
           <WhatsAppList
@@ -154,8 +155,11 @@ export default function SessionDetailPage() {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Left: Add Participants */}
             <div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Teilnehmer hinzufügen</h2>
+              <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-4xl">👥</span>
+                  <h2 className="text-2xl font-bold text-gray-900">Teilnehmer hinzufügen</h2>
+                </div>
                 <ParticipantForm
                   onAdd={handleAddParticipant}
                   disabled={session.status !== 'planning'}
@@ -164,15 +168,29 @@ export default function SessionDetailPage() {
             </div>
 
             {/* Right: Participant List */}
-            <div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Teilnehmer ({participants.length})
-                </h2>
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">🎄</span>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Teilnehmer
+                    </h2>
+                  </div>
+                  <span className="bg-christmas-gold/20 text-christmas-gold-dark px-4 py-2 rounded-xl font-bold text-lg">
+                    {participants.length}
+                  </span>
+                </div>
                 {participants.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    Noch keine Teilnehmer hinzugefügt
-                  </p>
+                  <div className="text-center py-12 bg-christmas-ice/30 rounded-xl">
+                    <div className="text-6xl mb-3 animate-pulse-slow">🎁</div>
+                    <p className="text-gray-600 text-lg font-medium">
+                      Noch keine Teilnehmer hinzugefügt
+                    </p>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Füge mindestens 3 Personen hinzu
+                    </p>
+                  </div>
                 ) : (
                   <ParticipantList
                     participants={participants}
@@ -184,7 +202,7 @@ export default function SessionDetailPage() {
 
               {/* Draw Button */}
               {session.status === 'planning' && (
-                <div className="mt-4">
+                <div className="bg-gradient-to-br from-christmas-gold/10 to-christmas-gold-light/10 rounded-2xl p-6 border-2 border-christmas-gold/30 shadow-lg">
                   <DrawButton
                     sessionId={sessionId}
                     participants={participants}
@@ -195,9 +213,12 @@ export default function SessionDetailPage() {
                     }}
                   />
                   {!canDraw && participants.length < 3 && (
-                    <p className="text-sm text-gray-500 text-center mt-2">
-                      💡 Mindestens 3 Teilnehmer benötigt für die Auslosung
-                    </p>
+                    <div className="mt-4 text-center bg-white/70 rounded-xl p-4">
+                      <p className="text-sm text-gray-700 font-medium flex items-center justify-center gap-2">
+                        <span className="text-2xl">💡</span>
+                        <span>Mindestens 3 Teilnehmer benötigt für die Auslosung</span>
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
