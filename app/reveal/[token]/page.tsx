@@ -9,6 +9,7 @@ interface RevealData {
   participantName: string
   assignedToName: string
   allNames: string[]
+  sessionName: string
 }
 
 export default function RevealPage() {
@@ -51,6 +52,17 @@ export default function RevealPage() {
         throw new Error('Zugeteilte Person nicht gefunden')
       }
 
+      // Get session name
+      const { data: session, error: sessionError } = await supabase
+        .from('sessions')
+        .select('name')
+        .eq('id', participant.session_id)
+        .single()
+
+      if (sessionError || !session) {
+        throw new Error('Session nicht gefunden')
+      }
+
       // Get all participant names for animation
       const { data: allParticipants, error: allError } = await supabase
         .from('participants')
@@ -67,6 +79,7 @@ export default function RevealPage() {
         participantName: participant.name,
         assignedToName: assignedPerson.name,
         allNames,
+        sessionName: session.name,
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
@@ -106,6 +119,7 @@ export default function RevealPage() {
       participantName={data.participantName}
       assignedToName={data.assignedToName}
       allNames={data.allNames}
+      sessionName={data.sessionName}
       token={token}
     />
   )

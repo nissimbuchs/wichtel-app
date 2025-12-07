@@ -8,6 +8,7 @@ interface SlotMachineRevealProps {
   participantName: string
   assignedToName: string
   allNames: string[]
+  sessionName: string
   token: string
 }
 
@@ -15,6 +16,7 @@ export function SlotMachineReveal({
   participantName,
   assignedToName,
   allNames,
+  sessionName,
   token,
 }: SlotMachineRevealProps) {
   const [isAnimating, setIsAnimating] = useState(false)
@@ -102,7 +104,7 @@ export function SlotMachineReveal({
         animate={{ opacity: 1, y: 0 }}
         className="text-center text-white mb-8"
       >
-        <h1 className="text-5xl font-bold mb-4">🎄 Wichteln 2025</h1>
+        <h1 className="text-5xl font-bold mb-4">🎄 {sessionName}</h1>
         <p className="text-xl">Hallo {participantName}!</p>
       </motion.div>
 
