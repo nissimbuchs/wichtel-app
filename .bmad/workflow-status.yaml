@@ -1,0 +1,63 @@
+# BMM Workflow Status
+# Generated: 2025-12-07
+# Project: wichtel-app
+
+generated: "2025-12-07T12:00:00.000Z"
+project: "wichtel-app"
+project_type: "web-application"
+selected_track: "full-stack"
+field_type: "consumer-app"
+
+# Phase 1: Discovery & Analysis
+phase_1_discovery:
+  project_context:
+    status: "optional"
+    description: "Project context and background documentation"
+
+# Phase 2: Planning
+phase_2_planning:
+  prd:
+    status: "docs/prd.md"
+    description: "Product Requirements Document"
+    completed_at: "2025-12-06"
+    validated_at: "2025-12-07"
+    next_step: "ux-design or architecture"
+
+  ux_design:
+    status: "recommended"
+    description: "UX Design and Wireframes"
+    condition: "if_has_ui"
+    note: "Wichtel-App has UI components - UX Design recommended"
+
+# Phase 3: Solutioning
+phase_3_solutioning:
+  architecture:
+    status: "required"
+    description: "Technical Architecture Document"
+    dependencies: ["prd"]
+    note: "Should be done after UX Design if UI exists"
+
+  epics_and_stories:
+    status: "required"
+    description: "Epics and User Stories breakdown"
+    dependencies: ["prd", "architecture"]
+    note: "Can only start after Architecture is complete"
+
+# Phase 4: Implementation
+phase_4_implementation:
+  sprint_planning:
+    status: "required"
+    description: "Sprint planning and story prioritization"
+    dependencies: ["epics_and_stories"]
+    note: "Tracked separately in sprint-status.yaml"
+
+# Current State
+current_phase: "phase_2_planning"
+current_workflow: "prd"
+current_status: "completed"
+next_recommended_workflow: "ux-design"
+next_recommended_action: "Start UX Design workflow or skip to Architecture if no UI needed"
+
+# Metadata
+last_updated: "2025-12-07"
+bmm_version: "6.0.0-alpha.13"
