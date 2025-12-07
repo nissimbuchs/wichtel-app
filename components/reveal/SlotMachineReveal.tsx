@@ -19,22 +19,22 @@ export function SlotMachineReveal({
 }: SlotMachineRevealProps) {
   const [isAnimating, setIsAnimating] = useState(false)
   const [currentName, setCurrentName] = useState('')
-  const [hasSeenBefore, setHasSeenBefore] = useState(false)
+  const [wasSeenBeforePageLoad, setWasSeenBeforePageLoad] = useState(false)
 
   useEffect(() => {
-    // Check if user has seen this before
+    // Check if user has seen this before (BEFORE page load)
     const seenKey = `revealed_${token}`
     const hasSeen = localStorage.getItem(seenKey) === 'true'
 
     if (!hasSeen) {
       // First time - show animation
-      setHasSeenBefore(false)
+      setWasSeenBeforePageLoad(false)
       startAnimation()
-      // Mark as seen AFTER animation starts
+      // Mark as seen for future visits
       localStorage.setItem(seenKey, 'true')
     } else {
-      // Already seen - show directly
-      setHasSeenBefore(true)
+      // Already seen before - show directly without animation
+      setWasSeenBeforePageLoad(true)
       setCurrentName(assignedToName)
     }
   }, [token, assignedToName])
@@ -146,7 +146,7 @@ export function SlotMachineReveal({
         </motion.div>
       </motion.div>
 
-      {hasSeenBefore && !isAnimating && (
+      {wasSeenBeforePageLoad && !isAnimating && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
