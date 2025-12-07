@@ -6,11 +6,12 @@ import type { ParticipantAdmin } from '@/types/database.types'
  */
 export function generateWhatsAppUrl(
   participant: ParticipantAdmin,
-  assignmentUrl: string
+  assignmentUrl: string,
+  sessionName?: string
 ): string {
   const message = `Hallo ${participant.name}! 🎄
 
-Hier ist dein Link für unser Wichteln 2025:
+Hier ist dein Link für ${sessionName || 'unser Wichteln'}:
 ${assignmentUrl}
 
 Öffne den Link, um zu sehen, wen du beschenkst! 🎁`

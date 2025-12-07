@@ -8,11 +8,12 @@ import { CompletionModal } from './CompletionModal'
 
 interface WhatsAppListProps {
   sessionId: string
+  sessionName: string
   participants: ParticipantAdmin[]
   onUpdate: () => void
 }
 
-export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppListProps) {
+export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }: WhatsAppListProps) {
   const [sentParticipants, setSentParticipants] = useState<Set<string>>(new Set())
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const supabase = createClient()
@@ -44,7 +45,8 @@ export function WhatsAppList({ sessionId, participants, onUpdate }: WhatsAppList
   async function sendWhatsApp(participant: ParticipantAdmin) {
     const url = generateWhatsAppUrl(
       participant,
-      `${window.location.origin}/reveal/${participant.participant_token}`
+      `${window.location.origin}/reveal/${participant.participant_token}`,
+      sessionName
     )
 
     openWhatsApp(url)

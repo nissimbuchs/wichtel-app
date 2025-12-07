@@ -264,6 +264,7 @@ export default function SessionDetailPage() {
           // WhatsApp Send Mode
           <WhatsAppList
             sessionId={sessionId}
+            sessionName={session.name}
             participants={participants}
             onUpdate={loadParticipants}
           />
