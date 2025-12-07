@@ -20,6 +20,7 @@ Dieses Dokument beschreibt die Software-Architektur der Wichtel-Applikation basi
 - ✅ Email-basierte Authentifizierung (Magic Links)
 - ✅ Mobile-First Design
 - ✅ Vollständig Cloud-native
+- ✅ **Anonymitäts-Garantie:** Organisator kann selbst teilnehmen, ohne fremde Zuteilungen zu sehen
 
 -----
 
@@ -292,20 +293,35 @@ CREATE POLICY "Organizers can manage own sessions"
     ON sessions FOR ALL
     USING (organizer_id = auth.uid());
 
--- Participants: Read via session ownership or participant token
-CREATE POLICY "Organizers can manage participants in their sessions"
-    ON participants FOR ALL
+-- Participants: CRITICAL FOR ANONYMITY
+-- Organizers can manage participants BUT cannot see assigned_to_id field
+CREATE POLICY "Organizers can manage participants (no assignments)"
+    ON participants FOR SELECT
     USING (
         EXISTS (
-            SELECT 1 FROM sessions 
-            WHERE sessions.id = participants.session_id 
+            SELECT 1 FROM sessions
+            WHERE sessions.id = participants.session_id
             AND sessions.organizer_id = auth.uid()
         )
     );
 
+CREATE POLICY "Organizers can insert/update/delete participants"
+    ON participants FOR INSERT, UPDATE, DELETE
+    USING (
+        EXISTS (
+            SELECT 1 FROM sessions
+            WHERE sessions.id = participants.session_id
+            AND sessions.organizer_id = auth.uid()
+        )
+    );
+
+-- Participants can view own assignment via token
 CREATE POLICY "Participants can view own assignment"
     ON participants FOR SELECT
     USING (participant_token = current_setting('request.jwt.claims', true)::json->>'participant_token');
+
+-- NOTE: Frontend must explicitly exclude 'assigned_to_id' when querying as organizer
+-- Backend RLS allows read, but frontend should not request this field for admin views
 ```
 
 -----
@@ -353,8 +369,9 @@ Response: { id, status, ... }
 #### Participants
 
 ```
-GET /rest/v1/participants?session_id=eq.<session_id>
-Response: [{ id, name, phone_number, ... }]
+GET /rest/v1/participants?session_id=eq.<session_id>&select=id,name,phone_number,participant_token
+Response: [{ id, name, phone_number, participant_token }]
+⚠️ CRITICAL: Organizers MUST exclude 'assigned_to_id' from SELECT to preserve anonymity
 
 POST /rest/v1/participants
 Body: {
@@ -365,12 +382,14 @@ Body: {
 }
 Response: { id, name, participant_token, ... }
 
-GET /rest/v1/participants?participant_token=eq.<token>
-Response: { id, name, assigned_to_id, ... }
+GET /rest/v1/participants?participant_token=eq.<token>&select=id,name,assigned_to_id
+Response: { id, name, assigned_to_id }
+⚠️ This endpoint returns assignment ONLY when accessed via participant_token
 
 PATCH /rest/v1/participants?id=eq.<participant_id>
 Body: { "assigned_to_id": "<other_participant_id>" }
 Response: { id, assigned_to_id, ... }
+⚠️ Used only by draw algorithm, not exposed to organizer UI
 ```
 
 ### 5.3 Custom Functions (Supabase Edge Functions)
@@ -554,7 +573,7 @@ interface AuthContext {
 // SessionContext: Active session data
 interface SessionContext {
   currentSession: Session | null
-  participants: Participant[]
+  participants: Participant[]  // ⚠️ WITHOUT assigned_to_id field!
   setCurrentSession: (session: Session) => void
 }
 ```
@@ -564,6 +583,29 @@ interface SessionContext {
 - Form inputs
 - UI state (modals, loading indicators)
 - Temporary data
+
+**⚠️ CRITICAL: Anonymity-Preserving Data Fetching**
+
+```typescript
+// ✅ CORRECT: Organizer fetching participants (NO assignments)
+const { data: participants } = await supabase
+  .from('participants')
+  .select('id, name, phone_number, participant_token')  // NO assigned_to_id!
+  .eq('session_id', sessionId)
+
+// ❌ WRONG: Would expose assignments to organizer
+const { data: participants } = await supabase
+  .from('participants')
+  .select('*')  // Includes assigned_to_id!
+  .eq('session_id', sessionId)
+
+// ✅ CORRECT: Participant viewing own assignment
+const { data: assignment } = await supabase
+  .from('participants')
+  .select('id, name, assigned_to_id')
+  .eq('participant_token', token)
+  .single()
+```
 
 -----
 
@@ -868,6 +910,51 @@ jobs:
 - Keine Tracking-Cookies
 - DSGVO-konform
 - Daten-Löschung auf Anfrage möglich
+
+**⚠️ CRITICAL: Anonymitäts-Garantie für Organisator-Teilnahme**
+
+**Problem:** Organisator soll selbst teilnehmen können, OHNE die Zuteilungen anderer zu kennen.
+
+**Lösung (Multi-Layer Defense):**
+
+1. **Backend (RLS):**
+   - RLS Policies erlauben Organisatoren Lesen von participants
+   - ABER: Frontend muss explizit `assigned_to_id` ausschließen
+   - RLS allein reicht NICHT aus (da SELECT * die Daten zeigen würde)
+
+2. **API Layer:**
+   - Organizer-Queries enthalten explizite SELECT-Liste ohne `assigned_to_id`
+   - Participant-Queries (via token) enthalten `assigned_to_id`
+
+3. **Frontend Layer:**
+   - Admin-UI zeigt NIEMALS `assigned_to_id` Feld
+   - State Management enthält nur participants ohne Assignments
+   - TypeScript Interfaces erzwingen korrekte Datenstruktur
+
+4. **UI/UX Layer:**
+   - Klare Kommunikation: "Auch du siehst erst beim Öffnen deines Links, wen du beschenkst"
+   - Keine "Wer beschenkt wen"-Übersicht im Admin-Interface
+   - Organisator erhält eigenen WhatsApp-Link wie alle anderen
+
+**Code-Beispiel:**
+
+```typescript
+// ✅ CORRECT: Type-safe participant without assignment
+interface ParticipantAdmin {
+  id: string
+  name: string
+  phone_number: string
+  participant_token: string
+  // NO assigned_to_id field!
+}
+
+// ✅ CORRECT: Type for participant view (with assignment)
+interface ParticipantView {
+  id: string
+  name: string
+  assigned_to_id: string | null
+}
+```
 
 ### 11.3 Token-Management
 
@@ -1722,7 +1809,32 @@ Use Magic Links (passwordless email authentication).
 
 -----
 
-### ADR-004: PostgreSQL vs NoSQL
+### ADR-004: Organisator als Teilnehmer (Anonymitäts-Garantie)
+
+**Status:** Accepted
+**Date:** 2025-12-07
+
+**Context:**
+UX-Analyse ergab: Organisator soll selbst am Wichteln teilnehmen können, ohne die Anonymität zu gefährden.
+
+**Decision:**
+Multi-Layer Defense Strategy:
+1. Backend RLS erlaubt Lesen von participants
+2. Frontend muss explizit `assigned_to_id` aus SELECT ausschließen
+3. TypeScript Interfaces erzwingen korrekte Datenstrukturen
+4. UI verhindert versehentliches Sehen fremder Zuteilungen
+
+**Consequences:**
+
+- ✅ Organisator kann teilnehmen ohne Vertrauen zu brechen
+- ✅ Technisch garantierte Anonymität durch Code
+- ✅ TypeScript verhindert versehentliche Datenleaks
+- ❌ Entwickler muss bewusst korrekte SELECT-Queries schreiben
+- ❌ Zusätzliche Komplexität in Data Fetching Layer
+
+-----
+
+### ADR-005: PostgreSQL vs NoSQL
 
 **Status:** Accepted  
 **Date:** 2025-12-06

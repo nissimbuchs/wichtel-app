@@ -1,3 +1,16 @@
+---
+project_name: wichtel-app
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+lastStep: 11
+user_name: Nissim
+communication_language: German
+document_output_language: German
+created_date: 2025-12-06
+completed_date: 2025-12-06
+workflow_version: 6.0.0-alpha.13
+workflow_path: .bmad/bmm/workflows/2-plan-workflows/prd
+---
+
 # Product Requirements Document (PRD)
 
 ## Wichtel-Applikation für Weihnachtsfeiern
@@ -10,7 +23,7 @@
 
 ## 1. Executive Summary
 
-Eine einfache Web-Applikation zur Organisation von Wichtel-Auslosungen für Weihnachtsfeiern. Die Applikation ermöglicht es einem Organisator, Teilnehmer zentral zu erfassen, eine anonyme Zulosung durchzuführen und die Ergebnisse via WhatsApp zu kommunizieren.
+Eine einfache Web-Applikation zur Organisation von Wichtel-Auslosungen für Weihnachtsfeiern. Die Applikation ermöglicht es einem Organisator, Teilnehmer zentral zu erfassen, eine anonyme Zulosung durchzuführen und die Ergebnisse via WhatsApp zu kommunizieren. **Besonderheit:** Der Organisator kann selbst als Teilnehmer am Wichteln teilnehmen, ohne die Anonymität zu gefährden oder die Zuteilungen anderer Teilnehmer zu kennen.
 
 -----
 
@@ -33,16 +46,18 @@ Digitalisierung und Vereinfachung der Wichtel-Zulosung für kleine bis mittelgro
 
 ### 3.1 Primäre Persona: Der Organisator
 
-- Rolle: Organisiert die Weihnachtsfeier
+- Rolle: Organisiert die Weihnachtsfeier und koordiniert das Wichteln
 - Technische Affinität: Mittel
 - Bedürfnisse: Schnelle, unkomplizierte Lösung ohne aufwendiges Setup
-- Kommunikationskanal: WhatsApp
+- Kommunikationskanal: WhatsApp (primär mobil)
+- **Besonderheit:** Kann selbst als Teilnehmer am Wichteln teilnehmen, ohne die Anonymität zu gefährden
 
 ### 3.2 Sekundäre Persona: Die Teilnehmer
 
-- Rolle: Nehmen am Wichteln teil
+- Rolle: Nehmen am Wichteln teil (inklusive Organisator, falls dieser selbst teilnimmt)
 - Technische Anforderung: Minimal (nur WhatsApp-Link öffnen können)
 - Bedürfnis: Einfach erfahren, wen sie beschenken sollen
+- Erwartung: Garantierte Anonymität bis zur Weihnachtsfeier
 
 -----
 
@@ -73,13 +88,14 @@ Als Organisator möchte ich eine neue Wichtel-Session erstellen, damit ich eine 
 
 **Priorität:** MUST HAVE
 
-**User Story:**  
+**User Story:**
 Als Organisator möchte ich alle Teilnehmer zentral erfassen, damit ich die Auslosung durchführen kann.
 
 **Akzeptanzkriterien:**
 
 - Organisator kann Namen von Teilnehmern eingeben
 - Organisator kann Telefonnummern (für WhatsApp) hinterlegen
+- **Organisator kann sich selbst als Teilnehmer hinzufügen**
 - Minimum 3 Teilnehmer, Maximum 50 Teilnehmer
 - Teilnehmer können bearbeitet oder gelöscht werden vor der Auslosung
 - Validierung der Telefonnummern (Format)
@@ -88,6 +104,7 @@ Als Organisator möchte ich alle Teilnehmer zentral erfassen, damit ich die Ausl
 
 - Eingabeformular: Name + Telefonnummer
 - Liste aller erfassten Teilnehmer
+- Optional: "Mich selbst hinzufügen"-Button für schnelles Hinzufügen des Organisators
 - Bearbeiten/Löschen-Buttons pro Teilnehmer
 
 -----
@@ -114,7 +131,39 @@ Als Organisator möchte ich die Auslosung mit einem Klick durchführen, damit je
 
 -----
 
-### 4.4 WhatsApp-Direktversand (Organisator)
+### 4.4 Organisator als Teilnehmer (Organisator + Teilnehmer)
+
+**Priorität:** MUST HAVE
+
+**User Story:**
+Als Organisator möchte ich selbst am Wichteln teilnehmen können, ohne die Anonymität zu gefährden oder die Zuteilungen anderer Teilnehmer zu kennen.
+
+**Akzeptanzkriterien:**
+
+- Organisator kann sich selbst als regulären Teilnehmer zur Session hinzufügen
+- Nach der Auslosung sieht der Organisator **KEINE** Zuteilungen der anderen Teilnehmer
+- Organisator erhält seinen eigenen personalisierten Link (wie alle anderen Teilnehmer)
+- Organisator muss seinen eigenen Link öffnen, um zu sehen, wen er beschenkt
+- **UI verhindert versehentliches Sehen fremder Zuteilungen während des WhatsApp-Versands**
+- System behandelt Organisator als regulären Teilnehmer (gleiche Rechte, gleiche Anonymität)
+
+**Technische Details:**
+
+- Auslosungs-Algorithmus berücksichtigt Organisator wie jeden anderen Teilnehmer
+- Nach Auslosung werden Zuteilungen serverseitig gespeichert, aber nicht an Frontend gesendet
+- WhatsApp-Versand-Interface zeigt nur Namen + Telefonnummer, **keine Zuteilungsinformationen**
+- Organisator erhält eigenen Participant-Token für seinen Link
+- Zugriff auf Zuteilungen erfolgt ausschließlich über individuelle Teilnehmer-Links
+
+**UI-Überlegungen:**
+
+- Klare Kommunikation: "Auch du wirst erst beim Öffnen deines Links sehen, wen du beschenkst"
+- Vertrauensaufbau durch Transparenz über den Mechanismus
+- Keine Anzeige von "Wer beschenkt wen" im Admin-Interface
+
+-----
+
+### 4.5 WhatsApp-Direktversand (Organisator)
 
 **Priorität:** MUST HAVE
 
@@ -155,7 +204,7 @@ Viel Spaß beim Geschenke-Suchen! 🎁
 
 -----
 
-### 4.5 Zuteilung anzeigen (Teilnehmer)
+### 4.6 Zuteilung anzeigen (Teilnehmer)
 
 **Priorität:** MUST HAVE
 
@@ -181,7 +230,7 @@ Als Teilnehmer möchte ich über einen Link sehen, wen ich beschenken soll, dami
 
 -----
 
-### 4.6 Session-Verwaltung (Organisator)
+### 4.7 Session-Verwaltung (Organisator)
 
 **Priorität:** SHOULD HAVE
 
@@ -197,7 +246,7 @@ Als Organisator möchte ich meine Sessions verwalten können, damit ich im näch
 
 -----
 
-### 4.7 Wiederverwendbarkeit
+### 4.8 Wiederverwendbarkeit
 
 **Priorität:** MUST HAVE
 
@@ -229,6 +278,9 @@ Als Organisator möchte ich die App in zukünftigen Jahren wieder nutzen können
 - HTTPS-Verschlüsselung
 - Keine Weitergabe von Daten an Dritte
 - DSGVO-konform (EU)
+- **Anonymität für Organisator:** Zuteilungen werden ausschließlich über individuelle Teilnehmer-Links zugänglich gemacht
+- **Keine Admin-Ansicht der Zuteilungen:** Admin-Interface zeigt nur Teilnehmerliste, keine "Wer beschenkt wen"-Übersicht
+- **Serverseitige Kontrolle:** Zuteilungen werden nur bei Aufruf des individuellen Links zurückgegeben
 
 ### 5.3 Zuverlässigkeit
 
@@ -289,20 +341,22 @@ Participants:
 
 ## 7. User Flows
 
-### 7.1 Hauptflow: Organisator erstellt Wichtel-Session
+### 7.1 Hauptflow: Organisator erstellt Wichtel-Session (und nimmt selbst teil)
 
 1. Organisator öffnet App (auf Mobile)
-1. Klickt auf “Neue Wichtel-Session erstellen”
-1. Gibt Session-Namen ein (z.B. “Weihnachtsfeier 2025”)
+1. Klickt auf "Neue Wichtel-Session erstellen"
+1. Gibt Session-Namen ein (z.B. "Weihnachtsfeier 2025")
 1. Fügt Teilnehmer hinzu (Name + Telefonnummer)
+1. **Fügt sich selbst als Teilnehmer hinzu**
 1. Überprüft die Liste
-1. Klickt auf “Auslosung durchführen”
-1. Bestätigt die Auslosung
-1. Erhält Liste mit “WhatsApp öffnen”-Buttons pro Teilnehmer
+1. Klickt auf "Auslosung durchführen"
+1. Bestätigt die Auslosung (System informiert: "Auch du wirst erst beim Öffnen deines Links sehen, wen du beschenkst")
+1. Erhält Liste mit "WhatsApp öffnen"-Buttons pro Teilnehmer (inkl. sich selbst)
 1. Klickt auf ersten Button → WhatsApp öffnet sich mit vorausgefüllter Nachricht
 1. Sendet Nachricht ab
 1. Kehrt zur App zurück
-1. Wiederholt Schritt 9-11 für alle weiteren Teilnehmer
+1. Wiederholt Schritt 10-12 für alle weiteren Teilnehmer (inkl. an sich selbst)
+1. **Öffnet später seinen eigenen Link, um zu sehen, wen er beschenkt**
 
 ### 7.2 Nebenflow: Teilnehmer prüft Zuteilung
 
@@ -310,6 +364,16 @@ Participants:
 1. Klickt auf Link in Nachricht
 1. Browser öffnet sich mit Zuteilungs-Seite
 1. Sieht, wen er/sie beschenken soll
+1. Besorgt Geschenk vor der Weihnachtsfeier
+
+### 7.3 Nebenflow: Organisator prüft seine eigene Zuteilung
+
+1. Organisator hat alle WhatsApp-Nachrichten versendet (inkl. an sich selbst)
+1. Öffnet seine eigene WhatsApp-Nachricht (die er an sich selbst gesendet hat)
+1. Klickt auf seinen persönlichen Link
+1. Browser öffnet sich mit Zuteilungs-Seite
+1. **Animation läuft und enthüllt, wen er beschenken soll** (wie bei allen anderen Teilnehmern)
+1. Sieht nur SEINE Zuteilung, nicht die der anderen
 1. Besorgt Geschenk vor der Weihnachtsfeier
 
 -----
@@ -412,12 +476,14 @@ Die folgenden Features sind **NICHT** Teil der ersten Version:
 
 ## 10. Risiken und Mitigationen
 
-|Risiko                    |Wahrscheinlichkeit|Impact |Mitigation                                                  |
-|--------------------------|------------------|-------|------------------------------------------------------------|
-|Teilnehmer verliert Link  |Mittel            |Mittel |Organisator kann Link erneut senden                         |
-|Fehlerhafte Telefonnummern|Hoch              |Niedrig|Validierung + Organisator prüft vor Versand                 |
-|Teilnehmer teilt Link     |Niedrig           |Hoch   |Hinweis auf Geheimhaltung, aber technisch nicht verhinderbar|
-|Datenbank-Ausfall         |Sehr niedrig      |Hoch   |Regelmäßige Backups, zuverlässiger Hosting-Provider         |
+|Risiko                              |Wahrscheinlichkeit|Impact |Mitigation                                                        |
+|------------------------------------|------------------|-------|------------------------------------------------------------------|
+|Teilnehmer verliert Link            |Mittel            |Mittel |Organisator kann Link erneut senden                               |
+|Fehlerhafte Telefonnummern          |Hoch              |Niedrig|Validierung + Organisator prüft vor Versand                       |
+|Teilnehmer teilt Link               |Niedrig           |Hoch   |Hinweis auf Geheimhaltung, aber technisch nicht verhinderbar      |
+|Datenbank-Ausfall                   |Sehr niedrig      |Hoch   |Regelmäßige Backups, zuverlässiger Hosting-Provider               |
+|**Organisator öffnet fremde Links** |Mittel            |Hoch   |Klare UI-Kommunikation, nur eigenen Link öffnen                   |
+|**Misstrauen in Anonymität**        |Mittel            |Mittel |Transparente Erklärung des Mechanismus, Vertrauensaufbau durch UI |
 
 -----
 
@@ -485,6 +551,65 @@ Die folgenden Features sind **NICHT** Teil der ersten Version:
 - Analysetechnik: User Story Mapping
 - Priorisierung: MoSCoW-Methode
 - Stakeholder: Organisator der Weihnachtsfeier 2025
+
+-----
+
+## 14. Next Steps
+
+Das PRD ist nun abgeschlossen und bildet die Grundlage für alle weiteren Produktentwicklungsaktivitäten.
+
+### Empfohlene Reihenfolge:
+
+#### Option A: Produkt mit UI (Empfohlen für Wichtel-App)
+```
+1. UX Design → 2. Technical Architecture → 3. Epics & Stories → 4. Implementation
+```
+
+#### Option B: API/Backend ohne UI
+```
+1. Technical Architecture → 2. Epics & Stories → 3. Implementation
+```
+
+### Nächster Workflow: UX Design
+
+**Warum:** Die Wichtel-App ist UI-zentriert (Web-Interface für Organisator und Teilnehmer). UX Design hilft:
+- User Flows zu visualisieren
+- Wireframes/Mockups zu erstellen
+- UI-Komponenten zu identifizieren
+- Usability-Probleme früh zu erkennen
+
+**Kommando:** `/bmad:bmm:workflows:ux-design` (falls verfügbar) oder manuell erstellen
+
+### Danach: Technical Architecture
+
+Nach UX Design (oder falls übersprungen):
+- System-Design und Technologie-Entscheidungen
+- API-Design
+- Datenbankschema (bereits im PRD, kann verfeinert werden)
+- Deployment-Strategie
+
+**Kommando:** `/bmad:bmm:agents:architect` oder Architecture Workflow
+
+### Abschließend: Epics & Stories
+
+Requirements in implementierbare Stories aufbrechen:
+- Epics basierend auf funktionalen Anforderungen
+- User Stories mit Akzeptanzkriterien
+- Story-Priorisierung für Sprints
+
+**Kommando:** `/bmad:bmm:workflows:create-epics-and-stories`
+
+-----
+
+## 15. Validation Summary
+
+✅ **PRD Validierung abgeschlossen am 2025-12-07**
+
+- **Document Structure:** 89% (8/9 Sektionen komplett)
+- **Process Compliance:** 100% (nach Fixes)
+- **Validation Report:** `docs/validation-report-20251207.md`
+
+**Status:** APPROVED - Bereit für nächste Phase
 
 -----
 

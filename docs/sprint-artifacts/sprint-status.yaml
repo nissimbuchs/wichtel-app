@@ -1,0 +1,85 @@
+# generated: 2025-12-07
+# project: wichtel-app
+# project_key: wichtel-app
+# tracking_system: file-system
+# story_location: {project-root}/docs/sprint-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
+
+generated: 2025-12-07
+project: wichtel-app
+project_key: wichtel-app
+tracking_system: file-system
+story_location: docs/sprint-artifacts
+
+development_status:
+  # Epic 0: Technical Foundation
+  epic-0: in-progress
+  story-01-supabase-setup-database-schema: ready-for-dev
+  story-02-nextjs-tailwind-setup: backlog
+  story-03-supabase-auth-integration: backlog
+  epic-0-retrospective: optional
+
+  # Epic 1: Session-Setup & Teilnehmer-Management
+  epic-1: backlog
+  story-04-session-erstellung-initiieren: backlog
+  story-05-teilnehmer-hinzufuegen: backlog
+  story-06-eigene-teilnahme-als-organisator: backlog
+  story-07-teilnehmer-liste-anzeigen: backlog
+  story-08-teilnehmer-entfernen: backlog
+  story-09-mindest-teilnehmer-validierung: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Anonyme Auslosung mit Organisator-Teilnahme
+  epic-2: backlog
+  story-10-auslosungs-bestaetigung: backlog
+  story-11-derangement-algorithmus: backlog
+  story-12-admin-ui-ohne-assignments: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: WhatsApp-Integration & Link-Versand
+  epic-3: backlog
+  story-13-whatsapp-deep-link-generierung: backlog
+  story-14-whatsapp-button-pro-teilnehmer: backlog
+  story-15-self-send-confirmation: backlog
+  story-16-versand-progress-tracking: backlog
+  story-17-completion-message: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Teilnehmer Namen-Reveal Experience
+  epic-4: backlog
+  story-18-reveal-page-mit-token-validierung: backlog
+  story-19-slot-machine-animation: backlog
+  story-20-festliches-design: backlog
+  story-21-wiederholtes-oeffnen: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Session-Verwaltung & Wiederverwendbarkeit
+  epic-5: backlog
+  story-22-session-liste: backlog
+  story-23-session-kopieren: backlog
+  story-24-session-archivieren: backlog
+  epic-5-retrospective: optional
