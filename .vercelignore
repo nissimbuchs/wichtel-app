@@ -1,0 +1,8 @@
+.bmad
+.claude
+.agentvibes
+.mcp.json
+docs
+supabase/config.toml
+*.log
+.DS_Store
