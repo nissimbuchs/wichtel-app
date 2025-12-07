@@ -10,6 +10,7 @@ import { ParticipantList } from '@/components/sessions/ParticipantList'
 import { ParticipantForm } from '@/components/sessions/ParticipantForm'
 import { DrawButton } from '@/components/sessions/DrawButton'
 import { WhatsAppList } from '@/components/sessions/WhatsAppList'
+import { Footer } from '@/components/layout/Footer'
 
 export default function SessionDetailPage() {
   const params = useParams()
@@ -18,6 +19,9 @@ export default function SessionDetailPage() {
   const [session, setSession] = useState<Session | null>(null)
   const [participants, setParticipants] = useState<ParticipantAdmin[]>([])
   const [loading, setLoading] = useState(true)
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [newSessionName, setNewSessionName] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
@@ -98,6 +102,91 @@ export default function SessionDetailPage() {
     }
   }
 
+  async function handleArchiveToggle() {
+    const newStatus = session?.status === 'archived' ? 'completed' : 'archived'
+
+    const { error } = await supabase
+      .from('sessions')
+      .update({ status: newStatus })
+      .eq('id', sessionId)
+
+    if (error) {
+      console.error('Error updating session status:', error)
+      alert('Fehler beim Archivieren der Session')
+    } else {
+      await loadSession()
+    }
+  }
+
+  function handleDuplicateClick() {
+    // Pre-fill with current name + year
+    const currentYear = new Date().getFullYear()
+    setNewSessionName(`${session?.name} ${currentYear}`)
+    setShowDuplicateModal(true)
+  }
+
+  async function handleDuplicateConfirm() {
+    try {
+      if (!newSessionName.trim()) {
+        alert('Bitte gib einen Namen für die neue Session ein')
+        return
+      }
+
+      // Create new session with custom name
+      const { data: newSession, error: sessionError } = await supabase
+        .from('sessions')
+        .insert({
+          organizer_id: user!.id,
+          name: newSessionName.trim(),
+          status: 'planning',
+          admin_token: uuidv4(),
+        })
+        .select()
+        .single()
+
+      if (sessionError) throw sessionError
+
+      // Copy participants (without assignments)
+      const participantsWithoutAssignments = participants.map(p => ({
+        session_id: newSession.id,
+        name: p.name,
+        phone_number: p.phone_number,
+        participant_token: uuidv4(),
+        is_organizer: p.is_organizer,
+      }))
+
+      const { error: participantsError } = await supabase
+        .from('participants')
+        .insert(participantsWithoutAssignments)
+
+      if (participantsError) throw participantsError
+
+      // Navigate to new session
+      router.push(`/app/session/${newSession.id}`)
+    } catch (error) {
+      console.error('Error duplicating session:', error)
+      alert('Fehler beim Kopieren der Session')
+    }
+  }
+
+  async function handleDeleteConfirm() {
+    try {
+      // Delete session (CASCADE will delete participants automatically)
+      const { error } = await supabase
+        .from('sessions')
+        .delete()
+        .eq('id', sessionId)
+
+      if (error) throw error
+
+      // Navigate back to dashboard
+      router.push('/app')
+    } catch (error) {
+      console.error('Error deleting session:', error)
+      alert('Fehler beim Löschen der Session')
+    }
+  }
+
   if (loading || !session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
@@ -113,7 +202,7 @@ export default function SessionDetailPage() {
   const canDraw = participants.length >= 3 && session.status === 'planning'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
       <header className="bg-gradient-to-r from-christmas-red to-christmas-red-light shadow-christmas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
@@ -129,15 +218,43 @@ export default function SessionDetailPage() {
                 Session-ID: {session.id.substring(0, 8)}... • {participants.length} Teilnehmer
               </p>
             </div>
-            <span
-              className={`px-5 py-2 rounded-xl text-base font-bold shadow-lg ${
-                session.status === 'drawn'
-                  ? 'bg-white text-christmas-green'
-                  : 'bg-white/90 text-christmas-gold-dark'
-              }`}
+            <div className="flex items-center gap-3">
+              <span
+                className={`px-5 py-2 rounded-xl text-base font-bold shadow-lg ${
+                  session.status === 'archived'
+                    ? 'bg-gray-500 text-white'
+                    : session.status === 'drawn'
+                    ? 'bg-white text-christmas-green'
+                    : 'bg-white/90 text-christmas-gold-dark'
+                }`}
+              >
+                {session.status === 'archived'
+                  ? '📦 Archiviert'
+                  : session.status === 'planning'
+                  ? '📝 In Planung'
+                  : '🎰 Ausgelost'}
+              </span>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4 flex-wrap">
+            <button
+              onClick={handleDuplicateClick}
+              className="px-4 py-2 bg-white/20 backdrop-blur border-2 border-white/40 rounded-lg hover:bg-white/30 transition-all text-white text-sm font-semibold"
             >
-              {session.status === 'planning' ? '📝 In Planung' : '🎰 Ausgelost'}
-            </span>
+              📋 Als Vorlage kopieren
+            </button>
+            <button
+              onClick={handleArchiveToggle}
+              className="px-4 py-2 bg-white/20 backdrop-blur border-2 border-white/40 rounded-lg hover:bg-white/30 transition-all text-white text-sm font-semibold"
+            >
+              {session.status === 'archived' ? '♻️ Wiederherstellen' : '📦 Archivieren'}
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="px-4 py-2 bg-red-500/80 backdrop-blur border-2 border-red-400/40 rounded-lg hover:bg-red-600/80 transition-all text-white text-sm font-semibold"
+            >
+              🗑️ Löschen
+            </button>
           </div>
         </div>
       </header>
@@ -226,6 +343,85 @@ export default function SessionDetailPage() {
           </div>
         )}
       </main>
+      <Footer />
+
+      {/* Duplicate Session Modal */}
+      {showDuplicateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <span className="text-4xl">📋</span>
+              Session kopieren
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Gib einen Namen für die neue Session ein. Alle Teilnehmer werden kopiert, aber es erfolgt eine neue Auslosung.
+            </p>
+
+            <div className="mb-6">
+              <label htmlFor="sessionName" className="block text-sm font-bold text-gray-700 mb-2">
+                Session Name *
+              </label>
+              <input
+                id="sessionName"
+                type="text"
+                value={newSessionName}
+                onChange={(e) => setNewSessionName(e.target.value)}
+                placeholder="Wichteln 2025"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-christmas-red/30 focus:border-christmas-red transition-all text-lg"
+                autoFocus
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDuplicateModal(false)}
+                className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleDuplicateConfirm}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-christmas-red to-christmas-red-light text-white rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300"
+              >
+                Kopieren
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Session Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <h2 className="text-2xl font-bold text-red-600 mb-4 flex items-center gap-3">
+              <span className="text-4xl">⚠️</span>
+              Session löschen
+            </h2>
+            <p className="text-gray-700 mb-2 font-semibold">
+              Möchtest du die Session "{session?.name}" wirklich löschen?
+            </p>
+            <p className="text-gray-600 mb-6">
+              Diese Aktion kann nicht rückgängig gemacht werden. Alle Teilnehmer und Zuteilungen werden ebenfalls gelöscht.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold hover:scale-105 hover:shadow-lg transition-all duration-300"
+              >
+                Ja, löschen
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

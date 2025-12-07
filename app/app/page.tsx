@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
 import type { Session } from '@/types/database.types'
+import { Footer } from '@/components/layout/Footer'
 
 export default function AppPage() {
   const { user, loading: authLoading, signOut } = useAuth()
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
+  const [showArchived, setShowArchived] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -17,14 +19,21 @@ export default function AppPage() {
     if (!authLoading && user) {
       loadSessions()
     }
-  }, [authLoading, user])
+  }, [authLoading, user, showArchived])
 
   async function loadSessions() {
-    const { data, error } = await supabase
+    const query = supabase
       .from('sessions')
       .select('*')
       .eq('organizer_id', user!.id)
       .order('created_at', { ascending: false })
+
+    // Filter by archived status
+    if (!showArchived) {
+      query.neq('status', 'archived')
+    }
+
+    const { data, error } = await query
 
     if (error) {
       console.error('Error loading sessions:', error)
@@ -51,7 +60,7 @@ export default function AppPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
       <header className="bg-gradient-to-r from-christmas-red to-christmas-red-light shadow-christmas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
           <div>
@@ -73,20 +82,37 @@ export default function AppPage() {
             <h2 className="text-3xl font-bold text-gray-900">Meine Wichtel-Sessions</h2>
             <p className="text-gray-600 mt-1">Verwalte alle deine Wichtel-Veranstaltungen 🎁</p>
           </div>
-          <button
-            onClick={createNewSession}
-            className="bg-gradient-to-r from-christmas-red to-christmas-red-light text-white px-8 py-4 rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300 text-lg shadow-lg"
-          >
-            + Neue Session
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowArchived(!showArchived)}
+              className={`px-6 py-4 rounded-xl font-bold transition-all duration-300 text-base shadow-md ${
+                showArchived
+                  ? 'bg-gray-600 text-white hover:bg-gray-700'
+                  : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-gray-400'
+              }`}
+            >
+              {showArchived ? '📋 Aktive anzeigen' : '📦 Archiv anzeigen'}
+            </button>
+            <button
+              onClick={createNewSession}
+              className="bg-gradient-to-r from-christmas-red to-christmas-red-light text-white px-8 py-4 rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300 text-lg shadow-lg"
+            >
+              + Neue Session
+            </button>
+          </div>
         </div>
 
         {sessions.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl shadow-xl border-4 border-christmas-ice">
-            <div className="text-8xl mb-6 animate-wiggle">🎁</div>
-            <p className="text-gray-900 text-2xl font-bold mb-3">Noch keine Sessions erstellt</p>
+            <div className="text-8xl mb-6 animate-wiggle">{showArchived ? '📦' : '🎁'}</div>
+            <p className="text-gray-900 text-2xl font-bold mb-3">
+              {showArchived ? 'Keine archivierten Sessions' : 'Noch keine Sessions erstellt'}
+            </p>
             <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
-              Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude! ✨
+              {showArchived
+                ? 'Du hast noch keine Sessions archiviert. Archiviere alte Sessions um deine Liste übersichtlich zu halten.'
+                : 'Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude! ✨'
+              }
             </p>
             <button
               onClick={createNewSession}
@@ -121,21 +147,31 @@ export default function AppPage() {
                 <div className="flex items-center justify-between">
                   <span
                     className={`px-4 py-2 rounded-xl text-sm font-bold shadow-md ${
-                      session.status === 'drawn'
+                      session.status === 'archived'
+                        ? 'bg-gray-500 text-white'
+                        : session.status === 'drawn'
                         ? 'bg-gradient-to-r from-christmas-green to-christmas-green-light text-white'
                         : session.status === 'completed'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                         : 'bg-gradient-to-r from-christmas-gold to-christmas-gold-light text-white'
                     }`}
                   >
-                    {session.status === 'planning'
+                    {session.status === 'archived'
+                      ? '📦 Archiviert'
+                      : session.status === 'planning'
                       ? '📝 In Planung'
                       : session.status === 'drawn'
                       ? '🎰 Ausgelost'
                       : '✅ Abgeschlossen'}
                   </span>
                   <span className="text-3xl group-hover:scale-125 transition-transform">
-                    {session.status === 'planning' ? '🎄' : session.status === 'drawn' ? '🎁' : '🎉'}
+                    {session.status === 'archived'
+                      ? '📦'
+                      : session.status === 'planning'
+                      ? '🎄'
+                      : session.status === 'drawn'
+                      ? '🎁'
+                      : '🎉'}
                   </span>
                 </div>
               </div>
@@ -143,6 +179,7 @@ export default function AppPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   )
 }

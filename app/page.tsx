@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import { Footer } from '@/components/layout/Footer'
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold px-4 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 text-8xl animate-pulse-slow">❄️</div>
@@ -68,6 +70,8 @@ export default function Home() {
           <p>🎁 Von Wichtel-Fans für Wichtel-Fans gemacht</p>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

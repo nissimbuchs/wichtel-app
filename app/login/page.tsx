@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/services/supabase/client'
+import { Footer } from '@/components/layout/Footer'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -33,7 +34,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold px-4 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Decorative snowflakes */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 text-6xl animate-pulse-slow">❄️</div>
@@ -108,6 +110,8 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   )
 }

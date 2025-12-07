@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Footer } from '@/components/layout/Footer'
 
 interface SlotMachineRevealProps {
   participantName: string
@@ -69,7 +70,8 @@ export function SlotMachineReveal({
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-christmas-red to-christmas-red-light p-4">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-christmas-red to-christmas-red-light">
+    <div className="flex-1 flex flex-col items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -129,6 +131,8 @@ export function SlotMachineReveal({
           (Du hast diese Zuteilung bereits gesehen)
         </motion.p>
       )}
+    </div>
+    <Footer />
     </div>
   )
 }

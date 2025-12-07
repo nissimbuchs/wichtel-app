@@ -72,13 +72,13 @@ export function ParticipantForm({ onAdd, disabled }: ParticipantFormProps) {
           type="tel"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="+49 170 1234567"
+          placeholder="+41 79 123 45 67"
           disabled={disabled || loading}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
         />
         <p className="mt-1 text-xs text-gray-500">
-          Format: +49 oder 0049 oder deutsche Nummer
+          Format: +41 oder 0041 oder Schweizer Nummer (079 123 45 67)
         </p>
       </div>
 
