@@ -35,7 +35,13 @@ export default function RevealPage() {
         .single()
 
       if (participantError || !participant) {
-        throw new Error('Ungültiger oder abgelaufener Link')
+        console.error('Participant fetch error:', participantError)
+        console.log('Token used:', token)
+        throw new Error(
+          participantError
+            ? `Datenbankfehler: ${participantError.message}`
+            : 'Ungültiger oder abgelaufener Link'
+        )
       }
 
       if (!participant.assigned_to_id) {
