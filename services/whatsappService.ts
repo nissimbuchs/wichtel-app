@@ -16,13 +16,19 @@ ${assignmentUrl}
 
 Öffne den Link, um zu sehen, wen du beschenkst! 🎁`
 
-  // Remove + from phone number and format for WhatsApp
-  const phone = participant.phone_number.replace(/[^0-9]/g, '')
+  // Format phone number for WhatsApp
+  let phone = participant.phone_number.replace(/[^0-9]/g, '')
+
+  // If Swiss number starting with 0, replace with 41
+  if (phone.startsWith('0')) {
+    phone = '41' + phone.substring(1)
+  }
 
   // URL encode the message
   const encodedMessage = encodeURIComponent(message)
 
-  return `https://wa.me/${phone}?text=${encodedMessage}`
+  // Use https://api.whatsapp.com for better mobile compatibility
+  return `https://api.whatsapp.com/send?phone=${phone}&text=${encodedMessage}`
 }
 
 /**
