@@ -51,28 +51,28 @@ export default function Home() {
         </div>
 
         {/* Features Card */}
-        <div className="glass-card rounded-3xl p-8 md:p-10 text-left hover:shadow-frost-lg transition-all duration-300">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3">
+        <div className="glass-card-strong rounded-3xl p-8 md:p-10 text-left hover:shadow-frost-lg transition-all duration-300">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3 text-christmas-red">
             <WichtelIcon name="sparkles" size={40} />
             <span>Features</span>
             <WichtelIcon name="sparkles" size={40} />
           </h2>
-          <ul className="space-y-4 text-base md:text-lg">
+          <ul className="space-y-4 text-base md:text-lg text-gray-700">
             <li className="flex items-start gap-3 hover:translate-x-2 transition-transform">
-              <WichtelIcon name="lock" size={24} className="flex-shrink-0" />
-              <span><strong>Garantierte Anonymität</strong> - auch für Organisatoren</span>
+              <WichtelIcon name="lock" size={24} className="flex-shrink-0 text-christmas-red" />
+              <span><strong className="text-gray-900">Garantierte Anonymität</strong> - auch für Organisatoren</span>
             </li>
             <li className="flex items-start gap-3 hover:translate-x-2 transition-transform">
-              <WichtelIcon name="message-square" size={24} className="flex-shrink-0" />
-              <span><strong>WhatsApp-Integration</strong> für schnellen Versand</span>
+              <WichtelIcon name="message-square" size={24} className="flex-shrink-0 text-christmas-green" />
+              <span><strong className="text-gray-900">WhatsApp-Integration</strong> für schnellen Versand</span>
             </li>
             <li className="flex items-start gap-3 hover:translate-x-2 transition-transform">
-              <WichtelIcon name="dices" size={24} className="flex-shrink-0" />
-              <span><strong>Magische Namen-Reveal</strong> Animation</span>
+              <WichtelIcon name="dices" size={24} className="flex-shrink-0 text-christmas-gold" />
+              <span><strong className="text-gray-900">Magische Namen-Reveal</strong> Animation</span>
             </li>
             <li className="flex items-start gap-3 hover:translate-x-2 transition-transform">
-              <WichtelIcon name="smartphone" size={24} className="flex-shrink-0" />
-              <span><strong>Keine App-Installation</strong> nötig</span>
+              <WichtelIcon name="smartphone" size={24} className="flex-shrink-0 text-christmas-red" />
+              <span><strong className="text-gray-900">Keine App-Installation</strong> nötig</span>
             </li>
           </ul>
         </div>
