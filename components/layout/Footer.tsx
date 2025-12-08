@@ -1,10 +1,12 @@
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
+
 export function Footer() {
   return (
     <footer className="bg-gradient-to-r from-christmas-red to-christmas-red-light mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-4xl">🎄</span>
+            <WichtelIcon name="tree" size={40} className="text-christmas-green" />
             <div className="text-white">
               <p className="font-bold text-lg">Wichtel App</p>
               <p className="text-white/80 text-sm">Wichteln leicht gemacht</p>

@@ -11,6 +11,7 @@ import { ParticipantForm } from '@/components/sessions/ParticipantForm'
 import { DrawButton } from '@/components/sessions/DrawButton'
 import { WhatsAppList } from '@/components/sessions/WhatsAppList'
 import { Footer } from '@/components/layout/Footer'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 export default function SessionDetailPage() {
   const params = useParams()
@@ -189,7 +190,9 @@ export default function SessionDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
         <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce-slow">🎄</div>
+          <div className="mb-4 flex justify-center">
+            <WichtelIcon name="tree" size={64} className="text-christmas-green animate-bounce-slow" />
+          </div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
           <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
         </div>
@@ -201,8 +204,9 @@ export default function SessionDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
-      <header className="bg-gradient-to-r from-christmas-red to-christmas-red-light shadow-christmas">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <header className="relative bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
+        <div className="texture-overlay" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
           <button
             onClick={() => router.push('/app')}
             className="text-white/90 hover:text-white mb-3 flex items-center gap-2 font-semibold transition-all hover:translate-x-1"
@@ -218,7 +222,7 @@ export default function SessionDetailPage() {
             </div>
             <div className="flex items-center gap-3">
               <span
-                className={`px-5 py-2 rounded-xl text-base font-bold shadow-lg ${
+                className={`px-5 py-2 rounded-xl text-base font-bold shadow-lg flex items-center gap-2 ${
                   session.status === 'archived'
                     ? 'bg-gray-500 text-white'
                     : session.status === 'drawn'
@@ -226,32 +230,55 @@ export default function SessionDetailPage() {
                     : 'bg-white/90 text-christmas-gold-dark'
                 }`}
               >
-                {session.status === 'archived'
-                  ? '📦 Archiviert'
-                  : session.status === 'planning'
-                  ? '📝 In Planung'
-                  : '🎰 Ausgelost'}
+                {session.status === 'archived' ? (
+                  <>
+                    <WichtelIcon name="archive" size={20} />
+                    <span>Archiviert</span>
+                  </>
+                ) : session.status === 'planning' ? (
+                  <>
+                    <WichtelIcon name="edit" size={20} />
+                    <span>In Planung</span>
+                  </>
+                ) : (
+                  <>
+                    <WichtelIcon name="dices" size={20} />
+                    <span>Ausgelost</span>
+                  </>
+                )}
               </span>
             </div>
           </div>
           <div className="flex gap-2 mt-4 flex-wrap">
             <button
               onClick={handleDuplicateClick}
-              className="px-4 py-2 bg-white/20 backdrop-blur border-2 border-white/40 rounded-lg hover:bg-white/30 transition-all text-white text-sm font-semibold"
+              className="glass-button px-4 py-2 rounded-lg text-white hover:text-white text-sm font-semibold flex items-center gap-2"
             >
-              📋 Als Vorlage kopieren
+              <WichtelIcon name="clipboard" size={16} />
+              Als Vorlage kopieren
             </button>
             <button
               onClick={handleArchiveToggle}
-              className="px-4 py-2 bg-white/20 backdrop-blur border-2 border-white/40 rounded-lg hover:bg-white/30 transition-all text-white text-sm font-semibold"
+              className="glass-button px-4 py-2 rounded-lg text-white hover:text-white text-sm font-semibold flex items-center gap-2"
             >
-              {session.status === 'archived' ? '♻️ Wiederherstellen' : '📦 Archivieren'}
+              {session.status === 'archived' ? (
+                <>
+                  <WichtelIcon name="rotate-ccw" size={16} />
+                  Wiederherstellen
+                </>
+              ) : (
+                <>
+                  <WichtelIcon name="archive" size={16} />
+                  Archivieren
+                </>
+              )}
             </button>
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="px-4 py-2 bg-red-500/80 backdrop-blur border-2 border-red-400/40 rounded-lg hover:bg-red-600/80 transition-all text-white text-sm font-semibold"
+              className="px-4 py-2 bg-red-500/80 backdrop-blur border-2 border-red-400/40 rounded-lg hover:bg-red-600/80 transition-all text-white text-sm font-semibold flex items-center gap-2"
             >
-              🗑️ Löschen
+              <WichtelIcon name="trash" size={16} />
+              Löschen
             </button>
           </div>
         </div>
@@ -271,9 +298,9 @@ export default function SessionDetailPage() {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Left: Add Participants */}
             <div>
-              <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+              <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-4xl">👥</span>
+                  <WichtelIcon name="users" size={40} className="text-christmas-red" />
                   <h2 className="text-2xl font-bold text-gray-900">Teilnehmer hinzufügen</h2>
                 </div>
                 <ParticipantForm
@@ -286,10 +313,10 @@ export default function SessionDetailPage() {
 
             {/* Right: Participant List */}
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+              <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="text-4xl">🎄</span>
+                    <WichtelIcon name="tree" size={40} className="text-christmas-green" />
                     <h2 className="text-2xl font-bold text-gray-900">
                       Teilnehmer
                     </h2>
@@ -300,7 +327,9 @@ export default function SessionDetailPage() {
                 </div>
                 {participants.length === 0 ? (
                   <div className="text-center py-12 bg-christmas-ice/30 rounded-xl">
-                    <div className="text-6xl mb-3 animate-pulse-slow">🎁</div>
+                    <div className="mb-3 flex justify-center">
+                      <WichtelIcon name="gift" size={64} className="text-christmas-red animate-pulse-slow" />
+                    </div>
                     <p className="text-gray-600 text-lg font-medium">
                       Noch keine Teilnehmer hinzugefügt
                     </p>
@@ -332,7 +361,7 @@ export default function SessionDetailPage() {
                   {!canDraw && participants.length < 3 && (
                     <div className="mt-4 text-center bg-white/70 rounded-xl p-4">
                       <p className="text-sm text-gray-700 font-medium flex items-center justify-center gap-2">
-                        <span className="text-2xl">💡</span>
+                        <WichtelIcon name="lightbulb" size={24} className="text-christmas-gold-dark" />
                         <span>Mindestens 3 Teilnehmer benötigt für die Auslosung</span>
                       </p>
                     </div>
@@ -348,9 +377,9 @@ export default function SessionDetailPage() {
       {/* Duplicate Session Modal */}
       {showDuplicateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+          <div className="glass-card-strong rounded-2xl max-w-md w-full p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-              <span className="text-4xl">📋</span>
+              <WichtelIcon name="clipboard" size={40} className="text-christmas-red" />
               Session kopieren
             </h2>
             <p className="text-gray-600 mb-6">
@@ -375,13 +404,13 @@ export default function SessionDetailPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDuplicateModal(false)}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all"
+                className="flex-1 glass-button px-6 py-3 rounded-xl font-bold text-gray-700 hover:text-christmas-red"
               >
                 Abbrechen
               </button>
               <button
                 onClick={handleDuplicateConfirm}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-christmas-red to-christmas-red-light text-white rounded-xl font-bold hover:scale-105 hover:shadow-christmas transition-all duration-300"
+                className="flex-1 px-6 py-3 bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20"
               >
                 Kopieren
               </button>
@@ -393,9 +422,9 @@ export default function SessionDetailPage() {
       {/* Delete Session Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+          <div className="glass-card-strong rounded-2xl max-w-md w-full p-8">
             <h2 className="text-2xl font-bold text-red-600 mb-4 flex items-center gap-3">
-              <span className="text-4xl">⚠️</span>
+              <WichtelIcon name="alert-triangle" size={40} className="text-red-600" />
               Session löschen
             </h2>
             <p className="text-gray-700 mb-2 font-semibold">
@@ -408,13 +437,13 @@ export default function SessionDetailPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all"
+                className="flex-1 glass-button px-6 py-3 rounded-xl font-bold text-gray-700 hover:text-christmas-red"
               >
                 Abbrechen
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold hover:scale-105 hover:shadow-lg transition-all duration-300"
+                className="flex-1 px-6 py-3 bg-gradient-to-br from-red-500 via-red-500 to-red-600 text-white rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20"
               >
                 Ja, löschen
               </button>

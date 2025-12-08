@@ -1,6 +1,7 @@
 'use client'
 
 import type { ParticipantAdmin } from '@/types/database.types'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface ParticipantListProps {
   participants: ParticipantAdmin[]
@@ -31,11 +32,12 @@ export function ParticipantList({ participants, onRemove, canRemove }: Participa
         >
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <p className="font-medium text-gray-900">
+              <p className="font-medium text-gray-900 flex items-center gap-2">
                 {participant.name}
                 {participant.is_organizer && (
-                  <span className="ml-2 text-sm">
-                    👤 <span className="text-gray-600">(Du)</span>
+                  <span className="flex items-center gap-1 text-sm">
+                    <WichtelIcon name="user" size={14} />
+                    <span className="text-gray-600">(Du)</span>
                   </span>
                 )}
               </p>

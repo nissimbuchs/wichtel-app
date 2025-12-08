@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { createClient } from '@/services/supabase/client'
 import { SlotMachineReveal } from '@/components/reveal/SlotMachineReveal'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface RevealData {
   participantName: string
@@ -101,9 +102,11 @@ export default function RevealPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-christmas-red p-4">
-        <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
-          <div className="text-6xl mb-4">❌</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold p-4">
+        <div className="glass-card-strong rounded-2xl p-8 max-w-md w-full text-center">
+          <div className="mb-4 flex justify-center">
+            <WichtelIcon name="alert-triangle" size={64} className="text-red-600" />
+          </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Fehler</h1>
           <p className="text-gray-700">{error}</p>
           <p className="text-sm text-gray-500 mt-4">

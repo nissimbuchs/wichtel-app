@@ -5,6 +5,7 @@ import type { ParticipantAdmin } from '@/types/database.types'
 import { generateWhatsAppUrl, openWhatsApp } from '@/services/whatsappService'
 import { createClient } from '@/services/supabase/client'
 import { CompletionModal } from './CompletionModal'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface WhatsAppListProps {
   sessionId: string
@@ -81,9 +82,9 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
     <div className="space-y-6">
       {/* Organizer Info-Box */}
       {organizer && (
-        <div className="bg-gradient-to-br from-christmas-gold/20 to-christmas-gold-light/20 rounded-2xl shadow-lg p-8 border-2 border-christmas-gold/50">
+        <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300 border-2 border-christmas-gold/50">
           <div className="flex items-start gap-4">
-            <div className="text-5xl flex-shrink-0">🎅</div>
+            <WichtelIcon name="user-check" size={48} className="text-christmas-gold-dark flex-shrink-0" />
             <div className="flex-1">
               <h3 className="text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
                 Deine persönliche Zuteilung
@@ -93,24 +94,25 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
               </p>
               <button
                 onClick={() => handleOrganizerRevealClick(organizer)}
-                className="px-6 py-3 bg-gradient-to-r from-christmas-gold to-christmas-gold-light text-white rounded-xl font-bold text-base hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md flex items-center gap-2"
+                className="px-6 py-3 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white rounded-xl font-bold text-base shadow-frost-lg hover:shadow-glow-gold hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-2"
               >
-                <span>🎁</span>
+                <WichtelIcon name="gift" size={20} />
                 <span>Meine Zuteilung anzeigen</span>
               </button>
-              <p className="text-sm text-gray-600 mt-3 font-medium">
-                💡 Hinweis: Dieser Link ist nur für dich!
+              <p className="text-sm text-gray-600 mt-3 font-medium flex items-center gap-2">
+                <WichtelIcon name="lightbulb" size={16} />
+                Hinweis: Dieser Link ist nur für dich!
               </p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-christmas-ice/50">
+      <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
         {/* Header with Progress */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <span className="text-5xl">💬</span>
+            <WichtelIcon name="message-square" size={48} className="text-christmas-green" />
             <div>
               <h2 className="text-3xl font-bold text-gray-900">WhatsApp versenden</h2>
               <p className="text-gray-600 text-sm mt-1">Sende jedem Teilnehmer seinen persönlichen Link</p>
@@ -170,7 +172,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                 <div className="flex items-center gap-4 flex-1 mb-3 sm:mb-0">
                   {isSent && (
                     <div className="flex-shrink-0 w-10 h-10 bg-christmas-green rounded-full flex items-center justify-center animate-bounce-slow">
-                      <span className="text-white text-xl font-bold">✓</span>
+                      <WichtelIcon name="check" size={20} className="text-white font-bold" />
                     </div>
                   )}
                   {!isSent && (
@@ -183,13 +185,13 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       {participant.name}
                       {participant.is_organizer && (
                         <span className="inline-flex items-center gap-1 bg-christmas-gold/20 text-christmas-gold-dark px-3 py-1 rounded-full text-xs font-bold">
-                          <span>👤</span>
+                          <WichtelIcon name="user" size={14} />
                           <span>Du</span>
                         </span>
                       )}
                     </p>
                     <p className="text-sm text-gray-600 flex items-center gap-1 mt-1">
-                      <span>📱</span>
+                      <WichtelIcon name="smartphone" size={14} />
                       <span>{participant.phone_number}</span>
                     </p>
                   </div>
@@ -198,19 +200,30 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                 <button
                   onClick={() => handleSendWhatsApp(participant)}
                   disabled={isSent || participant.is_organizer}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap ${
+                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
                     isSent
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                       : participant.is_organizer
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-christmas-green to-christmas-green-light text-white hover:scale-105 hover:shadow-lg shadow-md'
+                      : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
                   }`}
                 >
-                  {isSent
-                    ? '✓ Gesendet'
-                    : participant.is_organizer
-                    ? '✓ Link verfügbar'
-                    : '💬 WhatsApp öffnen'}
+                  {isSent ? (
+                    <>
+                      <WichtelIcon name="check" size={16} />
+                      Gesendet
+                    </>
+                  ) : participant.is_organizer ? (
+                    <>
+                      <WichtelIcon name="check" size={16} />
+                      Link verfügbar
+                    </>
+                  ) : (
+                    <>
+                      <WichtelIcon name="message-square" size={16} />
+                      WhatsApp öffnen
+                    </>
+                  )}
                 </button>
               </div>
             )

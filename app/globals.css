@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Glassmorphic Card Base */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/30 shadow-frost;
+  }
+
+  .glass-card-strong {
+    @apply bg-white/90 backdrop-blur-lg border border-white/40 shadow-frost-lg;
+  }
+
+  /* Glassmorphic Button */
+  .glass-button {
+    @apply backdrop-blur-md bg-white/10 border-2 border-white/30
+           shadow-frost hover:bg-white/20 hover:shadow-frost-lg
+           transition-all duration-300;
+  }
+
+  /* Glow Effects */
+  .glow-red {
+    @apply shadow-glow-red;
+  }
+
+  .glow-gold {
+    @apply shadow-glow-gold;
+  }
+
+  .glow-green {
+    @apply shadow-glow-green;
+  }
+
+  /* Subtle Texture Overlay */
+  .texture-overlay::before {
+    content: '';
+    @apply absolute inset-0 bg-frost-gradient opacity-50 pointer-events-none;
+  }
+}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Footer } from '@/components/layout/Footer'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface SlotMachineRevealProps {
   participantName: string
@@ -104,7 +105,10 @@ export function SlotMachineReveal({
         animate={{ opacity: 1, y: 0 }}
         className="text-center text-white mb-8"
       >
-        <h1 className="text-5xl font-bold mb-4">🎄 {sessionName}</h1>
+        <h1 className="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
+          <WichtelIcon name="tree" size={48} className="text-christmas-green" />
+          {sessionName}
+        </h1>
         <p className="text-xl">Hallo {participantName}!</p>
       </motion.div>
 
@@ -112,7 +116,7 @@ export function SlotMachineReveal({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full"
+        className="glass-card-strong rounded-2xl p-8 max-w-md w-full"
       >
         <p className="text-center text-gray-700 text-lg mb-6 font-medium">Du beschenkst:</p>
 
@@ -139,9 +143,11 @@ export function SlotMachineReveal({
         >
           {!isAnimating && (
             <>
-              <div className="text-6xl mb-4">🎁</div>
+              <div className="mb-4 flex justify-center">
+                <WichtelIcon name="gift" size={64} className="text-christmas-red" />
+              </div>
               <p className="text-gray-600 text-sm">
-                Denk dran: Es bleibt geheim bis zur Weihnachtsfeier! 🤫
+                Denk dran: Es bleibt geheim bis zur Weihnachtsfeier!
               </p>
             </>
           )}

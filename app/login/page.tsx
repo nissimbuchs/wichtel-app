@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -28,7 +29,7 @@ export default function LoginPage() {
     if (error) {
       setError(error.message)
     } else {
-      setMessage('Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. 📧')
+      setMessage('Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt.')
     }
     setLoading(false)
   }
@@ -38,23 +39,37 @@ export default function LoginPage() {
     <div className="flex-1 flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Decorative snowflakes */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 text-6xl animate-pulse-slow">❄️</div>
-        <div className="absolute top-32 right-20 text-5xl animate-bounce-slow">❄️</div>
-        <div className="absolute bottom-20 left-32 text-7xl animate-wiggle">⭐</div>
-        <div className="absolute bottom-32 right-10 text-6xl animate-pulse-slow">✨</div>
+        <div className="absolute top-10 left-10 animate-pulse-slow">
+          <WichtelIcon name="snowflake" size={60} className="text-white" />
+        </div>
+        <div className="absolute top-32 right-20 animate-bounce-slow">
+          <WichtelIcon name="snowflake" size={50} className="text-white" />
+        </div>
+        <div className="absolute bottom-20 left-32 animate-wiggle">
+          <WichtelIcon name="star" size={70} className="text-white" />
+        </div>
+        <div className="absolute bottom-32 right-10 animate-pulse-slow">
+          <WichtelIcon name="sparkles" size={60} className="text-white" />
+        </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-2xl p-10 md:p-12 max-w-md w-full relative z-10 border-4 border-white/30">
+      <div className="glass-card-strong rounded-3xl p-10 md:p-12 max-w-md w-full relative z-10">
         <div className="text-center mb-10">
-          <div className="text-7xl mb-4 animate-bounce-slow">🎄</div>
+          <div className="mb-4 flex justify-center animate-bounce-slow">
+            <WichtelIcon name="tree" size={70} className="text-christmas-green" />
+          </div>
           <h1 className="text-5xl font-bold text-christmas-red mb-3 drop-shadow-lg">Wichtel App</h1>
-          <p className="text-gray-600 text-lg">Organisiere dein Wichteln in unter 5 Minuten! 🎁</p>
+          <p className="text-gray-600 text-lg flex items-center justify-center gap-2">
+            Organisiere dein Wichteln in unter 5 Minuten!
+            <WichtelIcon name="gift" size={24} className="text-christmas-red" />
+          </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-3">
-              E-Mail-Adresse ✉️
+            <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+              E-Mail-Adresse
+              <WichtelIcon name="mail" size={16} />
             </label>
             <input
               id="email"
@@ -70,15 +85,18 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-christmas-red to-christmas-red-light text-white py-4 rounded-xl font-bold text-lg hover:scale-105 hover:shadow-christmas transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-4 rounded-xl font-bold text-lg shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="animate-bounce">🎅</span>
+                <WichtelIcon name="user-check" size={20} className="animate-bounce" />
                 <span>Wird gesendet...</span>
               </span>
             ) : (
-              'Magic Link senden 🪄'
+              <span className="flex items-center justify-center gap-2">
+                <WichtelIcon name="sparkles" size={20} />
+                <span>Magic Link senden</span>
+              </span>
             )}
           </button>
         </form>
@@ -86,7 +104,7 @@ export default function LoginPage() {
         {message && (
           <div className="mt-6 p-5 bg-gradient-to-r from-christmas-green-light/20 to-christmas-green/20 border-2 border-christmas-green rounded-xl text-christmas-green-dark text-base font-medium animate-pulse-slow">
             <div className="flex items-start gap-3">
-              <span className="text-2xl">✅</span>
+              <WichtelIcon name="check-circle" size={24} className="flex-shrink-0" />
               <span>{message}</span>
             </div>
           </div>
@@ -95,7 +113,7 @@ export default function LoginPage() {
         {error && (
           <div className="mt-6 p-5 bg-red-50 border-2 border-red-300 rounded-xl text-red-800 text-base font-medium">
             <div className="flex items-start gap-3">
-              <span className="text-2xl">⚠️</span>
+              <WichtelIcon name="alert-triangle" size={24} className="flex-shrink-0" />
               <span>{error}</span>
             </div>
           </div>
@@ -103,8 +121,8 @@ export default function LoginPage() {
 
         <div className="mt-8 text-center">
           <div className="inline-block bg-gradient-to-r from-christmas-gold/20 to-christmas-gold-light/20 border-2 border-christmas-gold/30 rounded-xl p-4">
-            <p className="text-sm text-gray-700 font-medium">
-              <span className="text-xl mr-2">🔐</span>
+            <p className="text-sm text-gray-700 font-medium flex items-center gap-2">
+              <WichtelIcon name="lock" size={20} />
               Kein Passwort nötig! Wir senden dir einen sicheren Login-Link per E-Mail.
             </p>
           </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { ParticipantAdmin } from '@/types/database.types'
 import { DrawConfirmationModal } from './DrawConfirmationModal'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface DrawButtonProps {
   sessionId: string
@@ -19,9 +20,19 @@ export function DrawButton({ sessionId, participants, canDraw, onDrawComplete }:
       <button
         onClick={() => setShowConfirmation(true)}
         disabled={!canDraw}
-        className="w-full bg-christmas-green text-white py-3 rounded-lg font-semibold hover:bg-christmas-green-light transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white py-3 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-green hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
       >
-        {canDraw ? '🎲 Auslosung durchführen' : '⏳ Auslosung nicht möglich'}
+        {canDraw ? (
+          <>
+            <WichtelIcon name="dices" size={20} />
+            Auslosung durchführen
+          </>
+        ) : (
+          <>
+            <WichtelIcon name="alert-triangle" size={20} />
+            Auslosung nicht möglich
+          </>
+        )}
       </button>
 
       {showConfirmation && (

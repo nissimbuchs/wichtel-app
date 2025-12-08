@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
 interface ParticipantFormProps {
   onAdd: (name: string, phoneNumber: string, isOrganizer: boolean) => Promise<void>
@@ -97,8 +98,9 @@ export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFo
             className="mt-1 h-5 w-5 text-christmas-gold focus:ring-christmas-gold border-gray-300 rounded cursor-pointer"
           />
           <label htmlFor="isOrganizer" className="flex-1 cursor-pointer">
-            <span className="block text-sm font-bold text-gray-900">
-              🎅 Ich bin der Organisator
+            <span className="block text-sm font-bold text-gray-900 flex items-center gap-2">
+              <WichtelIcon name="user-check" size={16} />
+              Ich bin der Organisator
             </span>
             <span className="block text-xs text-gray-600 mt-1">
               Als Organisator erhältst du einen direkten Link zu deiner Zuteilung (kein WhatsApp nötig)
@@ -116,7 +118,7 @@ export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFo
       <button
         type="submit"
         disabled={disabled || loading}
-        className="w-full bg-christmas-red text-white py-2 rounded-lg font-semibold hover:bg-christmas-red-light transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-2 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {loading ? 'Wird hinzugefügt...' : '+ Hinzufügen'}
       </button>

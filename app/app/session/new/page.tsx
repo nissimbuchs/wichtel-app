@@ -41,21 +41,22 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
+      <header className="relative bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
+        <div className="texture-overlay" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
           <button
             onClick={() => router.back()}
-            className="text-gray-600 hover:text-gray-900 mb-2 flex items-center gap-2"
+            className="text-white/90 hover:text-white mb-2 flex items-center gap-2 font-semibold transition-all hover:translate-x-1"
           >
             ← Zurück
           </button>
-          <h1 className="text-3xl font-bold text-christmas-red">Neue Wichtel-Session</h1>
+          <h1 className="text-3xl font-bold text-white drop-shadow-lg">Neue Wichtel-Session</h1>
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow p-8">
+        <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
           <form onSubmit={handleCreateSession} className="space-y-6">
             <div>
               <label htmlFor="sessionName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -84,7 +85,7 @@ export default function NewSessionPage() {
             <button
               type="submit"
               disabled={creating}
-              className="w-full bg-christmas-red text-white py-3 rounded-lg font-semibold hover:bg-christmas-red-light transition disabled:opacity-50"
+              className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-3 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:hover:scale-100"
             >
               {creating ? 'Wird erstellt...' : 'Session erstellen'}
             </button>
