@@ -2,17 +2,27 @@
 
 import { useState } from 'react'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import type { ParticipantAdmin } from '@/types/database.types'
 
 interface ParticipantFormProps {
-  onAdd: (name: string, phoneNumber: string, isOrganizer: boolean) => Promise<void>
+  onAdd: (name: string, phoneNumber: string, isOrganizer: boolean, partnerId?: string | null) => Promise<void>
   disabled?: boolean
   hasOrganizer?: boolean
+  partnerExclusionEnabled?: boolean
+  existingParticipants?: ParticipantAdmin[]
 }
 
-export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFormProps) {
+export function ParticipantForm({
+  onAdd,
+  disabled,
+  hasOrganizer,
+  partnerExclusionEnabled = false,
+  existingParticipants = []
+}: ParticipantFormProps) {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isOrganizer, setIsOrganizer] = useState(false)
+  const [partnerId, setPartnerId] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -36,18 +46,22 @@ export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFo
         throw new Error('Ungültige Telefonnummer')
       }
 
-      await onAdd(name.trim(), phoneNumber.trim(), isOrganizer)
+      await onAdd(name.trim(), phoneNumber.trim(), isOrganizer, partnerId || null)
 
       // Clear form
       setName('')
       setPhoneNumber('')
       setIsOrganizer(false)
+      setPartnerId('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Fehler beim Hinzufügen')
     } finally {
       setLoading(false)
     }
   }
+
+  // Filter out already-partnered participants
+  const availablePartners = existingParticipants.filter(p => !p.partner_id)
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,6 +99,32 @@ export function ParticipantForm({ onAdd, disabled, hasOrganizer }: ParticipantFo
           Format: +41 oder 0041 oder Schweizer Nummer (079 123 45 67)
         </p>
       </div>
+
+      {/* Partner Selection */}
+      {partnerExclusionEnabled && availablePartners.length > 0 && (
+        <div>
+          <label htmlFor="partner" className="block text-sm font-medium text-gray-700 mb-1">
+            Partner (optional)
+          </label>
+          <select
+            id="partner"
+            value={partnerId}
+            onChange={(e) => setPartnerId(e.target.value)}
+            disabled={disabled || loading}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
+          >
+            <option value="">Kein Partner</option>
+            {availablePartners.map((participant) => (
+              <option key={participant.id} value={participant.id}>
+                {participant.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Wähle einen Partner aus, der nicht zugelost werden soll.
+          </p>
+        </div>
+      )}
 
       {/* Organizer Checkbox */}
       {!hasOrganizer && (

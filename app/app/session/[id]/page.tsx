@@ -65,7 +65,7 @@ export default function SessionDetailPage() {
     // CRITICAL: Do NOT select assigned_to_id to preserve anonymity
     const { data, error } = await supabase
       .from('participants')
-      .select('id, name, phone_number, participant_token, is_organizer, whatsapp_sent_at, reveal_viewed_at, created_at')
+      .select('id, name, phone_number, participant_token, is_organizer, whatsapp_sent_at, reveal_viewed_at, partner_id, created_at')
       .eq('session_id', sessionId)
       .order('created_at', { ascending: true })
 
@@ -76,7 +76,12 @@ export default function SessionDetailPage() {
     }
   }
 
-  async function handleAddParticipant(name: string, phoneNumber: string, isOrganizer: boolean = false) {
+  async function handleAddParticipant(
+    name: string,
+    phoneNumber: string,
+    isOrganizer: boolean = false,
+    partnerId: string | null = null
+  ) {
     if (!user) return
 
     const { error } = await supabase.from('participants').insert({
@@ -85,6 +90,7 @@ export default function SessionDetailPage() {
       phone_number: phoneNumber,
       participant_token: uuidv4(),
       is_organizer: isOrganizer,
+      partner_id: partnerId,
     })
 
     if (error) {
@@ -319,6 +325,8 @@ export default function SessionDetailPage() {
                   onAdd={handleAddParticipant}
                   disabled={session.status !== 'planning'}
                   hasOrganizer={participants.some(p => p.is_organizer)}
+                  partnerExclusionEnabled={session.partner_exclusion_enabled}
+                  existingParticipants={participants}
                 />
               </div>
             </div>
@@ -354,6 +362,7 @@ export default function SessionDetailPage() {
                     participants={participants}
                     onRemove={handleRemoveParticipant}
                     canRemove={session.status === 'planning'}
+                    showPartnerInfo={session.partner_exclusion_enabled}
                   />
                 )}
               </div>
@@ -365,6 +374,7 @@ export default function SessionDetailPage() {
                     sessionId={sessionId}
                     participants={participants}
                     canDraw={canDraw}
+                    partnerExclusionEnabled={session.partner_exclusion_enabled}
                     onDrawComplete={() => {
                       loadSession()
                       loadParticipants()

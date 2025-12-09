@@ -9,10 +9,17 @@ interface DrawButtonProps {
   sessionId: string
   participants: ParticipantAdmin[]
   canDraw: boolean
+  partnerExclusionEnabled: boolean
   onDrawComplete: () => void
 }
 
-export function DrawButton({ sessionId, participants, canDraw, onDrawComplete }: DrawButtonProps) {
+export function DrawButton({
+  sessionId,
+  participants,
+  canDraw,
+  partnerExclusionEnabled,
+  onDrawComplete
+}: DrawButtonProps) {
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   return (
@@ -39,6 +46,7 @@ export function DrawButton({ sessionId, participants, canDraw, onDrawComplete }:
         <DrawConfirmationModal
           sessionId={sessionId}
           participants={participants}
+          partnerExclusionEnabled={partnerExclusionEnabled}
           onClose={() => setShowConfirmation(false)}
           onComplete={() => {
             setShowConfirmation(false)

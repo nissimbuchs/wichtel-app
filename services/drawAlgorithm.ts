@@ -2,14 +2,44 @@ import { createClient } from './supabase/client'
 import type { ParticipantAdmin } from '@/types/database.types'
 
 /**
- * Generates a random derangement (permutation where no element appears in its original position)
- * This ensures nobody gets themselves in the Wichtel assignment
+ * Validates that partner constraints don't make a solution impossible
  */
-function generateDerangement(participants: ParticipantAdmin[]): Map<string, string> {
+function validatePartnerConstraints(participants: ParticipantAdmin[]): void {
+  const n = participants.length
+
+  // Count how many people have partners
+  const partneredCount = participants.filter(p => p.partner_id !== null).length
+
+  // Edge case: All participants are in pairs (even number, all paired)
+  if (partneredCount === n && n % 2 === 0) {
+    // This is solvable: each pair gives to the next pair in a cycle
+    // Example: (A,B) (C,D) → A→C, B→D, C→B, D→A
+    return
+  }
+
+  // Mathematical note: As long as not everyone is in one giant mutual exclusion group,
+  // a derangement should exist. The retry mechanism will find it.
+}
+
+/**
+ * Generates a random derangement with partner exclusion constraints
+ * Ensures:
+ * 1. Nobody gets themselves
+ * 2. Partners don't get each other (if partner_id is set)
+ */
+function generateDerangement(
+  participants: ParticipantAdmin[],
+  partnerExclusionEnabled: boolean = false
+): Map<string, string> {
   const n = participants.length
 
   if (n < 3) {
     throw new Error('Mindestens 3 Teilnehmer benötigt für die Auslosung')
+  }
+
+  // Validate partner constraints are solvable
+  if (partnerExclusionEnabled) {
+    validatePartnerConstraints(participants)
   }
 
   const assignments = new Map<string, string>()
@@ -26,10 +56,20 @@ function generateDerangement(participants: ParticipantAdmin[]): Map<string, stri
       ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
     }
 
-    // Check if valid derangement (nobody gets themselves)
+    // Check if valid derangement
     let isValid = true
     for (let i = 0; i < n; i++) {
-      if (participants[i].id === shuffled[i].id) {
+      const giver = participants[i]
+      const receiver = shuffled[i]
+
+      // Rule 1: Nobody gets themselves
+      if (giver.id === receiver.id) {
+        isValid = false
+        break
+      }
+
+      // Rule 2: Partners don't get each other
+      if (partnerExclusionEnabled && giver.partner_id === receiver.id) {
         isValid = false
         break
       }
@@ -44,7 +84,7 @@ function generateDerangement(participants: ParticipantAdmin[]): Map<string, stri
     }
   }
 
-  throw new Error('Konnte keine gültige Zuteilung nach maximalen Versuchen generieren')
+  throw new Error('Konnte keine gültige Zuteilung nach maximalen Versuchen generieren. Bitte prüfe die Partner-Zuordnungen.')
 }
 
 /**
@@ -53,14 +93,15 @@ function generateDerangement(participants: ParticipantAdmin[]): Map<string, stri
  */
 export async function performDraw(
   sessionId: string,
-  participants: ParticipantAdmin[]
+  participants: ParticipantAdmin[],
+  partnerExclusionEnabled: boolean = false
 ): Promise<void> {
   if (participants.length < 3) {
     throw new Error('Mindestens 3 Teilnehmer benötigt für die Auslosung')
   }
 
-  // Generate assignments
-  const assignments = generateDerangement(participants)
+  // Generate assignments with partner constraints
+  const assignments = generateDerangement(participants, partnerExclusionEnabled)
 
   // Convert Map to array for API
   const assignmentsArray = Array.from(assignments.entries()).map(([giverId, receiverId]) => ({

@@ -8,6 +8,7 @@ import { WichtelIcon } from '@/components/icons/WichtelIcon'
 interface DrawConfirmationModalProps {
   sessionId: string
   participants: ParticipantAdmin[]
+  partnerExclusionEnabled: boolean
   onClose: () => void
   onComplete: () => void
 }
@@ -15,6 +16,7 @@ interface DrawConfirmationModalProps {
 export function DrawConfirmationModal({
   sessionId,
   participants,
+  partnerExclusionEnabled,
   onClose,
   onComplete,
 }: DrawConfirmationModalProps) {
@@ -26,7 +28,7 @@ export function DrawConfirmationModal({
     setError('')
 
     try {
-      await performDraw(sessionId, participants)
+      await performDraw(sessionId, participants, partnerExclusionEnabled)
       onComplete()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Fehler bei der Auslosung')
@@ -51,6 +53,11 @@ export function DrawConfirmationModal({
               <p className="mt-2">
                 Niemand (auch nicht du als Organisator) kennt die Zuteilungen im Voraus.
               </p>
+              {partnerExclusionEnabled && (
+                <p className="mt-2 font-semibold text-christmas-blue">
+                  Partner-Ausschluss ist aktiv: Partner werden nicht einander zugelost.
+                </p>
+              )}
             </div>
           </div>
         </div>

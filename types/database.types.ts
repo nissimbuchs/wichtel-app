@@ -16,6 +16,7 @@ export interface Database {
           name: string
           status: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token: string
+          partner_exclusion_enabled: boolean
           created_at: string
           updated_at: string
         }
@@ -25,6 +26,7 @@ export interface Database {
           name: string
           status?: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token: string
+          partner_exclusion_enabled?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -34,6 +36,7 @@ export interface Database {
           name?: string
           status?: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token?: string
+          partner_exclusion_enabled?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -49,6 +52,7 @@ export interface Database {
           is_organizer: boolean
           whatsapp_sent_at: string | null
           reveal_viewed_at: string | null
+          partner_id: string | null
           created_at: string
           updated_at: string
         }
@@ -62,6 +66,7 @@ export interface Database {
           is_organizer?: boolean
           whatsapp_sent_at?: string | null
           reveal_viewed_at?: string | null
+          partner_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -75,6 +80,7 @@ export interface Database {
           is_organizer?: boolean
           whatsapp_sent_at?: string | null
           reveal_viewed_at?: string | null
+          partner_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -92,6 +98,7 @@ export interface ParticipantAdmin {
   is_organizer: boolean
   whatsapp_sent_at: string | null
   reveal_viewed_at: string | null
+  partner_id: string | null
   created_at: string
 }
 

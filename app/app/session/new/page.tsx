@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 export default function NewSessionPage() {
   const { user } = useAuth()
   const [sessionName, setSessionName] = useState(`Wichteln ${new Date().getFullYear()}`)
+  const [partnerExclusionEnabled, setPartnerExclusionEnabled] = useState(false)
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -28,6 +29,7 @@ export default function NewSessionPage() {
         name: sessionName,
         status: 'planning',
         admin_token: uuidv4(),
+        partner_exclusion_enabled: partnerExclusionEnabled,
       })
       .select()
       .single()
@@ -74,6 +76,26 @@ export default function NewSessionPage() {
               <p className="mt-2 text-sm text-gray-500">
                 Gib deiner Session einen Namen, damit du sie später leicht wiederfindest.
               </p>
+            </div>
+
+            <div className="bg-christmas-ice/30 border-2 border-christmas-blue/30 rounded-xl p-5">
+              <div className="flex items-start gap-3">
+                <input
+                  id="partnerExclusion"
+                  type="checkbox"
+                  checked={partnerExclusionEnabled}
+                  onChange={(e) => setPartnerExclusionEnabled(e.target.checked)}
+                  className="mt-1 h-5 w-5 text-christmas-blue focus:ring-christmas-blue border-gray-300 rounded cursor-pointer"
+                />
+                <label htmlFor="partnerExclusion" className="flex-1 cursor-pointer">
+                  <span className="block text-base font-bold text-gray-900">
+                    Partner-Ausschluss aktivieren
+                  </span>
+                  <span className="block text-sm text-gray-600 mt-1">
+                    Verhindert, dass Partner einander zugelost werden. Du kannst beim Hinzufügen von Teilnehmern angeben, wer mit wem in einer Partnerschaft ist.
+                  </span>
+                </label>
+              </div>
             </div>
 
             {error && (
