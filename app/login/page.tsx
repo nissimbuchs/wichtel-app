@@ -1,17 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const searchParams = useSearchParams()
 
   const supabase = createClient()
+
+  useEffect(() => {
+    // Check for auth error from callback
+    const authError = searchParams.get('error')
+    const errorDetails = searchParams.get('details')
+
+    if (authError === 'auth_failed') {
+      let errorMessage = 'Der Login-Link ist abgelaufen oder ungültig. Bitte fordere einen neuen Link an.'
+
+      // Check for specific error types
+      if (errorDetails) {
+        const details = decodeURIComponent(errorDetails)
+        if (details.includes('expired')) {
+          errorMessage = 'Der Login-Link ist abgelaufen. Bitte fordere einen neuen Link an.'
+        } else if (details.includes('invalid')) {
+          errorMessage = 'Der Login-Link ist ungültig. Bitte fordere einen neuen Link an.'
+        } else if (details.includes('already') || details.includes('used')) {
+          errorMessage = 'Dieser Login-Link wurde bereits verwendet. Bitte fordere einen neuen Link an.'
+        }
+      }
+
+      setError(errorMessage)
+    }
+  }, [searchParams])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,13 +49,14 @@ export default function LoginPage() {
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        shouldCreateUser: true,
       },
     })
 
     if (error) {
       setError(error.message)
     } else {
-      setMessage('Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt.')
+      setMessage('Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.')
     }
     setLoading(false)
   }
