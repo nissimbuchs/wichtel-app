@@ -31,6 +31,10 @@ export async function GET(request: Request) {
 
     // Log the exchange error for debugging
     console.error('Exchange code error:', exchangeError)
+
+    // Pass the error message to login page
+    const errorMessage = exchangeError.message || exchangeError.toString()
+    return NextResponse.redirect(`${origin}/login?error=auth_failed&details=${encodeURIComponent(errorMessage)}`)
   }
 
   // Return the user to an error page with instructions
