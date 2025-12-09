@@ -210,41 +210,55 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleSendWhatsApp(participant)}
-                  disabled={isSent || participant.is_organizer}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
-                    isViewed
-                      ? 'bg-green-100 text-green-700 cursor-default'
-                      : isSent
-                      ? 'bg-blue-100 text-blue-700 cursor-default'
-                      : participant.is_organizer
-                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                      : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
-                  }`}
-                >
-                  {isViewed ? (
-                    <>
-                      <WichtelIcon name="check-circle" size={16} />
-                      Abgerufen
-                    </>
-                  ) : isSent ? (
-                    <>
-                      <WichtelIcon name="check" size={16} />
-                      Versendet
-                    </>
-                  ) : participant.is_organizer ? (
-                    <>
-                      <WichtelIcon name="check" size={16} />
-                      Link verfügbar
-                    </>
-                  ) : (
-                    <>
-                      <WichtelIcon name="message-square" size={16} />
-                      WhatsApp öffnen
-                    </>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleSendWhatsApp(participant)}
+                    disabled={participant.is_organizer}
+                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
+                      participant.is_organizer
+                        ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                        : isViewed
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-300'
+                        : isSent
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-300'
+                        : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
+                    }`}
+                  >
+                    {isViewed ? (
+                      <>
+                        <WichtelIcon name="check-circle" size={16} />
+                        Abgerufen
+                      </>
+                    ) : isSent ? (
+                      <>
+                        <WichtelIcon name="check" size={16} />
+                        Versendet
+                      </>
+                    ) : participant.is_organizer ? (
+                      <>
+                        <WichtelIcon name="check" size={16} />
+                        Link verfügbar
+                      </>
+                    ) : (
+                      <>
+                        <WichtelIcon name="message-square" size={16} />
+                        WhatsApp öffnen
+                      </>
+                    )}
+                  </button>
+
+                  {/* Resend button - only show if already sent */}
+                  {isSent && !participant.is_organizer && (
+                    <button
+                      onClick={() => handleSendWhatsApp(participant)}
+                      className="px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
+                      title="Erneut senden"
+                    >
+                      <WichtelIcon name="rotate-ccw" size={16} />
+                      <span className="hidden sm:inline">Erneut senden</span>
+                    </button>
                   )}
-                </button>
+                </div>
               </div>
             )
           })}
