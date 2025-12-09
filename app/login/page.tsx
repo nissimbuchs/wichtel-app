@@ -11,9 +11,28 @@ function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [browserName, setBrowserName] = useState('')
   const searchParams = useSearchParams()
 
   const supabase = createClient()
+
+  // Detect browser name
+  useEffect(() => {
+    const userAgent = navigator.userAgent
+    let browser = 'diesem Browser'
+
+    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+      browser = 'Chrome'
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      browser = 'Safari'
+    } else if (userAgent.includes('Firefox')) {
+      browser = 'Firefox'
+    } else if (userAgent.includes('Edg')) {
+      browser = 'Edge'
+    }
+
+    setBrowserName(browser)
+  }, [])
 
   useEffect(() => {
     // Check for auth error from callback
@@ -26,7 +45,9 @@ function LoginForm() {
       // Check for specific error types
       if (errorDetails) {
         const details = decodeURIComponent(errorDetails)
-        if (details.includes('expired')) {
+        if (details.includes('code verifier') || details.includes('code_verifier') || details.includes('validation_failed')) {
+          errorMessage = `Der Login-Link wurde in einem anderen Browser geöffnet. Bitte öffne den Link in ${browserName || 'dem selben Browser'}, in dem du ihn angefordert hast, oder fordere einen neuen Link an.`
+        } else if (details.includes('expired')) {
           errorMessage = 'Der Login-Link ist abgelaufen. Bitte fordere einen neuen Link an.'
         } else if (details.includes('invalid')) {
           errorMessage = 'Der Login-Link ist ungültig. Bitte fordere einen neuen Link an.'
@@ -37,7 +58,7 @@ function LoginForm() {
 
       setError(errorMessage)
     }
-  }, [searchParams])
+  }, [searchParams, browserName])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +77,9 @@ function LoginForm() {
     if (error) {
       setError(error.message)
     } else {
-      setMessage('Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.')
+      setMessage(`Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. 
+
+⚠️ Wichtig: Öffne den Link in ${browserName || 'diesem Browser'}, in dem du diese Seite geöffnet hast.`)
     }
     setLoading(false)
   }

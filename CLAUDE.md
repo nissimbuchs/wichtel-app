@@ -155,6 +155,21 @@ supabase/
 5. Middleware protects `/app/*` routes, redirects unauthenticated users
 6. Use `useAuth()` hook in client components or `createServerClient()` in Server Components
 
+**Important Limitation - Same Browser Requirement**:
+Magic links use PKCE (Proof Key for Code Exchange) flow with browser-side storage. The `code_verifier` is stored in localStorage when the magic link is requested and must be retrieved when the link is clicked.
+
+**This means users MUST open the magic link in the same browser where they requested it.**
+
+If a user:
+- Requests a magic link in Chrome but opens it in Safari → Error: "code verifier should be non-empty"
+- Requests on desktop but opens from mobile email client → Same error
+- Has email security that pre-clicks links → Link is consumed before user can use it
+
+**Mitigation**:
+- Login page shows browser name and warns users to open link in same browser
+- Error messages detect code_verifier failures and provide specific guidance
+- Corporate email security systems may pre-click links - users should request links from personal email when possible
+
 **Access the current user**:
 ```typescript
 // Client Component
