@@ -77,7 +77,7 @@ function LoginForm() {
     if (error) {
       setError(error.message)
     } else {
-      setMessage(`Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. 
+      setMessage(`Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.
 
 ⚠️ Wichtig: Öffne den Link in ${browserName || 'diesem Browser'}, in dem du diese Seite geöffnet hast.`)
     }

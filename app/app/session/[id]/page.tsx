@@ -53,7 +53,7 @@ export default function SessionDetailPage() {
     // CRITICAL: Do NOT select assigned_to_id to preserve anonymity
     const { data, error } = await supabase
       .from('participants')
-      .select('id, name, phone_number, participant_token, is_organizer, whatsapp_sent_at, created_at')
+      .select('id, name, phone_number, participant_token, is_organizer, whatsapp_sent_at, reveal_viewed_at, created_at')
       .eq('session_id', sessionId)
       .order('created_at', { ascending: true })
 

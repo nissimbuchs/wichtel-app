@@ -48,6 +48,7 @@ export interface Database {
           assigned_to_id: string | null
           is_organizer: boolean
           whatsapp_sent_at: string | null
+          reveal_viewed_at: string | null
           created_at: string
           updated_at: string
         }
@@ -60,6 +61,7 @@ export interface Database {
           assigned_to_id?: string | null
           is_organizer?: boolean
           whatsapp_sent_at?: string | null
+          reveal_viewed_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -72,6 +74,7 @@ export interface Database {
           assigned_to_id?: string | null
           is_organizer?: boolean
           whatsapp_sent_at?: string | null
+          reveal_viewed_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -88,6 +91,7 @@ export interface ParticipantAdmin {
   participant_token: string
   is_organizer: boolean
   whatsapp_sent_at: string | null
+  reveal_viewed_at: string | null
   created_at: string
 }
 

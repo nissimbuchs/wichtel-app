@@ -75,6 +75,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
   }
 
   const sentCount = sentParticipants.size
+  const viewedCount = participants.filter(p => p.reveal_viewed_at !== null).length
   const totalCount = participants.length
   const organizer = participants.find((p) => p.is_organizer)
 
@@ -118,10 +119,16 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
               <p className="text-gray-600 text-sm mt-1">Sende jedem Teilnehmer seinen persönlichen Link</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-6">
+            {/* Versendet Counter */}
             <div className="text-right">
-              <div className="text-2xl font-bold text-christmas-green">{sentCount}</div>
-              <div className="text-sm text-gray-600">von {totalCount}</div>
+              <div className="text-xl font-bold text-blue-600">{sentCount}</div>
+              <div className="text-xs text-gray-600">Versendet</div>
+            </div>
+            {/* Abgerufen Counter */}
+            <div className="text-right">
+              <div className="text-xl font-bold text-green-600">{viewedCount}</div>
+              <div className="text-xs text-gray-600">Abgerufen</div>
             </div>
             <div className="relative w-20 h-20">
               <svg className="transform -rotate-90 w-20 h-20">
@@ -157,25 +164,31 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
         <div className="space-y-3">
           {participants.map((participant) => {
             const isSent = sentParticipants.has(participant.id)
+            const isViewed = participant.reveal_viewed_at !== null
 
             return (
               <div
                 key={participant.id}
                 className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-xl border-2 transition-all ${
-                  isSent
-                    ? 'bg-christmas-green/5 border-christmas-green/30'
+                  isViewed
+                    ? 'bg-green-50 border-green-300'
+                    : isSent
+                    ? 'bg-blue-50 border-blue-300'
                     : participant.is_organizer
                     ? 'bg-gradient-to-r from-organizer-bg to-organizer-border/20 border-organizer-border'
                     : 'bg-gray-50 border-gray-200 hover:border-christmas-gold/50 hover:shadow-md'
                 }`}
               >
                 <div className="flex items-center gap-4 flex-1 mb-3 sm:mb-0">
-                  {isSent && (
-                    <div className="flex-shrink-0 w-10 h-10 bg-christmas-green rounded-full flex items-center justify-center animate-bounce-slow">
+                  {isViewed ? (
+                    <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center animate-bounce-slow">
+                      <WichtelIcon name="check-circle" size={20} className="text-white font-bold" />
+                    </div>
+                  ) : isSent ? (
+                    <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                       <WichtelIcon name="check" size={20} className="text-white font-bold" />
                     </div>
-                  )}
-                  {!isSent && (
+                  ) : (
                     <div className="flex-shrink-0 w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                       <span className="text-gray-500 text-xl">○</span>
                     </div>
@@ -201,17 +214,24 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                   onClick={() => handleSendWhatsApp(participant)}
                   disabled={isSent || participant.is_organizer}
                   className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
-                    isSent
-                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                    isViewed
+                      ? 'bg-green-100 text-green-700 cursor-default'
+                      : isSent
+                      ? 'bg-blue-100 text-blue-700 cursor-default'
                       : participant.is_organizer
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                       : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
                   }`}
                 >
-                  {isSent ? (
+                  {isViewed ? (
+                    <>
+                      <WichtelIcon name="check-circle" size={16} />
+                      Abgerufen
+                    </>
+                  ) : isSent ? (
                     <>
                       <WichtelIcon name="check" size={16} />
-                      Gesendet
+                      Versendet
                     </>
                   ) : participant.is_organizer ? (
                     <>

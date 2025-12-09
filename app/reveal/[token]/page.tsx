@@ -30,7 +30,7 @@ export default function RevealPage() {
       // Get participant by token
       const { data: participant, error: participantError } = await supabase
         .from('participants')
-        .select('id, name, assigned_to_id, session_id')
+        .select('id, name, assigned_to_id, session_id, reveal_viewed_at')
         .eq('participant_token', token)
         .single()
 
@@ -57,6 +57,14 @@ export default function RevealPage() {
 
       if (assignedError || !assignedPerson) {
         throw new Error('Zugeteilte Person nicht gefunden')
+      }
+
+      // Track reveal view (only on first view)
+      if (!participant.reveal_viewed_at) {
+        await supabase
+          .from('participants')
+          .update({ reveal_viewed_at: new Date().toISOString() })
+          .eq('id', participant.id)
       }
 
       // Get session name
