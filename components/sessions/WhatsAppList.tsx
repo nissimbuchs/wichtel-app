@@ -77,38 +77,9 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
   const sentCount = sentParticipants.size
   const viewedCount = participants.filter(p => p.reveal_viewed_at !== null).length
   const totalCount = participants.length
-  const organizer = participants.find((p) => p.is_organizer)
 
   return (
     <div className="space-y-6">
-      {/* Organizer Info-Box */}
-      {organizer && (
-        <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300 border-2 border-christmas-gold/50">
-          <div className="flex items-start gap-4">
-            <WichtelIcon name="user-check" size={48} className="text-christmas-gold-dark flex-shrink-0" />
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
-                Deine persönliche Zuteilung
-              </h3>
-              <p className="text-gray-700 mb-4 text-base leading-relaxed">
-                Als Organisator kannst du hier direkt deine Zuteilung sehen, ohne WhatsApp zu verwenden.
-              </p>
-              <button
-                onClick={() => handleOrganizerRevealClick(organizer)}
-                className="px-6 py-3 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white rounded-xl font-bold text-base shadow-frost-lg hover:shadow-glow-gold hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-2"
-              >
-                <WichtelIcon name="gift" size={20} />
-                <span>Meine Zuteilung anzeigen</span>
-              </button>
-              <p className="text-sm text-gray-600 mt-3 font-medium flex items-center gap-2">
-                <WichtelIcon name="lightbulb" size={16} />
-                Hinweis: Dieser Link ist nur für dich!
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
         {/* Header with Progress */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -211,52 +182,58 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                 </div>
 
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleSendWhatsApp(participant)}
-                    disabled={participant.is_organizer}
-                    className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
-                      participant.is_organizer
-                        ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                        : isViewed
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-300'
-                        : isSent
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-300'
-                        : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
-                    }`}
-                  >
-                    {isViewed ? (
-                      <>
-                        <WichtelIcon name="check-circle" size={16} />
-                        Abgerufen
-                      </>
-                    ) : isSent ? (
-                      <>
-                        <WichtelIcon name="check" size={16} />
-                        Versendet
-                      </>
-                    ) : participant.is_organizer ? (
-                      <>
-                        <WichtelIcon name="check" size={16} />
-                        Link verfügbar
-                      </>
-                    ) : (
-                      <>
-                        <WichtelIcon name="message-square" size={16} />
-                        WhatsApp öffnen
-                      </>
-                    )}
-                  </button>
-
-                  {/* Resend button - only show if already sent */}
-                  {isSent && !participant.is_organizer && (
+                  {participant.is_organizer ? (
+                    /* Organizer: Show reveal button */
                     <button
-                      onClick={() => handleSendWhatsApp(participant)}
-                      className="px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
-                      title="Erneut senden"
+                      onClick={() => handleOrganizerRevealClick(participant)}
+                      className="px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white shadow-frost-lg hover:shadow-glow-gold hover:scale-105 border border-white/20"
                     >
-                      <WichtelIcon name="rotate-ccw" size={16} />
-                      <span className="hidden sm:inline">Erneut senden</span>
+                      <WichtelIcon name="gift" size={16} />
+                      <span>Meine Zuteilung anzeigen</span>
                     </button>
+                  ) : (
+                    /* Non-organizer: WhatsApp button with status */
+                    <>
+                      <button
+                        onClick={() => handleSendWhatsApp(participant)}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
+                          isViewed
+                            ? 'bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-300'
+                            : isSent
+                            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-300'
+                            : 'bg-gradient-to-br from-christmas-green via-christmas-green to-christmas-green-dark text-white shadow-frost-lg hover:shadow-glow-green hover:scale-105 border border-white/20'
+                        }`}
+                      >
+                        {isViewed ? (
+                          <>
+                            <WichtelIcon name="check-circle" size={16} />
+                            Abgerufen
+                          </>
+                        ) : isSent ? (
+                          <>
+                            <WichtelIcon name="check" size={16} />
+                            Versendet
+                          </>
+                        ) : (
+                          <>
+                            <WichtelIcon name="message-square" size={16} />
+                            WhatsApp öffnen
+                          </>
+                        )}
+                      </button>
+
+                      {/* Resend button - only show if already sent */}
+                      {isSent && (
+                        <button
+                          onClick={() => handleSendWhatsApp(participant)}
+                          className="px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
+                          title="Erneut senden"
+                        >
+                          <WichtelIcon name="rotate-ccw" size={16} />
+                          <span className="hidden sm:inline">Erneut senden</span>
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
