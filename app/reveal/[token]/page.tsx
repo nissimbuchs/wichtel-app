@@ -59,12 +59,13 @@ export default function RevealPage() {
         throw new Error('Zugeteilte Person nicht gefunden')
       }
 
-      // Track reveal view (only on first view)
+      // Track reveal view via API (bypasses RLS)
       if (!participant.reveal_viewed_at) {
-        await supabase
-          .from('participants')
-          .update({ reveal_viewed_at: new Date().toISOString() })
-          .eq('id', participant.id)
+        await fetch('/api/reveal/track-view', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        })
       }
 
       // Get session name

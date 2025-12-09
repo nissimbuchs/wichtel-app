@@ -33,6 +33,18 @@ export default function SessionDetailPage() {
     }
   }, [user, sessionId])
 
+  // Reload participants when user returns to tab (after viewing reveal)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && user) {
+        loadParticipants()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [user])
+
   async function loadSession() {
     const { data, error } = await supabase
       .from('sessions')
