@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import { useSearchParams } from 'next/navigation'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -158,5 +158,17 @@ export default function LoginPage() {
     </div>
     <Footer />
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold">
+        <div className="text-white text-xl">Lädt...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
