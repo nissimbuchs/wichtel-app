@@ -138,14 +138,18 @@ export function SlotMachineReveal({
         <p className="text-center text-gray-700 text-lg mb-6 font-medium">Du beschenkst:</p>
 
         <div className="relative h-32 flex items-center justify-center overflow-hidden bg-christmas-red-light rounded-xl border-4 border-white mb-6">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={currentName}
-              initial={{ y: 50, opacity: 0 }}
+              initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -50, opacity: 0 }}
-              transition={{ duration: isAnimating ? 0.1 : 0.3 }}
-              className="text-center"
+              exit={{ y: -20, opacity: 0 }}
+              transition={{
+                duration: 0.05,
+                ease: "linear"
+              }}
+              layout
+              className="absolute text-center"
             >
               <p className="text-4xl font-bold text-white">{currentName || '...'}</p>
             </motion.div>
