@@ -1,10 +1,11 @@
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import packageJson from '../../package.json'
 
 export function Footer() {
-  // Build info from environment variables
+  // Build info from environment variables and package.json
+  const version = packageJson.version
   const commitSha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || 'dev'
-  const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF || 'local'
-  const buildTag = `${branch}@${commitSha}`
+  const buildTag = `v${version} (${commitSha})`
 
   return (
     <footer className="bg-gradient-to-r from-christmas-red to-christmas-red-light mt-auto">
