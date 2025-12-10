@@ -110,8 +110,8 @@ export function SlotMachineReveal({
         <Image
           src="/logo-full.png"
           alt="Wichtel App"
-          width={300}
-          height={150}
+          width={80}
+          height={80}
           priority
           className="drop-shadow-2xl"
         />

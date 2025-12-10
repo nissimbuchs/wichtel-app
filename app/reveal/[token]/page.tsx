@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import { createClient } from '@/services/supabase/client'
 import { SlotMachineReveal } from '@/components/reveal/SlotMachineReveal'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import Image from 'next/image'
 
 interface RevealData {
   participantName: string
@@ -108,6 +109,13 @@ export default function RevealPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-christmas-red">
         <div className="text-center text-white">
+          <Image
+            src="/logo-icon.png"
+            alt="Wichtel App"
+            width={80}
+            height={80}
+            className="animate-bounce-slow mx-auto mb-4 drop-shadow-lg"
+          />
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mx-auto mb-4"></div>
           <p className="text-xl">Lädt deine Zuteilung...</p>
         </div>
