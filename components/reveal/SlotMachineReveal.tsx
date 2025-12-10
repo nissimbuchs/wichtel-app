@@ -123,8 +123,7 @@ export function SlotMachineReveal({
         transition={{ delay: 0.2 }}
         className="text-center text-white mb-8"
       >
-        <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-          <WichtelIcon name="tree" size={40} className="text-christmas-green" />
+        <h1 className="text-4xl font-bold mb-4">
           {sessionName}
         </h1>
         <p className="text-xl">Hallo {participantName}!</p>

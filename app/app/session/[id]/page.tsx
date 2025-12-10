@@ -12,6 +12,7 @@ import { DrawButton } from '@/components/sessions/DrawButton'
 import { WhatsAppList } from '@/components/sessions/WhatsAppList'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import Image from 'next/image'
 
 export default function SessionDetailPage() {
   const params = useParams()
@@ -209,7 +210,13 @@ export default function SessionDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
         <div className="text-center">
           <div className="mb-4 flex justify-center">
-            <WichtelIcon name="tree" size={64} className="text-christmas-green animate-bounce-slow" />
+            <Image
+              src="/logo-icon.png"
+              alt="Wichtel App"
+              width={80}
+              height={80}
+              className="animate-bounce-slow drop-shadow-lg"
+            />
           </div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
           <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>

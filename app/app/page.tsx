@@ -7,6 +7,8 @@ import { createClient } from '@/services/supabase/client'
 import type { Session } from '@/types/database.types'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
 
 export default function AppPage() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -52,7 +54,21 @@ export default function AppPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-snow to-christmas-ice">
         <div className="text-center">
-          <WichtelIcon name="tree" size={64} className="animate-bounce-slow text-christmas-red mx-auto mb-4" />
+          <motion.div
+            layoutId="wichtel-logo"
+            className="mx-auto mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src="/logo-icon.png"
+              alt="Wichtel App"
+              width={80}
+              height={80}
+              className="animate-bounce-slow drop-shadow-lg"
+            />
+          </motion.div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
           <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
         </div>
@@ -66,11 +82,21 @@ export default function AppPage() {
         <div className="texture-overlay" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
           <div>
-            <h1 className="text-4xl font-bold text-white drop-shadow-lg flex items-center gap-3">
-              <WichtelIcon name="tree" size={36} />
-              Wichtel App
-            </h1>
-            <p className="text-sm text-white/90 mt-2 font-medium">{user?.email}</p>
+            <motion.div
+              layoutId="wichtel-logo"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Image
+                src="/logo-full.png"
+                alt="Wichtel App"
+                width={80}
+                height={80}
+                className="drop-shadow-lg mb-2"
+              />
+            </motion.div>
+            <p className="text-sm text-white/90 font-medium">{user?.email}</p>
           </div>
           <button
             onClick={signOut}
