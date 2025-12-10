@@ -19,6 +19,13 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const supabase = createClient()
 
+  // Helper to find partner name
+  function getPartnerName(partnerId: string | null): string | null {
+    if (!partnerId) return null
+    const partner = participants.find(p => p.id === partnerId)
+    return partner?.name || null
+  }
+
   useEffect(() => {
     // Initialize sent status from database
     const sent = new Set(
@@ -178,6 +185,13 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       <WichtelIcon name="smartphone" size={14} />
                       <span>{participant.phone_number}</span>
                     </p>
+                    {/* Partner info */}
+                    {getPartnerName(participant.partner_id) && (
+                      <div className="mt-1 flex items-center gap-1 text-xs text-christmas-blue font-medium">
+                        <WichtelIcon name="users" size={12} />
+                        <span>Partner: {getPartnerName(participant.partner_id)}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
