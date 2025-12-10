@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
@@ -105,10 +106,16 @@ function LoginForm() {
 
       <div className="glass-card-strong rounded-3xl p-10 md:p-12 max-w-md w-full relative z-10">
         <div className="text-center mb-10">
-          <div className="mb-4 flex justify-center animate-bounce-slow">
-            <WichtelIcon name="tree" size={70} className="text-christmas-green" />
+          <div className="mb-6 flex justify-center">
+            <Image
+              src="/logo-full.png"
+              alt="Wichtel App"
+              width={300}
+              height={150}
+              priority
+              className="drop-shadow-2xl hover:scale-105 transition-transform duration-300"
+            />
           </div>
-          <h1 className="text-5xl font-bold text-christmas-red mb-3 drop-shadow-lg">Wichtel App</h1>
           <p className="text-gray-600 text-lg flex items-center justify-center gap-2">
             Organisiere dein Wichteln in unter 5 Minuten!
             <WichtelIcon name="gift" size={24} className="text-christmas-red" />
