@@ -90,10 +90,10 @@ export default function AppPage() {
               <WichtelIcon name="gift" size={20} className="text-christmas-red" />
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowArchived(!showArchived)}
-              className={`px-6 py-4 rounded-xl font-bold transition-all duration-300 text-base shadow-md flex items-center gap-2 ${
+              className={`w-full sm:w-auto px-6 py-4 rounded-xl font-bold transition-all duration-300 text-base shadow-md flex items-center justify-center gap-2 ${
                 showArchived
                   ? 'bg-gray-600 text-white hover:bg-gray-700'
                   : 'glass-button text-gray-700 hover:text-christmas-red'
@@ -113,7 +113,7 @@ export default function AppPage() {
             </button>
             <button
               onClick={createNewSession}
-              className="bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white px-8 py-4 rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 text-lg border border-white/20"
+              className="w-full sm:w-auto bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white px-8 py-4 rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 text-lg border border-white/20"
             >
               + Neue Session
             </button>

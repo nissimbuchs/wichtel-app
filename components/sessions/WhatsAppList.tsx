@@ -195,12 +195,12 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   {participant.is_organizer ? (
                     /* Organizer: Show reveal button */
                     <button
                       onClick={() => handleOrganizerRevealClick(participant)}
-                      className="px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white shadow-frost-lg hover:shadow-glow-gold hover:scale-105 border border-white/20"
+                      className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center justify-center gap-2 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white shadow-frost-lg hover:shadow-glow-gold hover:scale-105 border border-white/20"
                     >
                       <WichtelIcon name="gift" size={16} />
                       <span>Meine Zuteilung anzeigen</span>
@@ -210,7 +210,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                     <>
                       <button
                         onClick={() => handleSendWhatsApp(participant)}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 ${
+                        className={`w-full sm:w-auto px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center justify-center gap-2 ${
                           isViewed
                             ? 'bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-300'
                             : isSent
@@ -240,11 +240,11 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       {isSent && (
                         <button
                           onClick={() => handleSendWhatsApp(participant)}
-                          className="px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
+                          className="w-full sm:w-auto px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center justify-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
                           title="Erneut senden"
                         >
                           <WichtelIcon name="rotate-ccw" size={16} />
-                          <span className="hidden sm:inline">Erneut senden</span>
+                          <span className="sm:inline">Erneut senden</span>
                         </button>
                       )}
                     </>

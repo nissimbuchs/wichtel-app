@@ -5,6 +5,7 @@ import { SnowfallBackground } from "@/components/effects/SnowfallBackground";
 export const metadata: Metadata = {
   title: "Wichtel App - Anonymes Wichteln leicht gemacht",
   description: "Organisiere dein Wichteln in unter 5 Minuten mit garantierter Anonymität",
+  viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },

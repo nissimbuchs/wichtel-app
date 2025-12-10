@@ -28,13 +28,13 @@ export default function Home() {
           <div className="mb-6 flex justify-center animate-bounce-slow">
             <WichtelIcon name="tree" size={96} className="text-christmas-green" />
           </div>
-          <h1 className="text-7xl md:text-8xl font-bold mb-6 drop-shadow-2xl">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 drop-shadow-2xl">
             Wichtel App
           </h1>
-          <p className="text-3xl md:text-4xl font-semibold mb-4 text-christmas-snow">
+          <p className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 text-christmas-snow">
             Wichteln leicht gemacht
           </p>
-          <p className="text-xl md:text-2xl text-christmas-ice/90 font-light">
+          <p className="text-lg sm:text-xl md:text-2xl text-christmas-ice/90 font-light">
             In unter 5 Minuten startklar!
           </p>
         </div>
