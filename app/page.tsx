@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 
@@ -25,12 +26,16 @@ export default function Home() {
       <div className="text-center text-white max-w-2xl relative z-10">
         {/* Hero section */}
         <div className="mb-12">
-          <div className="mb-6 flex justify-center animate-bounce-slow">
-            <WichtelIcon name="tree" size={96} className="text-christmas-green" />
+          <div className="mb-6 flex justify-center">
+            <Image
+              src="/logo-full.png"
+              alt="Wichtel App"
+              width={400}
+              height={200}
+              priority
+              className="drop-shadow-2xl hover:scale-105 transition-transform duration-300"
+            />
           </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 drop-shadow-2xl">
-            Wichtel App
-          </h1>
           <p className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 text-christmas-snow">
             Wichteln leicht gemacht
           </p>

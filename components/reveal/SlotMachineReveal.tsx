@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
@@ -100,13 +101,30 @@ export function SlotMachineReveal({
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-christmas-red to-christmas-red-light">
     <div className="flex-1 flex flex-col items-center justify-center p-4">
+      {/* Logo */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="mb-6"
+      >
+        <Image
+          src="/logo-full.png"
+          alt="Wichtel App"
+          width={300}
+          height={150}
+          priority
+          className="drop-shadow-2xl"
+        />
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
         className="text-center text-white mb-8"
       >
-        <h1 className="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
-          <WichtelIcon name="tree" size={48} className="text-christmas-green" />
+        <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+          <WichtelIcon name="tree" size={40} className="text-christmas-green" />
           {sessionName}
         </h1>
         <p className="text-xl">Hallo {participantName}!</p>
