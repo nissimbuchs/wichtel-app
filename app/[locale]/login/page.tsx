@@ -6,8 +6,11 @@ import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 function LoginForm() {
+  const t = useTranslations('auth.login')
+  const tErrors = useTranslations('auth.errors')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -41,25 +44,25 @@ function LoginForm() {
     const errorDetails = searchParams.get('details')
 
     if (authError === 'auth_failed') {
-      let errorMessage = 'Der Login-Link ist abgelaufen oder ungültig. Bitte fordere einen neuen Link an.'
+      let errorMessage = tErrors('expiredLink')
 
       // Check for specific error types
       if (errorDetails) {
         const details = decodeURIComponent(errorDetails)
         if (details.includes('code verifier') || details.includes('code_verifier') || details.includes('validation_failed')) {
-          errorMessage = `Der Login-Link wurde in einem anderen Browser geöffnet. Bitte öffne den Link in ${browserName || 'dem selben Browser'}, in dem du ihn angefordert hast, oder fordere einen neuen Link an.`
+          errorMessage = tErrors('wrongBrowser', { browserName: browserName || tErrors('sameBrowser') })
         } else if (details.includes('expired')) {
-          errorMessage = 'Der Login-Link ist abgelaufen. Bitte fordere einen neuen Link an.'
+          errorMessage = tErrors('expired')
         } else if (details.includes('invalid')) {
-          errorMessage = 'Der Login-Link ist ungültig. Bitte fordere einen neuen Link an.'
+          errorMessage = tErrors('invalid')
         } else if (details.includes('already') || details.includes('used')) {
-          errorMessage = 'Dieser Login-Link wurde bereits verwendet. Bitte fordere einen neuen Link an.'
+          errorMessage = tErrors('used')
         }
       }
 
       setError(errorMessage)
     }
-  }, [searchParams, browserName])
+  }, [searchParams, browserName, tErrors])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -78,9 +81,7 @@ function LoginForm() {
     if (error) {
       setError(error.message)
     } else {
-      setMessage(`Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.
-
-⚠️ Wichtig: Öffne den Link in ${browserName || 'diesem Browser'}, in dem du diese Seite geöffnet hast.`)
+      setMessage(t('successMessage', { browserName: browserName || t('thisBrowser') }))
     }
     setLoading(false)
   }
@@ -117,7 +118,7 @@ function LoginForm() {
             />
           </div>
           <p className="text-gray-600 text-lg flex items-center justify-center gap-2">
-            Organisiere dein Wichteln in unter 5 Minuten!
+            {t('subtitle')}
             <WichtelIcon name="gift" size={24} className="text-christmas-red" />
           </p>
         </div>
@@ -125,7 +126,7 @@ function LoginForm() {
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-              E-Mail-Adresse
+              {t('emailLabel')}
               <WichtelIcon name="mail" size={16} />
             </label>
             <input
@@ -133,7 +134,7 @@ function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="deine@email.de"
+              placeholder={t('emailPlaceholder')}
               required
               className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-christmas-red/30 focus:border-christmas-red transition-all text-lg"
             />
@@ -147,12 +148,12 @@ function LoginForm() {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <WichtelIcon name="user-check" size={20} className="animate-bounce" />
-                <span>Wird gesendet...</span>
+                <span>{t('submittingButton')}</span>
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
                 <WichtelIcon name="sparkles" size={20} />
-                <span>Magic Link senden</span>
+                <span>{t('submitButton')}</span>
               </span>
             )}
           </button>
@@ -180,7 +181,7 @@ function LoginForm() {
           <div className="inline-block bg-gradient-to-r from-christmas-gold/20 to-christmas-gold-light/20 border-2 border-christmas-gold/30 rounded-xl p-4">
             <p className="text-sm text-gray-700 font-medium flex items-center gap-2">
               <WichtelIcon name="lock" size={20} />
-              Kein Passwort nötig! Wir senden dir einen sicheren Login-Link per E-Mail.
+              {t('infoText')}
             </p>
           </div>
         </div>
@@ -195,7 +196,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red via-christmas-red-light to-christmas-gold">
-        <div className="text-white text-xl">Lädt...</div>
+        <div className="text-white text-xl">Loading...</div>
       </div>
     }>
       <LoginForm />

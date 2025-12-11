@@ -1,0 +1,269 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "back": "Retour",
+      "close": "Fermer",
+      "confirm": "Confirmer",
+      "loading": "Chargement...",
+      "saving": "Enregistrement...",
+      "sending": "Envoi...",
+      "creating": "Création...",
+      "adding": "Ajout..."
+    },
+    "status": {
+      "planning": "En planification",
+      "drawn": "Tiré au sort",
+      "completed": "Terminé",
+      "archived": "Archivé",
+      "loading": "Chargement...",
+      "sent": "Envoyé",
+      "viewed": "Consulté",
+      "pending": "En attente"
+    },
+    "nav": {
+      "dashboard": "Mes sessions",
+      "logout": "Déconnexion",
+      "newSession": "Nouvelle session"
+    }
+  },
+  "meta": {
+    "title": "Wichtel App - Secret Santa facile et anonyme",
+    "description": "Organisez votre Secret Santa en moins de 5 minutes avec anonymat garanti. Intégration WhatsApp, animation magique de révélation et anonymat garanti - même pour les organisateurs !",
+    "manifestName": "Wichtel App - Secret Santa facile",
+    "manifestShortName": "Wichtel App",
+    "manifestDescription": "Secret Santa avec WhatsApp - anonymat garanti, même pour les organisateurs. Prêt en moins de 5 minutes !"
+  },
+  "landing": {
+    "hero": {
+      "title": "Secret Santa facile",
+      "subtitle": "Organisez votre Secret Santa en moins de 5 minutes",
+      "cta": "Commencer maintenant"
+    },
+    "features": {
+      "title": "Fonctionnalités",
+      "anonymity": {
+        "title": "Anonymat garanti",
+        "description": "même pour les organisateurs"
+      },
+      "whatsapp": {
+        "title": "Intégration WhatsApp",
+        "description": "pour un envoi rapide"
+      },
+      "reveal": {
+        "title": "Animation magique",
+        "description": "de révélation"
+      },
+      "noApp": {
+        "title": "Aucune installation",
+        "description": "nécessaire"
+      }
+    },
+    "trust": "Fait par des fans de Secret Santa pour des fans de Secret Santa"
+  },
+  "auth": {
+    "login": {
+      "title": "Organisez votre Secret Santa en moins de 5 minutes !",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "votre@email.fr",
+      "submitButton": "Envoyer le lien magique",
+      "submittingButton": "Envoi...",
+      "infoText": "Pas de mot de passe nécessaire ! Nous vous envoyons un lien de connexion sécurisé par e-mail.",
+      "successMessage": "Vérifiez vos e-mails ! Nous vous avons envoyé un lien magique. Le lien est valable 10 minutes.\n\n⚠️ Important : Ouvrez le lien dans {browserName}, dans lequel vous avez ouvert cette page.",
+      "successMessageFallback": "ce navigateur"
+    },
+    "errors": {
+      "expiredLink": "Le lien de connexion a expiré ou n'est pas valide. Veuillez demander un nouveau lien.",
+      "wrongBrowser": "Le lien de connexion a été ouvert dans un autre navigateur. Veuillez ouvrir le lien dans {browserName}, dans lequel vous l'avez demandé, ou demander un nouveau lien.",
+      "expired": "Le lien de connexion a expiré. Veuillez demander un nouveau lien.",
+      "invalid": "Le lien de connexion n'est pas valide. Veuillez demander un nouveau lien.",
+      "used": "Ce lien de connexion a déjà été utilisé. Veuillez demander un nouveau lien."
+    }
+  },
+  "dashboard": {
+    "title": "Mes sessions Secret Santa",
+    "subtitle": "Gérez tous vos événements Secret Santa",
+    "showActive": "Afficher actives",
+    "showArchive": "Afficher archives",
+    "newSession": "+ Nouvelle session",
+    "logout": "Déconnexion",
+    "loading": "Chargement...",
+    "empty": {
+      "noArchived": "Aucune session archivée",
+      "noSessions": "Aucune session créée",
+      "archivedHelp": "Vous n'avez pas encore archivé de sessions. Archivez les anciennes sessions pour garder votre liste organisée.",
+      "sessionsHelp": "Créez votre première session Secret Santa en moins de 5 minutes et offrez de la joie !"
+    },
+    "sessionInfo": {
+      "sessionId": "ID de session : {id}",
+      "participants": "{count, plural, =0 {Aucun participant} one {1 participant} other {# participants}}"
+    }
+  },
+  "session": {
+    "nav": {
+      "backToDashboard": "← Retour à toutes les sessions",
+      "backToSession": "← Retour"
+    },
+    "title": "{name}",
+    "sessionInfo": "ID de session : {shortId}... • {participants}",
+    "actions": {
+      "duplicate": "Copier comme modèle",
+      "archive": "Archiver",
+      "restore": "Restaurer",
+      "delete": "Supprimer"
+    },
+    "sections": {
+      "addParticipant": "Ajouter un participant",
+      "participants": "Participants"
+    },
+    "alerts": {
+      "noRemoveAfterDraw": "Les participants ne peuvent plus être retirés après le tirage au sort !",
+      "archiveError": "Erreur lors de l'archivage de la session",
+      "namePrompt": "Veuillez entrer un nom pour la nouvelle session",
+      "duplicateError": "Erreur lors de la copie de la session",
+      "deleteError": "Erreur lors de la suppression de la session"
+    },
+    "empty": {
+      "noParticipants": "Aucun participant ajouté",
+      "help": "Ajoutez au moins 3 personnes"
+    },
+    "minimumRequired": "Au moins 3 participants requis pour le tirage au sort",
+    "modals": {
+      "duplicate": {
+        "title": "Copier la session",
+        "label": "Nom de la session *",
+        "description": "Entrez un nom pour la nouvelle session. Tous les participants seront copiés, mais un nouveau tirage au sort sera effectué.",
+        "cancel": "Annuler",
+        "confirm": "Copier"
+      },
+      "delete": {
+        "title": "Supprimer la session",
+        "question": "Voulez-vous vraiment supprimer la session \"{name}\" ?",
+        "warning": "Cette action ne peut pas être annulée. Tous les participants et attributions seront également supprimés.",
+        "cancel": "Annuler",
+        "confirm": "Oui, supprimer"
+      }
+    },
+    "new": {
+      "title": "Nouvelle session Secret Santa",
+      "nameLabel": "Nom de la session",
+      "namePlaceholder": "ex. Fête de Noël 2024",
+      "nameHelp": "Donnez un nom à votre session pour la retrouver facilement plus tard.",
+      "partnerExclusion": "Activer l'exclusion des partenaires",
+      "partnerExclusionHelp": "Empêche que les partenaires soient tirés au sort l'un pour l'autre. Vous pouvez indiquer qui est en couple lors de l'ajout des participants.",
+      "defaultName": "Secret Santa {year}",
+      "creating": "Création...",
+      "create": "Créer la session"
+    },
+    "participant": {
+      "addTitle": "Ajouter un participant",
+      "nameLabel": "Nom *",
+      "namePlaceholder": "Jean Dupont",
+      "phoneLabel": "Numéro de téléphone *",
+      "phonePlaceholder": "+33 6 12 34 56 78",
+      "phoneHelp": "Format : Numéros français (06...) ou internationaux avec indicatif pays (+33, +41, +1, etc.)",
+      "partnerLabel": "Partenaire (optionnel)",
+      "partnerHelp": "Sélectionnez un partenaire qui ne doit pas être tiré au sort.",
+      "partnerNone": "Aucun partenaire",
+      "organizerCheckbox": "Je suis l'organisateur",
+      "organizerHelp": "En tant qu'organisateur, vous recevez un lien direct vers votre attribution (pas besoin de WhatsApp)",
+      "addButton": "Ajouter",
+      "addingButton": "Ajout...",
+      "disabledMessage": "Les participants ne peuvent plus être ajoutés après le tirage au sort.",
+      "errors": {
+        "nameRequired": "Le nom est requis",
+        "phoneRequired": "Le numéro de téléphone est requis",
+        "phoneInvalid": "Numéro de téléphone invalide. Veuillez entrer un numéro international (ex. +33 6 12 34 56 78)",
+        "phoneDuplicate": "Numéro de téléphone déjà utilisé par : {name}",
+        "selfPartner": "Vous ne pouvez pas vous sélectionner comme partenaire",
+        "generic": "Erreur lors de l'ajout"
+      },
+      "removeButton": "Retirer",
+      "confirmDelete": "Vraiment retirer {name} ?",
+      "confirmDeleteWithPartner": "Vraiment retirer {name} ? Le partenariat avec {partnerName} sera annulé.",
+      "partnerInfo": "Partenaire : {name}",
+      "organizerBadge": "(Vous)"
+    },
+    "draw": {
+      "buttonEnabled": "Effectuer le tirage au sort",
+      "buttonDisabled": "Tirage au sort impossible",
+      "modal": {
+        "title": "Effectuer le tirage au sort ?",
+        "important": "Important :",
+        "info1": "**VOUS** aussi ne verrez qui vous offrez un cadeau qu'en ouvrant votre propre lien.",
+        "info2": "Personne (pas même vous en tant qu'organisateur) ne connaît les attributions à l'avance.",
+        "partnerInfo": "L'exclusion des partenaires est active : les partenaires ne seront pas tirés au sort l'un pour l'autre.",
+        "cancel": "Annuler",
+        "running": "En cours...",
+        "confirm": "Compris, démarrer"
+      }
+    }
+  },
+  "whatsapp": {
+    "title": "Envoyer WhatsApp",
+    "subtitle": "Envoyez à chaque participant son lien personnel",
+    "statusSent": "Envoyé",
+    "statusViewed": "Consulté",
+    "organizerButton": "Afficher mon attribution",
+    "sendButton": "Ouvrir WhatsApp",
+    "sentButton": "Envoyé",
+    "viewedButton": "Consulté",
+    "resendButton": "Renvoyer",
+    "resendTitle": "Renvoyer",
+    "organizerBadge": "Vous",
+    "partnerInfo": "Partenaire : {name}",
+    "completion": {
+      "title": "Tous les messages envoyés !",
+      "message": "Chaque participant (y compris vous) a maintenant reçu son lien personnel.",
+      "security": "Personne ne connaît les attributions jusqu'à l'ouverture de son propre lien.",
+      "done": "Terminé"
+    },
+    "selfSend": {
+      "title": "Envoyer à vous-même ?",
+      "message": "Vous envoyez maintenant WhatsApp à votre propre numéro :",
+      "tipLabel": "Conseil :",
+      "tipText": "Ouvrez le lien plus tard pour voir à qui vous offrez un cadeau.",
+      "skip": "Passer",
+      "confirm": "Oui, m'envoyer"
+    },
+    "message": "Bonjour {name}! 🎄\n\nVoici ton lien pour {sessionName}:\n{assignmentUrl}\n\nOuvre le lien pour voir à qui tu offres un cadeau! 🎁"
+  },
+  "reveal": {
+    "loading": "Chargement de votre attribution...",
+    "error": "Erreur",
+    "errorContact": "Veuillez contacter votre organisateur pour un nouveau lien.",
+    "errors": {
+      "database": "Erreur de base de données : {message}",
+      "invalidToken": "Lien invalide ou expiré",
+      "noAssignment": "Le tirage au sort n'a pas encore été effectué",
+      "assignedNotFound": "Personne attribuée non trouvée",
+      "sessionNotFound": "Session non trouvée",
+      "participantsError": "Erreur lors du chargement des participants",
+      "unknown": "Erreur inconnue"
+    },
+    "sessionName": "{sessionName}",
+    "greeting": "Bonjour {participantName} !",
+    "label": "Tu offres un cadeau à :",
+    "reminder": "N'oublie pas : ça reste secret jusqu'à la fête de Noël !",
+    "alreadySeen": "(Tu as déjà vu cette attribution)",
+    "funnyNames": {
+      "santa": "🎅 Père Noël",
+      "elf": "🧝 Lutin Léon",
+      "snowman": "☃️ Bonhomme de neige",
+      "reindeer": "🦌 Renne Rudolph",
+      "angelElf": "🧝‍♀️ Fée Ella",
+      "angel": "👼 Ange Gabriel",
+      "star": "🌟 Étoile",
+      "bell": "🔔 Clochette"
+    }
+  },
+  "footer": {
+    "appName": "Wichtel App",
+    "tagline": "Secret Santa facile",
+    "copyright": "© 2025 by BuStokLi",
+    "message": "Fait avec ❤️ pour la saison festive • Joyeux Noël ! 🎅",
+    "buildLabel": "Build : {buildTag}"
+  }
+}

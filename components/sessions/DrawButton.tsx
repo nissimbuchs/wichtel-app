@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { ParticipantAdmin } from '@/types/database.types'
 import { DrawConfirmationModal } from './DrawConfirmationModal'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useTranslations } from 'next-intl'
 
 interface DrawButtonProps {
   sessionId: string
@@ -20,6 +21,7 @@ export function DrawButton({
   partnerExclusionEnabled,
   onDrawComplete
 }: DrawButtonProps) {
+  const t = useTranslations('session.draw')
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   return (
@@ -32,12 +34,12 @@ export function DrawButton({
         {canDraw ? (
           <>
             <WichtelIcon name="dices" size={20} />
-            Auslosung durchführen
+            {t('buttonEnabled')}
           </>
         ) : (
           <>
             <WichtelIcon name="alert-triangle" size={20} />
-            Auslosung nicht möglich
+            {t('buttonDisabled')}
           </>
         )}
       </button>

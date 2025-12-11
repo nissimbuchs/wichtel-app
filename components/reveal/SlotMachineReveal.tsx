@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useTranslations } from 'next-intl'
 
 interface SlotMachineRevealProps {
   participantName: string
@@ -21,6 +22,7 @@ export function SlotMachineReveal({
   sessionName,
   token,
 }: SlotMachineRevealProps) {
+  const t = useTranslations('reveal')
   const [isAnimating, setIsAnimating] = useState(false)
   const [currentName, setCurrentName] = useState('')
   // Check localStorage immediately during initialization
@@ -48,14 +50,14 @@ export function SlotMachineReveal({
 
     // Funny fictional Christmas characters
     const funnyNames = [
-      '🎅 Weihnachtsmann',
-      '🧝 Wichtel Willi',
-      '☃️ Schneemann Olaf',
-      '🦌 Rentier Rudolph',
-      '🧝‍♀️ Elfe Ella',
-      '👼 Engel Gabriel',
-      '🌟 Sternchen',
-      '🔔 Glöckchen',
+      t('funnyNames.santa'),
+      t('funnyNames.elf'),
+      t('funnyNames.snowman'),
+      t('funnyNames.reindeer'),
+      t('funnyNames.angelElf'),
+      t('funnyNames.angel'),
+      t('funnyNames.star'),
+      t('funnyNames.bell'),
     ]
 
     // Mix real names with funny names for animation
@@ -139,7 +141,7 @@ export function SlotMachineReveal({
         <h1 className="text-4xl font-bold mb-4">
           {sessionName}
         </h1>
-        <p className="text-xl">Hallo {participantName}!</p>
+        <p className="text-xl">{t('greeting', { participantName })}</p>
       </motion.div>
 
       <motion.div
@@ -148,7 +150,7 @@ export function SlotMachineReveal({
         transition={{ delay: 0.3 }}
         className="glass-card-strong rounded-2xl p-8 max-w-md w-full"
       >
-        <p className="text-center text-gray-700 text-lg mb-6 font-medium">Du beschenkst:</p>
+        <p className="text-center text-gray-700 text-lg mb-6 font-medium">{t('label')}</p>
 
         <div className="relative h-32 flex items-center justify-center overflow-hidden bg-christmas-red-light rounded-xl border-4 border-white mb-6">
           <AnimatePresence mode="popLayout" initial={false}>
@@ -181,7 +183,7 @@ export function SlotMachineReveal({
                 <WichtelIcon name="gift" size={64} className="text-christmas-red" />
               </div>
               <p className="text-gray-600 text-sm">
-                Denk dran: Es bleibt geheim bis zur Weihnachtsfeier!
+                {t('reminder')}
               </p>
             </>
           )}
@@ -195,7 +197,7 @@ export function SlotMachineReveal({
           transition={{ delay: 0.5 }}
           className="text-white text-sm mt-4"
         >
-          (Du hast diese Zuteilung bereits gesehen)
+          {t('alreadySeen')}
         </motion.p>
       )}
     </div>

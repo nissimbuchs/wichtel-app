@@ -13,8 +13,11 @@ import { WhatsAppList } from '@/components/sessions/WhatsAppList'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 export default function SessionDetailPage() {
+  const t = useTranslations('session')
+  const tStatus = useTranslations('common.status')
   const params = useParams()
   const sessionId = params.id as string
   const { user } = useAuth()
@@ -104,7 +107,7 @@ export default function SessionDetailPage() {
 
   async function handleRemoveParticipant(participantId: string) {
     if (session?.status === 'drawn') {
-      alert('Teilnehmer können nach der Auslosung nicht mehr entfernt werden!')
+      alert(t('alerts.cannotRemoveAfterDraw'))
       return
     }
 
@@ -130,7 +133,7 @@ export default function SessionDetailPage() {
 
     if (error) {
       console.error('Error updating session status:', error)
-      alert('Fehler beim Archivieren der Session')
+      alert(t('alerts.archiveError'))
     } else {
       await loadSession()
     }
@@ -146,7 +149,7 @@ export default function SessionDetailPage() {
   async function handleDuplicateConfirm() {
     try {
       if (!newSessionName.trim()) {
-        alert('Bitte gib einen Namen für die neue Session ein')
+        alert(t('modals.duplicate.nameRequired'))
         return
       }
 
@@ -211,7 +214,7 @@ export default function SessionDetailPage() {
       router.push(`/app/session/${newSession.id}`)
     } catch (error) {
       console.error('Error duplicating session:', error)
-      alert('Fehler beim Kopieren der Session')
+      alert(t('alerts.duplicateError'))
     }
   }
 
@@ -229,7 +232,7 @@ export default function SessionDetailPage() {
       router.push('/app')
     } catch (error) {
       console.error('Error deleting session:', error)
-      alert('Fehler beim Löschen der Session')
+      alert(t('alerts.deleteError'))
     }
   }
 
@@ -247,7 +250,7 @@ export default function SessionDetailPage() {
             />
           </div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
-          <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
+          <p className="mt-6 text-gray-700 text-xl font-medium">{t('loading')}</p>
         </div>
       </div>
     )
@@ -264,13 +267,13 @@ export default function SessionDetailPage() {
             onClick={() => router.push('/app')}
             className="text-white/90 hover:text-white mb-3 flex items-center gap-2 font-semibold transition-all hover:translate-x-1"
           >
-            ← Zurück zu allen Sessions
+            ← {t('backToSessions')}
           </button>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-4xl font-bold text-white drop-shadow-lg">{session.name}</h1>
               <p className="text-sm text-white/80 mt-2 font-medium">
-                Session-ID: {session.id.substring(0, 8)}... • {participants.length} Teilnehmer
+                {t('sessionInfo', { id: session.id.substring(0, 8), count: participants.length })}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -286,17 +289,17 @@ export default function SessionDetailPage() {
                 {session.status === 'archived' ? (
                   <>
                     <WichtelIcon name="archive" size={20} />
-                    <span>Archiviert</span>
+                    <span>{tStatus('archived')}</span>
                   </>
                 ) : session.status === 'planning' ? (
                   <>
                     <WichtelIcon name="edit" size={20} />
-                    <span>In Planung</span>
+                    <span>{tStatus('planning')}</span>
                   </>
                 ) : (
                   <>
                     <WichtelIcon name="dices" size={20} />
-                    <span>Ausgelost</span>
+                    <span>{tStatus('drawn')}</span>
                   </>
                 )}
               </span>
@@ -308,7 +311,7 @@ export default function SessionDetailPage() {
               className="glass-button px-4 py-2 rounded-lg text-white hover:text-white text-sm font-semibold flex items-center gap-2"
             >
               <WichtelIcon name="clipboard" size={16} />
-              Als Vorlage kopieren
+              {t('actions.duplicate')}
             </button>
             <button
               onClick={handleArchiveToggle}
@@ -317,12 +320,12 @@ export default function SessionDetailPage() {
               {session.status === 'archived' ? (
                 <>
                   <WichtelIcon name="rotate-ccw" size={16} />
-                  Wiederherstellen
+                  {t('actions.restore')}
                 </>
               ) : (
                 <>
                   <WichtelIcon name="archive" size={16} />
-                  Archivieren
+                  {t('actions.archive')}
                 </>
               )}
             </button>
@@ -331,7 +334,7 @@ export default function SessionDetailPage() {
               className="px-4 py-2 bg-red-500/80 backdrop-blur border-2 border-red-400/40 rounded-lg hover:bg-red-600/80 transition-all text-white text-sm font-semibold flex items-center gap-2"
             >
               <WichtelIcon name="trash" size={16} />
-              Löschen
+              {t('actions.delete')}
             </button>
           </div>
         </div>
@@ -343,6 +346,7 @@ export default function SessionDetailPage() {
           <WhatsAppList
             sessionId={sessionId}
             sessionName={session.name}
+            sessionLanguage={session.language}
             participants={participants}
             onUpdate={loadParticipants}
           />
@@ -354,7 +358,7 @@ export default function SessionDetailPage() {
               <div className="glass-card rounded-2xl p-8 hover:shadow-frost-lg transition-all duration-300">
                 <div className="flex items-center gap-3 mb-6">
                   <WichtelIcon name="users" size={40} className="text-christmas-red" />
-                  <h2 className="text-2xl font-bold text-gray-900">Teilnehmer hinzufügen</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t('sections.addParticipant')}</h2>
                 </div>
                 <ParticipantForm
                   onAdd={handleAddParticipant}
@@ -373,7 +377,7 @@ export default function SessionDetailPage() {
                   <div className="flex items-center gap-3">
                     <WichtelIcon name="tree" size={40} className="text-christmas-green" />
                     <h2 className="text-2xl font-bold text-gray-900">
-                      Teilnehmer
+                      {t('sections.participants')}
                     </h2>
                   </div>
                   <span className="bg-christmas-gold/20 text-christmas-gold-dark px-4 py-2 rounded-xl font-bold text-lg">
@@ -386,10 +390,10 @@ export default function SessionDetailPage() {
                       <WichtelIcon name="gift" size={64} className="text-christmas-red animate-pulse-slow" />
                     </div>
                     <p className="text-gray-600 text-lg font-medium">
-                      Noch keine Teilnehmer hinzugefügt
+                      {t('sections.noParticipants')}
                     </p>
                     <p className="text-gray-500 text-sm mt-2">
-                      Füge mindestens 3 Personen hinzu
+                      {t('sections.minimumParticipants')}
                     </p>
                   </div>
                 ) : (
@@ -419,7 +423,7 @@ export default function SessionDetailPage() {
                     <div className="mt-4 text-center bg-white/70 rounded-xl p-4">
                       <p className="text-sm text-gray-700 font-medium flex items-center justify-center gap-2">
                         <WichtelIcon name="lightbulb" size={24} className="text-christmas-gold-dark" />
-                        <span>Mindestens 3 Teilnehmer benötigt für die Auslosung</span>
+                        <span>{t('sections.drawRequirement')}</span>
                       </p>
                     </div>
                   )}
@@ -437,22 +441,22 @@ export default function SessionDetailPage() {
           <div className="glass-card-strong rounded-2xl max-w-md w-full p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
               <WichtelIcon name="clipboard" size={40} className="text-christmas-red" />
-              Session kopieren
+              {t('modals.duplicate.title')}
             </h2>
             <p className="text-gray-600 mb-6">
-              Gib einen Namen für die neue Session ein. Alle Teilnehmer werden kopiert, aber es erfolgt eine neue Auslosung.
+              {t('modals.duplicate.description')}
             </p>
 
             <div className="mb-6">
               <label htmlFor="sessionName" className="block text-sm font-bold text-gray-700 mb-2">
-                Session Name *
+                {t('modals.duplicate.nameLabel')}
               </label>
               <input
                 id="sessionName"
                 type="text"
                 value={newSessionName}
                 onChange={(e) => setNewSessionName(e.target.value)}
-                placeholder="Wichteln 2025"
+                placeholder={t('modals.duplicate.namePlaceholder')}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-christmas-red/30 focus:border-christmas-red transition-all text-lg"
                 autoFocus
               />
@@ -463,13 +467,13 @@ export default function SessionDetailPage() {
                 onClick={() => setShowDuplicateModal(false)}
                 className="flex-1 glass-button px-6 py-3 rounded-xl font-bold text-gray-700 hover:text-christmas-red"
               >
-                Abbrechen
+                {t('modals.duplicate.cancel')}
               </button>
               <button
                 onClick={handleDuplicateConfirm}
                 className="flex-1 px-6 py-3 bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20"
               >
-                Kopieren
+                {t('modals.duplicate.confirm')}
               </button>
             </div>
           </div>
@@ -482,13 +486,13 @@ export default function SessionDetailPage() {
           <div className="glass-card-strong rounded-2xl max-w-md w-full p-8">
             <h2 className="text-2xl font-bold text-red-600 mb-4 flex items-center gap-3">
               <WichtelIcon name="alert-triangle" size={40} className="text-red-600" />
-              Session löschen
+              {t('modals.delete.title')}
             </h2>
             <p className="text-gray-700 mb-2 font-semibold">
-              Möchtest du die Session "{session?.name}" wirklich löschen?
+              {t('modals.delete.question', { name: session?.name })}
             </p>
             <p className="text-gray-600 mb-6">
-              Diese Aktion kann nicht rückgängig gemacht werden. Alle Teilnehmer und Zuteilungen werden ebenfalls gelöscht.
+              {t('modals.delete.warning')}
             </p>
 
             <div className="flex gap-3">
@@ -496,13 +500,13 @@ export default function SessionDetailPage() {
                 onClick={() => setShowDeleteModal(false)}
                 className="flex-1 glass-button px-6 py-3 rounded-xl font-bold text-gray-700 hover:text-christmas-red"
               >
-                Abbrechen
+                {t('modals.delete.cancel')}
               </button>
               <button
                 onClick={handleDeleteConfirm}
                 className="flex-1 px-6 py-3 bg-gradient-to-br from-red-500 via-red-500 to-red-600 text-white rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20"
               >
-                Ja, löschen
+                {t('modals.delete.confirm')}
               </button>
             </div>
           </div>

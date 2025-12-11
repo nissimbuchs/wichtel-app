@@ -17,6 +17,7 @@ export interface Database {
           status: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token: string
           partner_exclusion_enabled: boolean
+          language: string
           created_at: string
           updated_at: string
         }
@@ -27,6 +28,7 @@ export interface Database {
           status?: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token: string
           partner_exclusion_enabled?: boolean
+          language?: string
           created_at?: string
           updated_at?: string
         }
@@ -37,6 +39,7 @@ export interface Database {
           status?: 'planning' | 'drawn' | 'completed' | 'archived'
           admin_token?: string
           partner_exclusion_enabled?: boolean
+          language?: string
           created_at?: string
           updated_at?: string
         }

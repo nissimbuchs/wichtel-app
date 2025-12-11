@@ -6,6 +6,7 @@ import { createClient } from '@/services/supabase/client'
 import { SlotMachineReveal } from '@/components/reveal/SlotMachineReveal'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 interface RevealData {
   participantName: string
@@ -15,6 +16,7 @@ interface RevealData {
 }
 
 export default function RevealPage() {
+  const t = useTranslations('reveal')
   const params = useParams()
   const token = params.token as string
   const [data, setData] = useState<RevealData | null>(null)
@@ -40,13 +42,13 @@ export default function RevealPage() {
         console.log('Token used:', token)
         throw new Error(
           participantError
-            ? `Datenbankfehler: ${participantError.message}`
-            : 'Ungültiger oder abgelaufener Link'
+            ? t('errors.database', { message: participantError.message })
+            : t('errors.invalidLink')
         )
       }
 
       if (!participant.assigned_to_id) {
-        throw new Error('Auslosung wurde noch nicht durchgeführt')
+        throw new Error(t('errors.notDrawn'))
       }
 
       // Get assigned person's name
@@ -57,7 +59,7 @@ export default function RevealPage() {
         .single()
 
       if (assignedError || !assignedPerson) {
-        throw new Error('Zugeteilte Person nicht gefunden')
+        throw new Error(t('errors.assignedNotFound'))
       }
 
       // Track reveal view via API (bypasses RLS)
@@ -77,7 +79,7 @@ export default function RevealPage() {
         .single()
 
       if (sessionError || !session) {
-        throw new Error('Session nicht gefunden')
+        throw new Error(t('errors.sessionNotFound'))
       }
 
       // Get all participant names for animation
@@ -87,7 +89,7 @@ export default function RevealPage() {
         .eq('session_id', participant.session_id)
 
       if (allError) {
-        throw new Error('Fehler beim Laden der Teilnehmer')
+        throw new Error(t('errors.participantsLoadError'))
       }
 
       const allNames = allParticipants?.map((p) => p.name) || []
@@ -99,7 +101,7 @@ export default function RevealPage() {
         sessionName: session.name,
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : t('errors.unknown'))
     } finally {
       setLoading(false)
     }
@@ -117,7 +119,7 @@ export default function RevealPage() {
             className="animate-bounce-slow mx-auto mb-4 drop-shadow-lg"
           />
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mx-auto mb-4"></div>
-          <p className="text-xl">Lädt deine Zuteilung...</p>
+          <p className="text-xl">{t('loading')}</p>
         </div>
       </div>
     )
@@ -130,10 +132,10 @@ export default function RevealPage() {
           <div className="mb-4 flex justify-center">
             <WichtelIcon name="alert-triangle" size={64} className="text-red-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Fehler</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('error')}</h1>
           <p className="text-gray-700">{error}</p>
           <p className="text-sm text-gray-500 mt-4">
-            Bitte kontaktiere deinen Organisator für einen neuen Link.
+            {t('errorContact')}
           </p>
         </div>
       </div>

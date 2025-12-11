@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import type { ParticipantAdmin } from '@/types/database.types'
 import { isValidPhoneNumber, normalizePhoneNumber } from '@/services/phoneValidation'
+import { useTranslations } from 'next-intl'
 
 interface ParticipantFormProps {
   onAdd: (name: string, phoneNumber: string, isOrganizer: boolean, partnerId?: string | null) => Promise<void>
@@ -20,6 +21,7 @@ export function ParticipantForm({
   partnerExclusionEnabled = false,
   existingParticipants = []
 }: ParticipantFormProps) {
+  const t = useTranslations('session.participant')
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isOrganizer, setIsOrganizer] = useState(false)
@@ -35,15 +37,15 @@ export function ParticipantForm({
     try {
       // Basic validation
       if (!name.trim()) {
-        throw new Error('Name ist erforderlich')
+        throw new Error(t('errors.nameRequired'))
       }
       if (!phoneNumber.trim()) {
-        throw new Error('Telefonnummer ist erforderlich')
+        throw new Error(t('errors.phoneRequired'))
       }
 
       // International phone number validation
       if (!isValidPhoneNumber(phoneNumber)) {
-        throw new Error('Ungültige Telefonnummer. Bitte gib eine internationale Nummer ein (z.B. +41 79 123 45 67)')
+        throw new Error(t('errors.phoneInvalid'))
       }
 
       // Duplicate phone number check (normalize for comparison)
@@ -52,7 +54,7 @@ export function ParticipantForm({
         p => normalizePhoneNumber(p.phone_number) === normalizedPhone
       )
       if (existingParticipant) {
-        throw new Error(`Telefonnummer bereits verwendet von: ${existingParticipant.name}`)
+        throw new Error(t('errors.phoneDuplicate', { name: existingParticipant.name }))
       }
 
       // Partner validation (defensive check, though UI prevents self-selection)
@@ -61,7 +63,7 @@ export function ParticipantForm({
       if (partnerId && partnerExclusionEnabled) {
         const selectedPartner = existingParticipants.find(p => p.id === partnerId)
         if (selectedPartner && normalizePhoneNumber(selectedPartner.phone_number) === normalizedPhone) {
-          throw new Error('Du kannst dich nicht selbst als Partner auswählen')
+          throw new Error(t('errors.selfPartner'))
         }
       }
 
@@ -73,7 +75,7 @@ export function ParticipantForm({
       setIsOrganizer(false)
       setPartnerId('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Fehler beim Hinzufügen')
+      setError(err instanceof Error ? err.message : t('errors.generic'))
     } finally {
       setLoading(false)
     }
@@ -86,14 +88,14 @@ export function ParticipantForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          Name *
+          {t('nameLabel')}
         </label>
         <input
           id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Max Mustermann"
+          placeholder={t('namePlaceholder')}
           disabled={disabled || loading}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
@@ -102,20 +104,20 @@ export function ParticipantForm({
 
       <div>
         <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-          Telefonnummer *
+          {t('phoneLabel')}
         </label>
         <input
           id="phone"
           type="tel"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="+41 79 123 45 67"
+          placeholder={t('phonePlaceholder')}
           disabled={disabled || loading}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
         />
         <p className="mt-1 text-xs text-gray-500">
-          Format: Schweizer Nummern (079...) oder internationale mit Ländercode (+41, +49, +1, etc.)
+          {t('phoneHelp')}
         </p>
       </div>
 
@@ -123,7 +125,7 @@ export function ParticipantForm({
       {partnerExclusionEnabled && availablePartners.length > 0 && (
         <div>
           <label htmlFor="partner" className="block text-sm font-medium text-gray-700 mb-1">
-            Partner (optional)
+            {t('partnerLabel')}
           </label>
           <select
             id="partner"
@@ -132,7 +134,7 @@ export function ParticipantForm({
             disabled={disabled || loading}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
           >
-            <option value="">Kein Partner</option>
+            <option value="">{t('partnerNone')}</option>
             {availablePartners.map((participant) => (
               <option key={participant.id} value={participant.id}>
                 {participant.name}
@@ -140,7 +142,7 @@ export function ParticipantForm({
             ))}
           </select>
           <p className="mt-1 text-xs text-gray-500">
-            Wähle einen Partner aus, der nicht zugelost werden soll.
+            {t('partnerHelp')}
           </p>
         </div>
       )}
@@ -159,10 +161,10 @@ export function ParticipantForm({
           <label htmlFor="isOrganizer" className="flex-1 cursor-pointer">
             <span className="block text-sm font-bold text-gray-900 flex items-center gap-2">
               <WichtelIcon name="user-check" size={16} />
-              Ich bin der Organisator
+              {t('organizerCheckbox')}
             </span>
             <span className="block text-xs text-gray-600 mt-1">
-              Als Organisator erhältst du einen direkten Link zu deiner Zuteilung (kein WhatsApp nötig)
+              {t('organizerHelp')}
             </span>
           </label>
         </div>
@@ -179,12 +181,12 @@ export function ParticipantForm({
         disabled={disabled || loading}
         className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-2 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
-        {loading ? 'Wird hinzugefügt...' : '+ Hinzufügen'}
+        {loading ? t('addingButton') : `+ ${t('addButton')}`}
       </button>
 
       {disabled && (
         <p className="text-sm text-gray-500 text-center">
-          Nach der Auslosung können keine Teilnehmer mehr hinzugefügt werden.
+          {t('disabledMessage')}
         </p>
       )}
     </form>

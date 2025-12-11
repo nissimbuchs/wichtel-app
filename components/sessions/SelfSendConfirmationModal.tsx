@@ -2,6 +2,7 @@
 
 import type { ParticipantAdmin } from '@/types/database.types'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useTranslations } from 'next-intl'
 
 interface SelfSendConfirmationModalProps {
   participant: ParticipantAdmin
@@ -16,13 +17,14 @@ export function SelfSendConfirmationModal({
   onSkip,
   onClose,
 }: SelfSendConfirmationModalProps) {
+  const t = useTranslations('whatsapp.selfSend')
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">An dich selbst senden?</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('title')}</h2>
 
         <div className="mb-4">
-          <p className="text-gray-700 mb-2">Du sendest jetzt WhatsApp an deine eigene Nummer:</p>
+          <p className="text-gray-700 mb-2">{t('message')}</p>
           <p className="font-medium text-gray-900">{participant.phone_number}</p>
         </div>
 
@@ -30,8 +32,8 @@ export function SelfSendConfirmationModal({
           <div className="flex gap-3">
             <WichtelIcon name="lightbulb" size={24} className="text-yellow-600 flex-shrink-0" />
             <div className="text-sm text-yellow-900">
-              <p className="font-semibold">Tipp:</p>
-              <p>Öffne den Link später, um zu sehen, wen du beschenkst.</p>
+              <p className="font-semibold">{t('tipLabel')}</p>
+              <p>{t('tipMessage')}</p>
             </div>
           </div>
         </div>
@@ -41,13 +43,13 @@ export function SelfSendConfirmationModal({
             onClick={onSkip}
             className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold"
           >
-            Überspringen
+            {t('skip')}
           </button>
           <button
             onClick={onConfirm}
             className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold"
           >
-            Ja, an mich senden
+            {t('confirm')}
           </button>
         </div>
       </div>

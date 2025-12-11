@@ -6,15 +6,18 @@ import { generateWhatsAppUrl, openWhatsApp } from '@/services/whatsappService'
 import { createClient } from '@/services/supabase/client'
 import { CompletionModal } from './CompletionModal'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useTranslations } from 'next-intl'
 
 interface WhatsAppListProps {
   sessionId: string
   sessionName: string
+  sessionLanguage: string
   participants: ParticipantAdmin[]
   onUpdate: () => void
 }
 
-export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }: WhatsAppListProps) {
+export function WhatsAppList({ sessionId, sessionName, sessionLanguage, participants, onUpdate }: WhatsAppListProps) {
+  const t = useTranslations('whatsapp')
   const [sentParticipants, setSentParticipants] = useState<Set<string>>(new Set())
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const supabase = createClient()
@@ -54,7 +57,8 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
     const url = generateWhatsAppUrl(
       participant,
       `${window.location.origin}/reveal/${participant.participant_token}`,
-      sessionName
+      sessionName,
+      sessionLanguage as 'de' | 'fr' | 'it' | 'en'
     )
 
     openWhatsApp(url)
@@ -93,20 +97,20 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
           <div className="flex items-center gap-3">
             <WichtelIcon name="message-square" size={48} className="text-christmas-green" />
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">WhatsApp versenden</h2>
-              <p className="text-gray-600 text-sm mt-1">Sende jedem Teilnehmer seinen persönlichen Link</p>
+              <h2 className="text-3xl font-bold text-gray-900">{t('title')}</h2>
+              <p className="text-gray-600 text-sm mt-1">{t('subtitle')}</p>
             </div>
           </div>
           <div className="flex items-center gap-6">
             {/* Versendet Counter */}
             <div className="text-right">
               <div className="text-xl font-bold text-blue-600">{sentCount}</div>
-              <div className="text-xs text-gray-600">Versendet</div>
+              <div className="text-xs text-gray-600">{t('statusSent')}</div>
             </div>
             {/* Abgerufen Counter */}
             <div className="text-right">
               <div className="text-xl font-bold text-green-600">{viewedCount}</div>
-              <div className="text-xs text-gray-600">Abgerufen</div>
+              <div className="text-xs text-gray-600">{t('statusViewed')}</div>
             </div>
             <div className="relative w-20 h-20">
               <svg className="transform -rotate-90 w-20 h-20">
@@ -143,6 +147,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
           {participants.map((participant) => {
             const isSent = sentParticipants.has(participant.id)
             const isViewed = participant.reveal_viewed_at !== null
+            const partnerName = getPartnerName(participant.partner_id)
 
             return (
               <div
@@ -177,7 +182,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       {participant.is_organizer && (
                         <span className="inline-flex items-center gap-1 bg-christmas-gold/20 text-christmas-gold-dark px-3 py-1 rounded-full text-xs font-bold">
                           <WichtelIcon name="user" size={14} />
-                          <span>Du</span>
+                          <span>{t('organizerBadge')}</span>
                         </span>
                       )}
                     </p>
@@ -186,10 +191,10 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       <span>{participant.phone_number}</span>
                     </p>
                     {/* Partner info */}
-                    {getPartnerName(participant.partner_id) && (
+                    {partnerName && (
                       <div className="mt-1 flex items-center gap-1 text-xs text-christmas-blue font-medium">
                         <WichtelIcon name="users" size={12} />
-                        <span>Partner: {getPartnerName(participant.partner_id)}</span>
+                        <span>{t('partnerInfo', { name: partnerName })}</span>
                       </div>
                     )}
                   </div>
@@ -203,7 +208,7 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                       className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center justify-center gap-2 bg-gradient-to-br from-christmas-gold via-christmas-gold to-christmas-gold-dark text-white shadow-frost-lg hover:shadow-glow-gold hover:scale-105 border border-white/20"
                     >
                       <WichtelIcon name="gift" size={16} />
-                      <span>Meine Zuteilung anzeigen</span>
+                      <span>{t('organizerButton')}</span>
                     </button>
                   ) : (
                     /* Non-organizer: WhatsApp button with status */
@@ -221,17 +226,17 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                         {isViewed ? (
                           <>
                             <WichtelIcon name="check-circle" size={16} />
-                            Abgerufen
+                            {t('viewedButton')}
                           </>
                         ) : isSent ? (
                           <>
                             <WichtelIcon name="check" size={16} />
-                            Versendet
+                            {t('sentButton')}
                           </>
                         ) : (
                           <>
                             <WichtelIcon name="message-square" size={16} />
-                            WhatsApp öffnen
+                            {t('sendButton')}
                           </>
                         )}
                       </button>
@@ -241,10 +246,10 @@ export function WhatsAppList({ sessionId, sessionName, participants, onUpdate }:
                         <button
                           onClick={() => handleSendWhatsApp(participant)}
                           className="w-full sm:w-auto px-4 py-3 rounded-xl font-bold transition-all duration-300 text-base whitespace-nowrap flex items-center justify-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300 hover:scale-105"
-                          title="Erneut senden"
+                          title={t('resendTitle')}
                         >
                           <WichtelIcon name="rotate-ccw" size={16} />
-                          <span className="sm:inline">Erneut senden</span>
+                          <span className="sm:inline">{t('resendButton')}</span>
                         </button>
                       )}
                     </>

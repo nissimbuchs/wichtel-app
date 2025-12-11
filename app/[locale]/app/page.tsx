@@ -9,8 +9,12 @@ import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useTranslations, useFormatter } from 'next-intl'
 
 export default function AppPage() {
+  const t = useTranslations('dashboard')
+  const tStatus = useTranslations('common.status')
+  const format = useFormatter()
   const { user, loading: authLoading, signOut } = useAuth()
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
@@ -70,7 +74,7 @@ export default function AppPage() {
             />
           </motion.div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
-          <p className="mt-6 text-gray-700 text-xl font-medium">Lädt...</p>
+          <p className="mt-6 text-gray-700 text-xl font-medium">{t('loading')}</p>
         </div>
       </div>
     )
@@ -102,7 +106,7 @@ export default function AppPage() {
             onClick={signOut}
             className="glass-button px-6 py-3 rounded-xl text-white hover:text-white font-semibold"
           >
-            Abmelden
+            {t('logout')}
           </button>
         </div>
       </header>
@@ -110,9 +114,9 @@ export default function AppPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Meine Wichtel-Sessions</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{t('title')}</h2>
             <p className="text-gray-600 mt-1 flex items-center gap-2">
-              Verwalte alle deine Wichtel-Veranstaltungen
+              {t('subtitle')}
               <WichtelIcon name="gift" size={20} className="text-christmas-red" />
             </p>
           </div>
@@ -128,12 +132,12 @@ export default function AppPage() {
               {showArchived ? (
                 <>
                   <WichtelIcon name="list" size={20} />
-                  Aktive anzeigen
+                  {t('showActive')}
                 </>
               ) : (
                 <>
                   <WichtelIcon name="archive" size={20} />
-                  Archiv anzeigen
+                  {t('showArchive')}
                 </>
               )}
             </button>
@@ -141,7 +145,7 @@ export default function AppPage() {
               onClick={createNewSession}
               className="w-full sm:w-auto bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white px-8 py-4 rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 text-lg border border-white/20"
             >
-              + Neue Session
+              {t('newSession')}
             </button>
           </div>
         </div>
@@ -154,20 +158,17 @@ export default function AppPage() {
               className={`mx-auto mb-6 text-christmas-red ${!showArchived ? 'animate-wiggle' : 'animate-pulse-slow'}`}
             />
             <p className="text-gray-900 text-2xl font-bold mb-3">
-              {showArchived ? 'Keine archivierten Sessions' : 'Noch keine Sessions erstellt'}
+              {showArchived ? t('empty.archived.title') : t('empty.active.title')}
             </p>
             <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
-              {showArchived
-                ? 'Du hast noch keine Sessions archiviert. Archiviere alte Sessions um deine Liste übersichtlich zu halten.'
-                : 'Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude!'
-              }
+              {showArchived ? t('empty.archived.description') : t('empty.active.description')}
             </p>
             <button
               onClick={createNewSession}
               className="bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white px-10 py-4 rounded-xl font-bold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 text-xl border border-white/20"
             >
               <WichtelIcon name="sparkles" size={24} />
-              Jetzt starten
+              {t('empty.active.action')}
             </button>
           </div>
         ) : (
@@ -185,7 +186,7 @@ export default function AppPage() {
                     </h3>
                     <p className="text-sm text-gray-500 flex items-center gap-2">
                       <WichtelIcon name="calendar" size={16} />
-                      {new Date(session.created_at).toLocaleDateString('de-DE', {
+                      {format.dateTime(new Date(session.created_at), {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric'
@@ -208,22 +209,22 @@ export default function AppPage() {
                     {session.status === 'archived' ? (
                       <>
                         <WichtelIcon name="archive" size={16} />
-                        Archiviert
+                        {tStatus('archived')}
                       </>
                     ) : session.status === 'planning' ? (
                       <>
                         <WichtelIcon name="edit" size={16} />
-                        In Planung
+                        {tStatus('planning')}
                       </>
                     ) : session.status === 'drawn' ? (
                       <>
                         <WichtelIcon name="dices" size={16} />
-                        Ausgelost
+                        {tStatus('drawn')}
                       </>
                     ) : (
                       <>
                         <WichtelIcon name="check" size={16} />
-                        Abgeschlossen
+                        {tStatus('completed')}
                       </>
                     )}
                   </span>

@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
 import { v4 as uuidv4 } from 'uuid'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function NewSessionPage() {
+  const t = useTranslations('session.new')
+  const locale = useLocale()
   const { user } = useAuth()
-  const [sessionName, setSessionName] = useState(`Wichteln ${new Date().getFullYear()}`)
+  const [sessionName, setSessionName] = useState(t('defaultName', { year: new Date().getFullYear() }))
   const [partnerExclusionEnabled, setPartnerExclusionEnabled] = useState(false)
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState('')
@@ -30,6 +33,7 @@ export default function NewSessionPage() {
         status: 'planning',
         admin_token: uuidv4(),
         partner_exclusion_enabled: partnerExclusionEnabled,
+        language: locale, // Store organizer's language for WhatsApp messages
       })
       .select()
       .single()
@@ -51,9 +55,9 @@ export default function NewSessionPage() {
             onClick={() => router.back()}
             className="text-white/90 hover:text-white mb-2 flex items-center gap-2 font-semibold transition-all hover:translate-x-1"
           >
-            ← Zurück
+            ← {t('back')}
           </button>
-          <h1 className="text-3xl font-bold text-white drop-shadow-lg">Neue Wichtel-Session</h1>
+          <h1 className="text-3xl font-bold text-white drop-shadow-lg">{t('title')}</h1>
         </div>
       </header>
 
@@ -62,19 +66,19 @@ export default function NewSessionPage() {
           <form onSubmit={handleCreateSession} className="space-y-6">
             <div>
               <label htmlFor="sessionName" className="block text-sm font-medium text-gray-700 mb-2">
-                Session-Name
+                {t('nameLabel')}
               </label>
               <input
                 id="sessionName"
                 type="text"
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
-                placeholder="z.B. Weihnachtsfeier 2024"
+                placeholder={t('namePlaceholder')}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent"
               />
               <p className="mt-2 text-sm text-gray-500">
-                Gib deiner Session einen Namen, damit du sie später leicht wiederfindest.
+                {t('nameHelp')}
               </p>
             </div>
 
@@ -89,10 +93,10 @@ export default function NewSessionPage() {
                 />
                 <label htmlFor="partnerExclusion" className="flex-1 cursor-pointer">
                   <span className="block text-base font-bold text-gray-900">
-                    Partner-Ausschluss aktivieren
+                    {t('partnerExclusion.label')}
                   </span>
                   <span className="block text-sm text-gray-600 mt-1">
-                    Verhindert, dass Partner einander zugelost werden. Du kannst beim Hinzufügen von Teilnehmern angeben, wer mit wem in einer Partnerschaft ist.
+                    {t('partnerExclusion.description')}
                   </span>
                 </label>
               </div>
@@ -109,7 +113,7 @@ export default function NewSessionPage() {
               disabled={creating}
               className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-3 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20 disabled:opacity-50 disabled:hover:scale-100"
             >
-              {creating ? 'Wird erstellt...' : 'Session erstellen'}
+              {creating ? t('creating') : t('submitButton')}
             </button>
           </form>
         </div>

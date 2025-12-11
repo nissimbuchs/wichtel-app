@@ -1,0 +1,269 @@
+{
+  "common": {
+    "buttons": {
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "back": "Zurück",
+      "close": "Schließen",
+      "confirm": "Bestätigen",
+      "loading": "Lädt...",
+      "saving": "Wird gespeichert...",
+      "sending": "Wird gesendet...",
+      "creating": "Wird erstellt...",
+      "adding": "Wird hinzugefügt..."
+    },
+    "status": {
+      "planning": "In Planung",
+      "drawn": "Ausgelost",
+      "completed": "Abgeschlossen",
+      "archived": "Archiviert",
+      "loading": "Lädt...",
+      "sent": "Versendet",
+      "viewed": "Angesehen",
+      "pending": "Ausstehend"
+    },
+    "nav": {
+      "dashboard": "Meine Sessions",
+      "logout": "Abmelden",
+      "newSession": "Neue Session"
+    }
+  },
+  "meta": {
+    "title": "Wichtel App - Anonymes Wichteln leicht gemacht",
+    "description": "Organisiere dein Wichteln in unter 5 Minuten mit garantierter Anonymität. WhatsApp-Integration, magische Reveal-Animation und garantierte Anonymität - auch für Organisatoren!",
+    "manifestName": "Wichtel App - Wichteln leicht gemacht",
+    "manifestShortName": "Wichtel App",
+    "manifestDescription": "Wichteln mit WhatsApp - garantierte Anonymität, auch für Organisatoren. In unter 5 Minuten startklar!"
+  },
+  "landing": {
+    "hero": {
+      "title": "Wichteln leicht gemacht",
+      "subtitle": "Organisiere dein Wichteln in unter 5 Minuten",
+      "cta": "Jetzt starten"
+    },
+    "features": {
+      "title": "Features",
+      "anonymity": {
+        "title": "Garantierte Anonymität",
+        "description": "auch für Organisatoren"
+      },
+      "whatsapp": {
+        "title": "WhatsApp-Integration",
+        "description": "für schnellen Versand"
+      },
+      "reveal": {
+        "title": "Magische Namen-Reveal",
+        "description": "Animation"
+      },
+      "noApp": {
+        "title": "Keine App-Installation",
+        "description": "nötig"
+      }
+    },
+    "trust": "Von Wichtel-Fans für Wichtel-Fans gemacht"
+  },
+  "auth": {
+    "login": {
+      "title": "Organisiere dein Wichteln in unter 5 Minuten!",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "deine@email.de",
+      "submitButton": "Magic Link senden",
+      "submittingButton": "Wird gesendet...",
+      "infoText": "Kein Passwort nötig! Wir senden dir einen sicheren Login-Link per E-Mail.",
+      "successMessage": "Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.\n\n⚠️ Wichtig: Öffne den Link in {browserName}, in dem du diese Seite geöffnet hast.",
+      "successMessageFallback": "diesem Browser"
+    },
+    "errors": {
+      "expiredLink": "Der Login-Link ist abgelaufen oder ungültig. Bitte fordere einen neuen Link an.",
+      "wrongBrowser": "Der Login-Link wurde in einem anderen Browser geöffnet. Bitte öffne den Link in {browserName}, in dem du ihn angefordert hast, oder fordere einen neuen Link an.",
+      "expired": "Der Login-Link ist abgelaufen. Bitte fordere einen neuen Link an.",
+      "invalid": "Der Login-Link ist ungültig. Bitte fordere einen neuen Link an.",
+      "used": "Dieser Login-Link wurde bereits verwendet. Bitte fordere einen neuen Link an."
+    }
+  },
+  "dashboard": {
+    "title": "Meine Wichtel-Sessions",
+    "subtitle": "Verwalte alle deine Wichtel-Veranstaltungen",
+    "showActive": "Aktive anzeigen",
+    "showArchive": "Archiv anzeigen",
+    "newSession": "+ Neue Session",
+    "logout": "Abmelden",
+    "loading": "Lädt...",
+    "empty": {
+      "noArchived": "Keine archivierten Sessions",
+      "noSessions": "Noch keine Sessions erstellt",
+      "archivedHelp": "Du hast noch keine Sessions archiviert. Archiviere alte Sessions um deine Liste übersichtlich zu halten.",
+      "sessionsHelp": "Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude!"
+    },
+    "sessionInfo": {
+      "sessionId": "Session-ID: {id}",
+      "participants": "{count, plural, =0 {Keine Teilnehmer} one {1 Teilnehmer} other {# Teilnehmer}}"
+    }
+  },
+  "session": {
+    "nav": {
+      "backToDashboard": "← Zurück zu allen Sessions",
+      "backToSession": "← Zurück"
+    },
+    "title": "{name}",
+    "sessionInfo": "Session-ID: {shortId}... • {participants}",
+    "actions": {
+      "duplicate": "Als Vorlage kopieren",
+      "archive": "Archivieren",
+      "restore": "Wiederherstellen",
+      "delete": "Löschen"
+    },
+    "sections": {
+      "addParticipant": "Teilnehmer hinzufügen",
+      "participants": "Teilnehmer"
+    },
+    "alerts": {
+      "noRemoveAfterDraw": "Teilnehmer können nach der Auslosung nicht mehr entfernt werden!",
+      "archiveError": "Fehler beim Archivieren der Session",
+      "namePrompt": "Bitte gib einen Namen für die neue Session ein",
+      "duplicateError": "Fehler beim Kopieren der Session",
+      "deleteError": "Fehler beim Löschen der Session"
+    },
+    "empty": {
+      "noParticipants": "Noch keine Teilnehmer hinzugefügt",
+      "help": "Füge mindestens 3 Personen hinzu"
+    },
+    "minimumRequired": "Mindestens 3 Teilnehmer benötigt für die Auslosung",
+    "modals": {
+      "duplicate": {
+        "title": "Session kopieren",
+        "label": "Session Name *",
+        "description": "Gib einen Namen für die neue Session ein. Alle Teilnehmer werden kopiert, aber es erfolgt eine neue Auslosung.",
+        "cancel": "Abbrechen",
+        "confirm": "Kopieren"
+      },
+      "delete": {
+        "title": "Session löschen",
+        "question": "Möchtest du die Session \"{name}\" wirklich löschen?",
+        "warning": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Teilnehmer und Zuteilungen werden ebenfalls gelöscht.",
+        "cancel": "Abbrechen",
+        "confirm": "Ja, löschen"
+      }
+    },
+    "new": {
+      "title": "Neue Wichtel-Session",
+      "nameLabel": "Session-Name",
+      "namePlaceholder": "z.B. Weihnachtsfeier 2024",
+      "nameHelp": "Gib deiner Session einen Namen, damit du sie später leicht wiederfindest.",
+      "partnerExclusion": "Partner-Ausschluss aktivieren",
+      "partnerExclusionHelp": "Verhindert, dass Partner einander zugelost werden. Du kannst beim Hinzufügen von Teilnehmern angeben, wer mit wem in einer Partnerschaft ist.",
+      "defaultName": "Wichteln {year}",
+      "creating": "Wird erstellt...",
+      "create": "Session erstellen"
+    },
+    "participant": {
+      "addTitle": "Teilnehmer hinzufügen",
+      "nameLabel": "Name *",
+      "namePlaceholder": "Max Mustermann",
+      "phoneLabel": "Telefonnummer *",
+      "phonePlaceholder": "+41 79 123 45 67",
+      "phoneHelp": "Format: Schweizer Nummern (079...) oder internationale mit Ländercode (+41, +49, +1, etc.)",
+      "partnerLabel": "Partner (optional)",
+      "partnerHelp": "Wähle einen Partner aus, der nicht zugelost werden soll.",
+      "partnerNone": "Kein Partner",
+      "organizerCheckbox": "Ich bin der Organisator",
+      "organizerHelp": "Als Organisator erhältst du einen direkten Link zu deiner Zuteilung (kein WhatsApp nötig)",
+      "addButton": "Hinzufügen",
+      "addingButton": "Wird hinzugefügt...",
+      "disabledMessage": "Nach der Auslosung können keine Teilnehmer mehr hinzugefügt werden.",
+      "errors": {
+        "nameRequired": "Name ist erforderlich",
+        "phoneRequired": "Telefonnummer ist erforderlich",
+        "phoneInvalid": "Ungültige Telefonnummer. Bitte gib eine internationale Nummer ein (z.B. +41 79 123 45 67)",
+        "phoneDuplicate": "Telefonnummer bereits verwendet von: {name}",
+        "selfPartner": "Du kannst dich nicht selbst als Partner auswählen",
+        "generic": "Fehler beim Hinzufügen"
+      },
+      "removeButton": "Entfernen",
+      "confirmDelete": "Wirklich {name} entfernen?",
+      "confirmDeleteWithPartner": "Wirklich {name} entfernen? Die Partnerschaft mit {partnerName} wird aufgehoben.",
+      "partnerInfo": "Partner: {name}",
+      "organizerBadge": "(Du)"
+    },
+    "draw": {
+      "buttonEnabled": "Auslosung durchführen",
+      "buttonDisabled": "Auslosung nicht möglich",
+      "modal": {
+        "title": "Auslosung durchführen?",
+        "important": "Wichtig:",
+        "info1": "Auch **DU** wirst erst beim Öffnen deines eigenen Links sehen, wen du beschenkst.",
+        "info2": "Niemand (auch nicht du als Organisator) kennt die Zuteilungen im Voraus.",
+        "partnerInfo": "Partner-Ausschluss ist aktiv: Partner werden nicht einander zugelost.",
+        "cancel": "Abbrechen",
+        "running": "Läuft...",
+        "confirm": "Verstanden, starten"
+      }
+    }
+  },
+  "whatsapp": {
+    "title": "WhatsApp versenden",
+    "subtitle": "Sende jedem Teilnehmer seinen persönlichen Link",
+    "statusSent": "Versendet",
+    "statusViewed": "Abgerufen",
+    "organizerButton": "Meine Zuteilung anzeigen",
+    "sendButton": "WhatsApp öffnen",
+    "sentButton": "Versendet",
+    "viewedButton": "Abgerufen",
+    "resendButton": "Erneut senden",
+    "resendTitle": "Erneut senden",
+    "organizerBadge": "Du",
+    "partnerInfo": "Partner: {name}",
+    "completion": {
+      "title": "Alle Nachrichten versendet!",
+      "message": "Jeder Teilnehmer (inklusive du) hat jetzt seinen persönlichen Link erhalten.",
+      "security": "Niemand kennt die Zuteilungen bis zum Öffnen des eigenen Links.",
+      "done": "Fertig"
+    },
+    "selfSend": {
+      "title": "An dich selbst senden?",
+      "message": "Du sendest jetzt WhatsApp an deine eigene Nummer:",
+      "tipLabel": "Tipp:",
+      "tipText": "Öffne den Link später, um zu sehen, wen du beschenkst.",
+      "skip": "Überspringen",
+      "confirm": "Ja, an mich senden"
+    },
+    "message": "Hallo {name}! 🎄\n\nHier ist dein Link für {sessionName}:\n{assignmentUrl}\n\nÖffne den Link, um zu sehen, wen du beschenkst! 🎁"
+  },
+  "reveal": {
+    "loading": "Lädt deine Zuteilung...",
+    "error": "Fehler",
+    "errorContact": "Bitte kontaktiere deinen Organisator für einen neuen Link.",
+    "errors": {
+      "database": "Datenbankfehler: {message}",
+      "invalidToken": "Ungültiger oder abgelaufener Link",
+      "noAssignment": "Auslosung wurde noch nicht durchgeführt",
+      "assignedNotFound": "Zugeteilte Person nicht gefunden",
+      "sessionNotFound": "Session nicht gefunden",
+      "participantsError": "Fehler beim Laden der Teilnehmer",
+      "unknown": "Unbekannter Fehler"
+    },
+    "sessionName": "{sessionName}",
+    "greeting": "Hallo {participantName}!",
+    "label": "Du beschenkst:",
+    "reminder": "Denk dran: Es bleibt geheim bis zur Weihnachtsfeier!",
+    "alreadySeen": "(Du hast diese Zuteilung bereits gesehen)",
+    "funnyNames": {
+      "santa": "🎅 Weihnachtsmann",
+      "elf": "🧝 Wichtel Willi",
+      "snowman": "☃️ Schneemann Olaf",
+      "reindeer": "🦌 Rentier Rudolph",
+      "angelElf": "🧝‍♀️ Elfe Ella",
+      "angel": "👼 Engel Gabriel",
+      "star": "🌟 Sternchen",
+      "bell": "🔔 Glöckchen"
+    }
+  },
+  "footer": {
+    "appName": "Wichtel App",
+    "tagline": "Wichteln leicht gemacht",
+    "copyright": "© 2025 by BuStokLi",
+    "message": "Made with ❤️ for the festive season • Frohe Weihnachten! 🎅",
+    "buildLabel": "Build: {buildTag}"
+  }
+}

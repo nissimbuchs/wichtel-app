@@ -19,12 +19,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="de">
-      <body>
-        <SnowfallBackground />
-        <div className="relative z-10">{children}</div>
-      </body>
-    </html>
-  );
+  return children;
 }

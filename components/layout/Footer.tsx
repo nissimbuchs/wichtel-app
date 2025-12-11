@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import packageJson from '../../package.json'
+import { getTranslations } from 'next-intl/server'
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations('footer')
   // Build info from environment variables and package.json
   const version = packageJson.version
   const commitSha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || 'dev'
@@ -21,14 +23,14 @@ export function Footer() {
               className="rounded-lg"
             />
             <div className="text-white">
-              <p className="font-bold text-lg">Wichtel App</p>
-              <p className="text-white/80 text-sm">Wichteln leicht gemacht</p>
+              <p className="font-bold text-lg">{t('appName')}</p>
+              <p className="text-white/80 text-sm">{t('tagline')}</p>
             </div>
           </div>
 
           <div className="text-center md:text-right">
             <p className="text-white/90 text-sm font-medium">
-              © 2025 by BuStokLi
+              {t('copyright')}
             </p>
             <a
               href="mailto:nissim@buchs.be"
@@ -41,10 +43,10 @@ export function Footer() {
 
         <div className="mt-6 pt-6 border-t border-white/20 text-center">
           <p className="text-white/70 text-xs">
-            Made with ❤️ for the festive season • Frohe Weihnachten! 🎅
+            {t('message')}
           </p>
           <p className="text-white/50 text-xs mt-2 font-mono">
-            Build: {buildTag}
+            {t('buildLabel')}: {buildTag}
           </p>
         </div>
       </div>

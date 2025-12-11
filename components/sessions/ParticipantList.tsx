@@ -2,6 +2,7 @@
 
 import type { ParticipantAdmin } from '@/types/database.types'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
+import { useTranslations } from 'next-intl'
 
 interface ParticipantListProps {
   participants: ParticipantAdmin[]
@@ -16,6 +17,8 @@ export function ParticipantList({
   canRemove,
   showPartnerInfo = false
 }: ParticipantListProps) {
+  const t = useTranslations('session.participant')
+
   // Helper to find partner name
   function getPartnerName(partnerId: string | null): string | null {
     if (!partnerId) return null
@@ -26,8 +29,8 @@ export function ParticipantList({
   function handleRemove(participant: ParticipantAdmin) {
     const partnerName = getPartnerName(participant.partner_id)
     const message = partnerName
-      ? `Wirklich ${participant.name} entfernen? Die Partnerschaft mit ${partnerName} wird aufgehoben.`
-      : `Wirklich ${participant.name} entfernen?`
+      ? t('confirmDeleteWithPartner', { name: participant.name, partnerName })
+      : t('confirmDelete', { name: participant.name })
 
     const confirmed = window.confirm(message)
     if (confirmed) {
@@ -56,7 +59,7 @@ export function ParticipantList({
                   {participant.is_organizer && (
                     <span className="flex items-center gap-1 text-sm">
                       <WichtelIcon name="user" size={14} />
-                      <span className="text-gray-600">(Du)</span>
+                      <span className="text-gray-600">{t('organizerBadge')}</span>
                     </span>
                   )}
                 </p>
@@ -67,7 +70,7 @@ export function ParticipantList({
               {showPartnerInfo && partnerName && (
                 <div className="mt-1 flex items-center gap-1 text-xs text-christmas-blue font-medium">
                   <WichtelIcon name="users" size={12} />
-                  <span>Partner: {partnerName}</span>
+                  <span>{t('partnerInfo', { name: partnerName })}</span>
                 </div>
               )}
             </div>
@@ -77,7 +80,7 @@ export function ParticipantList({
                 onClick={() => handleRemove(participant)}
                 className="ml-4 text-red-600 hover:text-red-800 transition font-medium text-sm"
               >
-                Entfernen
+                {t('removeButton')}
               </button>
             )}
           </div>
