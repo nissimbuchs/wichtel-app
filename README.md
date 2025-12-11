@@ -4,6 +4,7 @@ Die moderne Wichtel-App für unkompliziertes, anonymes Wichteln mit garantierter
 
 ## ✨ Features
 
+### Core Features
 - ✅ **Garantierte Anonymität**: Organisatoren können selbst teilnehmen, ohne fremde Zuteilungen zu sehen
 - ✅ **WhatsApp-Integration**: One-Click Versand mit vorausgefüllten Nachrichten
 - ✅ **Magische Reveal-Animation**: Slot-Machine-Effekt beim Öffnen des persönlichen Links
@@ -11,6 +12,14 @@ Die moderne Wichtel-App für unkompliziertes, anonymes Wichteln mit garantierter
 - ✅ **Mobile-First Design**: Optimiert für Smartphone-Nutzung
 - ✅ **Keine App-Installation**: Alles im Browser, sofort einsatzbereit
 - ✅ **Unter 5 Minuten**: Von Session-Erstellung bis Versand
+
+### Enhanced Features (v1.1.0+)
+- ✅ **Partner-Ausschlussregeln**: Paare können sich nicht gegenseitig beschenken
+- ✅ **Reveal View Tracking**: Organisatoren sehen, wer seinen Link geöffnet hat
+- ✅ **WhatsApp Resend**: Links können erneut gesendet werden
+- ✅ **Internationale Telefon-Validierung**: E.164 Format für alle Länder (CH, DE, AT, etc.)
+- ✅ **Professionelles Branding**: Einheitliches Logo-System
+- ✅ **Test Infrastructure**: Automatisierte Tests mit Vitest
 
 ## 🚀 Quick Start
 
@@ -26,11 +35,13 @@ Die App läuft auf [http://localhost:3000](http://localhost:3000)
 
 ## 🏗️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Styling**: Tailwind CSS 4
-- **Backend**: Supabase (PostgreSQL + Auth)
-- **Animation**: Framer Motion
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS 3.4
+- **Backend**: Supabase (PostgreSQL + Auth + RLS)
+- **Animation**: Framer Motion 12
 - **TypeScript**: Vollständig typsicher
+- **Testing**: Vitest + Testing Library
+- **Deployment**: Vercel (Serverless)
 
 ## 🎯 Implementation Status
 
@@ -182,6 +193,12 @@ npm run dev
 # Type Checking
 npm run type-check
 
+# Run Tests
+npm test
+
+# Test Coverage
+npm run test:coverage
+
 # Build für Production
 npm run build
 
@@ -199,4 +216,4 @@ Weitere Details in `/docs/`:
 ---
 
 **Entwickelt mit ❤️ und Claude Code** 🎄
-**Version 3.0** - Alle 24 Stories implementiert
+**Version 1.2.0** - Alle 24 Stories + Post-MVP Enhancements implementiert

@@ -81,6 +81,7 @@ sessions
 ├── name (VARCHAR)
 ├── status ('planning' | 'drawn' | 'completed' | 'archived')
 ├── admin_token (VARCHAR, unique)
+├── partner_exclusion_enabled (BOOLEAN, default false)  # v1.1.0
 └── timestamps
 
 participants
@@ -90,11 +91,16 @@ participants
 ├── phone_number (VARCHAR)
 ├── participant_token (VARCHAR, unique)
 ├── assigned_to_id (UUID, FK to participants, SET NULL)
+├── partner_id (UUID, FK to participants, SET NULL)  # v1.1.0
 ├── is_organizer (BOOLEAN)
 ├── whatsapp_sent_at (TIMESTAMP)
+├── reveal_viewed_at (TIMESTAMP)  # v1.1.0
 └── timestamps
 
-CONSTRAINT: no_self_assignment CHECK (id != assigned_to_id)
+CONSTRAINTS:
+- no_self_assignment CHECK (id != assigned_to_id)
+- no_self_partnering CHECK (id != partner_id)
+- bidirectional_partner_trigger (maintains A↔B partner relationship)
 ```
 
 **Important**: There is NO separate `organizers` table. Organizers are users in `auth.users` table, linked via `sessions.organizer_id`.
@@ -294,11 +300,13 @@ planning → drawn → completed → archived
 
 When modifying features, read these files first:
 - `/app/app/session/[id]/page.tsx` - Main session management UI
-- `/services/drawAlgorithm.ts` - Core draw logic
+- `/services/drawAlgorithm.ts` - Core draw logic (includes partner constraint validation)
 - `/app/api/draw/route.ts` - Draw persistence API
-- `/app/reveal/[token]/page.tsx` - Reveal experience
+- `/app/reveal/[token]/page.tsx` - Reveal experience with slot machine animation
 - `/types/database.types.ts` - Type definitions
+- `/services/phoneValidation.ts` - International phone number validation
 - `/docs/architecture.md` - Detailed architecture decisions
+- `/docs/prd.md` - Product requirements including post-MVP enhancements
 
 ### Critical Security Considerations
 
@@ -326,6 +334,52 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key  # Server-side only
 ```
 
+### Post-MVP Enhancements (v1.1.0 - v1.2.0)
+
+The following features were added after the initial MVP release and are fully integrated:
+
+**Partner Exclusion System (v1.1.0)**:
+- Sessions can enable partner exclusion via `partner_exclusion_enabled` flag
+- Participants can be linked via `partner_id` (bidirectional relationship)
+- Draw algorithm validates partner constraints before assignment
+- UI shows partner relationships in participant list
+- Handle edge cases: all paired, unsolvable configurations
+
+**Reveal View Tracking (v1.1.0)**:
+- Track when participants open their reveal link via `reveal_viewed_at` timestamp
+- API route `/api/reveal/track-view` bypasses RLS to set timestamp
+- Organizers see status: "Ausstehend" ⏳ or "Angesehen" ✅ with relative time
+- Auto-refresh on visibility change
+
+**WhatsApp Link Resend (v1.1.0)**:
+- "Erneut senden" button for participants who already received link
+- Status buttons are clickable to resend
+- Same `generateWhatsAppLink()` function as initial send
+- Responsive: icon-only on mobile, text on desktop
+
+**International Phone Validation (v1.2.0)**:
+- E.164 format normalization via `services/phoneValidation.ts`
+- Supports Swiss (041), German (049), Austrian (043), and other international numbers
+- Automatic formatting for WhatsApp compatibility
+- Unit tests in `services/__tests__/phoneValidation.test.ts`
+
+**Test Infrastructure (v1.2.0)**:
+- Vitest test framework configured in `vitest.config.ts`
+- Unit tests for `drawAlgorithm.ts` and `phoneValidation.ts`
+- Run with `npm test` or `npm run test:coverage`
+- Tests validate edge cases and error handling
+
+**Logo/Branding (v1.2.0)**:
+- Professional logo system replaces generic tree icons
+- Logo on login page, reveal page (header + loading), and app navigation
+- Responsive sizing (80x80px on reveal, adjusted in header)
+
+**Enhanced Slot Machine Animation (v1.0.0, optimized v1.2.0)**:
+- Framer Motion animation with popLayout mode
+- 50ms transition duration, 20px vertical movement
+- Linear easing, absolute positioning for smooth layering
+- Names randomized and rotated before final reveal
+
 ### Common Development Tasks
 
 **Add a new page**:
@@ -346,6 +400,13 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key  # Server-side only
 3. Test locally with `supabase db reset`
 4. Push to production with `supabase db push`
 5. Regenerate types with `supabase gen types typescript`
+
+**Add or modify tests**:
+1. Create test file in `services/__tests__/[service].test.ts`
+2. Use Vitest syntax: `describe()`, `it()`, `expect()`
+3. Run tests with `npm test`
+4. Check coverage with `npm run test:coverage`
+5. Tests automatically run in watch mode during development
 
 **Update email templates**:
 - Modify files in `/supabase/email-templates/`
