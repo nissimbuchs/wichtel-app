@@ -1,4 +1,5 @@
 import type { ParticipantAdmin } from '@/types/database.types'
+import { normalizePhoneNumber } from './phoneValidation'
 
 /**
  * Generates a WhatsApp deep link with pre-filled message
@@ -16,13 +17,9 @@ ${assignmentUrl}
 
 Öffne den Link, um zu sehen, wen du beschenkst! 🎁`
 
-  // Format phone number for WhatsApp
-  let phone = participant.phone_number.replace(/[^0-9]/g, '')
-
-  // If Swiss number starting with 0, replace with 41
-  if (phone.startsWith('0')) {
-    phone = '41' + phone.substring(1)
-  }
+  // Normalize phone number for WhatsApp (international E.164 format)
+  // Supports worldwide phone numbers with automatic country code detection
+  const phone = normalizePhoneNumber(participant.phone_number)
 
   // URL encode the message
   const encodedMessage = encodeURIComponent(message)

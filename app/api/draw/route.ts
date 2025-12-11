@@ -30,6 +30,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
     }
 
+    // IDEMPOTENCY CHECK: Prevent double-draw
+    const { data: session, error: sessionCheckError } = await supabaseAdmin
+      .from('sessions')
+      .select('status')
+      .eq('id', sessionId)
+      .single()
+
+    if (sessionCheckError) {
+      console.error('Session check error:', sessionCheckError)
+      return NextResponse.json(
+        { error: 'Session nicht gefunden' },
+        { status: 404 }
+      )
+    }
+
+    if (session.status === 'drawn') {
+      return NextResponse.json(
+        { error: 'Auslosung wurde bereits durchgeführt' },
+        { status: 400 }
+      )
+    }
+
+    // Validate minimum participant count
+    if (assignments.length < 3) {
+      return NextResponse.json(
+        { error: 'Mindestens 3 Teilnehmer benötigt für die Auslosung' },
+        { status: 400 }
+      )
+    }
+
     // Update all participants with their assignments using SERVICE ROLE (bypasses RLS)
     const updates = assignments.map(({ giverId, receiverId }) =>
       supabaseAdmin

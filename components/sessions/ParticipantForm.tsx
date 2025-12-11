@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import type { ParticipantAdmin } from '@/types/database.types'
+import { isValidPhoneNumber, normalizePhoneNumber } from '@/services/phoneValidation'
 
 interface ParticipantFormProps {
   onAdd: (name: string, phoneNumber: string, isOrganizer: boolean, partnerId?: string | null) => Promise<void>
@@ -40,10 +41,28 @@ export function ParticipantForm({
         throw new Error('Telefonnummer ist erforderlich')
       }
 
-      // Phone number validation (basic)
-      const phoneRegex = /^[+]?[0-9\s()-]{8,}$/
-      if (!phoneRegex.test(phoneNumber)) {
-        throw new Error('Ungültige Telefonnummer')
+      // International phone number validation
+      if (!isValidPhoneNumber(phoneNumber)) {
+        throw new Error('Ungültige Telefonnummer. Bitte gib eine internationale Nummer ein (z.B. +41 79 123 45 67)')
+      }
+
+      // Duplicate phone number check (normalize for comparison)
+      const normalizedPhone = normalizePhoneNumber(phoneNumber)
+      const existingParticipant = existingParticipants.find(
+        p => normalizePhoneNumber(p.phone_number) === normalizedPhone
+      )
+      if (existingParticipant) {
+        throw new Error(`Telefonnummer bereits verwendet von: ${existingParticipant.name}`)
+      }
+
+      // Partner validation (defensive check, though UI prevents self-selection)
+      // Note: Self-assignment is structurally impossible when adding NEW participants
+      // since they don't exist in availablePartners yet. DB constraint provides backend protection.
+      if (partnerId && partnerExclusionEnabled) {
+        const selectedPartner = existingParticipants.find(p => p.id === partnerId)
+        if (selectedPartner && normalizePhoneNumber(selectedPartner.phone_number) === normalizedPhone) {
+          throw new Error('Du kannst dich nicht selbst als Partner auswählen')
+        }
       }
 
       await onAdd(name.trim(), phoneNumber.trim(), isOrganizer, partnerId || null)
@@ -96,7 +115,7 @@ export function ParticipantForm({
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent disabled:bg-gray-100"
         />
         <p className="mt-1 text-xs text-gray-500">
-          Format: +41 oder 0041 oder Schweizer Nummer (079 123 45 67)
+          Format: Schweizer Nummern (079...) oder internationale mit Ländercode (+41, +49, +1, etc.)
         </p>
       </div>
 

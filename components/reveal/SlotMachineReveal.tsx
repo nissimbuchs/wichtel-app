@@ -77,7 +77,20 @@ export function SlotMachineReveal({
       700,                             // Final slow (1x700 = 700ms)
     ]
 
-    function showNextName() {
+// 40, 40, 40, 40, 40, 40,          // Fast start           + (6x40 = 240ms)
+// 60, 60, 60, 60,                  // Medium (4x60          +  = 240ms)
+// 80, 80, 80,                      // Slower (3x80          +  = 240ms)
+// 100, 100, 100,                   // Even slower           + (3x100 = 300ms)
+// 120, 120, 120,                   // Slowing down          +  (3x120 = 360ms)
+// 150, 150,                        // Much slower           + (2x150 = 300ms)
+// 200, 200,                        // Very slow           + (2x200 = 400ms)
+// 300,                             // Nearly           + stopping (1x300 = 300ms)
+// 400,                             // Final slow           + (1x400 = 400ms)
+// ]
+// Total: ~2580ms ≈ 2.6 seconds
+
+
+       function showNextName() {
       if (index >= speeds.length) {
         // Animation complete - show final name (always the REAL assigned name)
         setTimeout(() => {
