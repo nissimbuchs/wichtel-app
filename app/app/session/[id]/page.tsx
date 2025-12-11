@@ -150,7 +150,7 @@ export default function SessionDetailPage() {
         return
       }
 
-      // Create new session with custom name
+      // Create new session with custom name (including partner_exclusion_enabled)
       const { data: newSession, error: sessionError } = await supabase
         .from('sessions')
         .insert({
@@ -158,6 +158,7 @@ export default function SessionDetailPage() {
           name: newSessionName.trim(),
           status: 'planning',
           admin_token: uuidv4(),
+          partner_exclusion_enabled: session?.partner_exclusion_enabled ?? false,
         })
         .select()
         .single()
@@ -173,11 +174,38 @@ export default function SessionDetailPage() {
         is_organizer: p.is_organizer,
       }))
 
-      const { error: participantsError } = await supabase
+      const { data: newParticipants, error: participantsError } = await supabase
         .from('participants')
         .insert(participantsWithoutAssignments)
+        .select('id')
 
       if (participantsError) throw participantsError
+
+      // Create mapping from old participant IDs to new participant IDs
+      const idMapping = new Map<string, string>()
+      participants.forEach((oldParticipant, index) => {
+        idMapping.set(oldParticipant.id, newParticipants[index].id)
+      })
+
+      // Copy partner relationships if they exist
+      const partnerUpdates = participants
+        .filter(p => p.partner_id)
+        .map(p => ({
+          id: idMapping.get(p.id)!,
+          partner_id: idMapping.get(p.partner_id!)!,
+        }))
+
+      if (partnerUpdates.length > 0) {
+        // Update partner_id for each participant with a partner
+        for (const update of partnerUpdates) {
+          const { error: updateError } = await supabase
+            .from('participants')
+            .update({ partner_id: update.partner_id })
+            .eq('id', update.id)
+
+          if (updateError) throw updateError
+        }
+      }
 
       // Navigate to new session
       router.push(`/app/session/${newSession.id}`)
