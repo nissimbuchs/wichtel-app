@@ -1,6 +1,6 @@
 {
   "name": "wichtel-app",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Wichteln mit Whatsapp",
   "main": "index.js",
   "directories": {
