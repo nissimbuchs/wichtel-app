@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
 import type { Session } from '@/types/database.types'
 import { Footer } from '@/components/layout/Footer'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -102,12 +103,15 @@ export default function AppPage() {
             </motion.div>
             <p className="text-sm text-white/90 font-medium">{user?.email}</p>
           </div>
-          <button
-            onClick={signOut}
-            className="glass-button px-6 py-3 rounded-xl text-white hover:text-white font-semibold"
-          >
-            {t('logout')}
-          </button>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <button
+              onClick={signOut}
+              className="glass-button px-6 py-3 rounded-xl text-white hover:text-white font-semibold"
+            >
+              {t('logout')}
+            </button>
+          </div>
         </div>
       </header>
 

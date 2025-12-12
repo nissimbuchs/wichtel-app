@@ -1,36 +1,38 @@
 import createMiddleware from 'next-intl/middleware'
 import { updateSession } from './services/supabase/middleware'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest } from 'next/server'
+import { locales, defaultLocale } from './i18n'
 
-// i18n Middleware
+// i18n Middleware with cookie-based locale (no URL prefix)
 const intlMiddleware = createMiddleware({
-  locales: ['de', 'fr', 'it', 'en'],
-  defaultLocale: 'de',
-  localePrefix: 'as-needed', // /app = de, /fr/app = fr
-  localeDetection: true,
+  locales,
+  defaultLocale,
+  localePrefix: 'never', // No locale in URL path
+  localeDetection: true, // Auto-detect from browser/cookie
 })
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // Handle reveal pages specially: redirect /reveal/* to /de/reveal/*
-  if (pathname.startsWith('/reveal/') && !pathname.startsWith('/de/reveal/')) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/de${pathname}`
-    return NextResponse.redirect(url)
-  }
-
-  // Handle i18n routing first
+  // Handle i18n routing first (sets locale from cookie/browser)
   const i18nResponse = intlMiddleware(request)
 
-  // If i18n middleware returned a response (redirect/rewrite), return it
+  // If i18n middleware returned a response (e.g., setting cookies), use it
   if (i18nResponse) {
+    // Continue with Supabase auth using the i18n response
+    const supabaseResponse = await updateSession(request)
+
+    // Merge i18n cookies with Supabase response
+    if (supabaseResponse) {
+      i18nResponse.cookies.getAll().forEach(cookie => {
+        supabaseResponse.cookies.set(cookie)
+      })
+      return supabaseResponse
+    }
+
     return i18nResponse
   }
 
-  // Then handle Supabase auth with the original request
+  // If no i18n response, just handle Supabase auth
   const supabaseResponse = await updateSession(request)
-
   return supabaseResponse
 }
 
