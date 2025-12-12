@@ -66,17 +66,20 @@
   "auth": {
     "login": {
       "title": "Organisiere dein Wichteln in unter 5 Minuten!",
+      "subtitle": "Organisiere dein Wichteln in unter 5 Minuten!",
       "emailLabel": "E-Mail-Adresse",
       "emailPlaceholder": "deine@email.de",
       "submitButton": "Magic Link senden",
       "submittingButton": "Wird gesendet...",
       "infoText": "Kein Passwort nötig! Wir senden dir einen sicheren Login-Link per E-Mail.",
       "successMessage": "Prüfe deine E-Mails! Wir haben dir einen Magic Link geschickt. Der Link ist 10 Minuten gültig.\n\n⚠️ Wichtig: Öffne den Link in {browserName}, in dem du diese Seite geöffnet hast.",
-      "successMessageFallback": "diesem Browser"
+      "successMessageFallback": "diesem Browser",
+      "thisBrowser": "diesem Browser"
     },
     "errors": {
       "expiredLink": "Der Login-Link ist abgelaufen oder ungültig. Bitte fordere einen neuen Link an.",
       "wrongBrowser": "Der Login-Link wurde in einem anderen Browser geöffnet. Bitte öffne den Link in {browserName}, in dem du ihn angefordert hast, oder fordere einen neuen Link an.",
+      "sameBrowser": "Der Login-Link wurde in einem anderen Browser geöffnet. Bitte öffne den Link in {browserName}, in dem du ihn angefordert hast, oder fordere einen neuen Link an.",
       "expired": "Der Login-Link ist abgelaufen. Bitte fordere einen neuen Link an.",
       "invalid": "Der Login-Link ist ungültig. Bitte fordere einen neuen Link an.",
       "used": "Dieser Login-Link wurde bereits verwendet. Bitte fordere einen neuen Link an."
@@ -91,10 +94,15 @@
     "logout": "Abmelden",
     "loading": "Lädt...",
     "empty": {
-      "noArchived": "Keine archivierten Sessions",
-      "noSessions": "Noch keine Sessions erstellt",
-      "archivedHelp": "Du hast noch keine Sessions archiviert. Archiviere alte Sessions um deine Liste übersichtlich zu halten.",
-      "sessionsHelp": "Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude!"
+      "archived": {
+        "title": "Keine archivierten Sessions",
+        "description": "Du hast noch keine Sessions archiviert. Archiviere alte Sessions um deine Liste übersichtlich zu halten."
+      },
+      "active": {
+        "title": "Noch keine Sessions erstellt",
+        "description": "Erstelle deine erste Wichtel-Session in unter 5 Minuten und verschenke Freude!",
+        "action": "Erste Session erstellen"
+      }
     },
     "sessionInfo": {
       "sessionId": "Session-ID: {id}",
@@ -102,12 +110,14 @@
     }
   },
   "session": {
+    "loading": "Lädt...",
+    "backToSessions": "Zurück zu allen Sessions",
     "nav": {
       "backToDashboard": "← Zurück zu allen Sessions",
       "backToSession": "← Zurück"
     },
     "title": "{name}",
-    "sessionInfo": "Session-ID: {shortId}... • {participants}",
+    "sessionInfo": "Session-ID: {shortId}... • {count, plural, =0 {Keine Teilnehmer} one {1 Teilnehmer} other {# Teilnehmer}}",
     "actions": {
       "duplicate": "Als Vorlage kopieren",
       "archive": "Archivieren",
@@ -116,10 +126,14 @@
     },
     "sections": {
       "addParticipant": "Teilnehmer hinzufügen",
-      "participants": "Teilnehmer"
+      "participants": "Teilnehmer",
+      "noParticipants": "Noch keine Teilnehmer hinzugefügt",
+      "minimumParticipants": "Füge mindestens 3 Personen hinzu",
+      "drawRequirement": "Mindestens 3 Teilnehmer benötigt für die Auslosung"
     },
     "alerts": {
       "noRemoveAfterDraw": "Teilnehmer können nach der Auslosung nicht mehr entfernt werden!",
+      "cannotRemoveAfterDraw": "Teilnehmer können nach der Auslosung nicht mehr entfernt werden!",
       "archiveError": "Fehler beim Archivieren der Session",
       "namePrompt": "Bitte gib einen Namen für die neue Session ein",
       "duplicateError": "Fehler beim Kopieren der Session",
@@ -133,8 +147,10 @@
     "modals": {
       "duplicate": {
         "title": "Session kopieren",
-        "label": "Session Name *",
+        "nameLabel": "Session Name *",
         "description": "Gib einen Namen für die neue Session ein. Alle Teilnehmer werden kopiert, aber es erfolgt eine neue Auslosung.",
+        "nameRequired": "Name ist erforderlich",
+        "namePlaceholder": "z.B. Weihnachten 2025",
         "cancel": "Abbrechen",
         "confirm": "Kopieren"
       },
@@ -151,11 +167,15 @@
       "nameLabel": "Session-Name",
       "namePlaceholder": "z.B. Weihnachtsfeier 2024",
       "nameHelp": "Gib deiner Session einen Namen, damit du sie später leicht wiederfindest.",
-      "partnerExclusion": "Partner-Ausschluss aktivieren",
-      "partnerExclusionHelp": "Verhindert, dass Partner einander zugelost werden. Du kannst beim Hinzufügen von Teilnehmern angeben, wer mit wem in einer Partnerschaft ist.",
+      "back": "← Zurück",
+      "partnerExclusion": {
+        "label": "Partner-Ausschluss aktivieren",
+        "description": "Verhindert, dass Partner einander zugelost werden. Du kannst beim Hinzufügen von Teilnehmern angeben, wer mit wem in einer Partnerschaft ist."
+      },
       "defaultName": "Wichteln {year}",
       "creating": "Wird erstellt...",
-      "create": "Session erstellen"
+      "create": "Session erstellen",
+      "submitButton": "Session erstellen"
     },
     "participant": {
       "addTitle": "Teilnehmer hinzufügen",
@@ -197,7 +217,9 @@
         "partnerInfo": "Partner-Ausschluss ist aktiv: Partner werden nicht einander zugelost.",
         "cancel": "Abbrechen",
         "running": "Läuft...",
-        "confirm": "Verstanden, starten"
+        "loading": "Wird gelost...",
+        "confirm": "Verstanden, starten",
+        "error": "Fehler bei der Auslosung"
       }
     }
   },
@@ -237,10 +259,13 @@
     "errors": {
       "database": "Datenbankfehler: {message}",
       "invalidToken": "Ungültiger oder abgelaufener Link",
+      "invalidLink": "Ungültiger oder abgelaufener Link",
       "noAssignment": "Auslosung wurde noch nicht durchgeführt",
+      "notDrawn": "Auslosung wurde noch nicht durchgeführt",
       "assignedNotFound": "Zugeteilte Person nicht gefunden",
       "sessionNotFound": "Session nicht gefunden",
       "participantsError": "Fehler beim Laden der Teilnehmer",
+      "participantsLoadError": "Fehler beim Laden der Teilnehmer",
       "unknown": "Unbekannter Fehler"
     },
     "sessionName": "{sessionName}",

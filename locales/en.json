@@ -66,17 +66,20 @@
   "auth": {
     "login": {
       "title": "Organize your Secret Santa in under 5 minutes!",
+      "subtitle": "Organize your Secret Santa in under 5 minutes!",
       "emailLabel": "Email Address",
       "emailPlaceholder": "your@email.com",
       "submitButton": "Send Magic Link",
       "submittingButton": "Sending...",
       "infoText": "No password required! We'll send you a secure login link via email.",
       "successMessage": "Check your email! We've sent you a magic link. The link is valid for 10 minutes.\n\n⚠️ Important: Open the link in {browserName}, where you opened this page.",
-      "successMessageFallback": "this browser"
+      "successMessageFallback": "this browser",
+      "thisBrowser": "this browser"
     },
     "errors": {
       "expiredLink": "The login link has expired or is invalid. Please request a new link.",
       "wrongBrowser": "The login link was opened in a different browser. Please open the link in {browserName}, where you requested it, or request a new link.",
+      "sameBrowser": "The login link was opened in a different browser. Please open the link in {browserName}, where you requested it, or request a new link.",
       "expired": "The login link has expired. Please request a new link.",
       "invalid": "The login link is invalid. Please request a new link.",
       "used": "This login link has already been used. Please request a new link."
@@ -91,10 +94,15 @@
     "logout": "Logout",
     "loading": "Loading...",
     "empty": {
-      "noArchived": "No archived sessions",
-      "noSessions": "No sessions created yet",
-      "archivedHelp": "You haven't archived any sessions yet. Archive old sessions to keep your list organized.",
-      "sessionsHelp": "Create your first Secret Santa session in under 5 minutes and spread joy!"
+      "archived": {
+        "title": "No archived sessions",
+        "description": "You haven't archived any sessions yet. Archive old sessions to keep your list organized."
+      },
+      "active": {
+        "title": "No sessions created yet",
+        "description": "Create your first Secret Santa session in under 5 minutes and spread joy!",
+        "action": "Create first session"
+      }
     },
     "sessionInfo": {
       "sessionId": "Session ID: {id}",
@@ -102,12 +110,14 @@
     }
   },
   "session": {
+    "loading": "Loading...",
+    "backToSessions": "Back to all sessions",
     "nav": {
       "backToDashboard": "← Back to All Sessions",
       "backToSession": "← Back"
     },
     "title": "{name}",
-    "sessionInfo": "Session ID: {shortId}... • {participants}",
+    "sessionInfo": "Session ID: {shortId}... • {count, plural, =0 {No participants} one {1 participant} other {# participants}}",
     "actions": {
       "duplicate": "Copy as Template",
       "archive": "Archive",
@@ -116,10 +126,14 @@
     },
     "sections": {
       "addParticipant": "Add Participant",
-      "participants": "Participants"
+      "participants": "Participants",
+      "noParticipants": "No participants added yet",
+      "minimumParticipants": "Add at least 3 people",
+      "drawRequirement": "At least 3 participants required for the draw"
     },
     "alerts": {
       "noRemoveAfterDraw": "Participants cannot be removed after the draw!",
+      "cannotRemoveAfterDraw": "Participants cannot be removed after the draw!",
       "archiveError": "Error archiving session",
       "namePrompt": "Please enter a name for the new session",
       "duplicateError": "Error copying session",
@@ -133,8 +147,10 @@
     "modals": {
       "duplicate": {
         "title": "Copy Session",
-        "label": "Session Name *",
+        "nameLabel": "Session Name *",
         "description": "Enter a name for the new session. All participants will be copied, but a new draw will be performed.",
+        "nameRequired": "Name is required",
+        "namePlaceholder": "e.g. Christmas 2025",
         "cancel": "Cancel",
         "confirm": "Copy"
       },
@@ -151,11 +167,15 @@
       "nameLabel": "Session Name",
       "namePlaceholder": "e.g. Christmas Party 2024",
       "nameHelp": "Give your session a name so you can easily find it later.",
-      "partnerExclusion": "Enable Partner Exclusion",
-      "partnerExclusionHelp": "Prevents partners from being drawn for each other. You can specify who is partnered when adding participants.",
+      "back": "← Back",
+      "partnerExclusion": {
+        "label": "Enable Partner Exclusion",
+        "description": "Prevents partners from being drawn for each other. You can specify who is partnered when adding participants."
+      },
       "defaultName": "Secret Santa {year}",
       "creating": "Creating...",
-      "create": "Create Session"
+      "create": "Create Session",
+      "submitButton": "Create Session"
     },
     "participant": {
       "addTitle": "Add Participant",
@@ -197,7 +217,9 @@
         "partnerInfo": "Partner exclusion is active: partners will not be drawn for each other.",
         "cancel": "Cancel",
         "running": "Running...",
-        "confirm": "Understood, Start"
+        "loading": "Running draw...",
+        "confirm": "Understood, Start",
+        "error": "Error during draw"
       }
     }
   },
@@ -237,10 +259,13 @@
     "errors": {
       "database": "Database error: {message}",
       "invalidToken": "Invalid or expired link",
+      "invalidLink": "Invalid or expired link",
       "noAssignment": "Draw has not been performed yet",
+      "notDrawn": "Draw has not been performed yet",
       "assignedNotFound": "Assigned person not found",
       "sessionNotFound": "Session not found",
       "participantsError": "Error loading participants",
+      "participantsLoadError": "Error loading participants",
       "unknown": "Unknown error"
     },
     "sessionName": "{sessionName}",

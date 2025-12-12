@@ -70,8 +70,9 @@ export default function AppPage() {
               src="/logo-icon.png"
               alt="Wichtel App"
               width={80}
-              height={80}
+              height={0}
               className="animate-bounce-slow drop-shadow-lg"
+              style={{ height: 'auto', width: 'auto' }}
             />
           </motion.div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
@@ -97,8 +98,9 @@ export default function AppPage() {
                 src="/logo-full.png"
                 alt="Wichtel App"
                 width={80}
-                height={80}
+                height={0}
                 className="drop-shadow-lg mb-2"
+                style={{ height: 'auto', width: 'auto' }}
               />
             </motion.div>
             <p className="text-sm text-white/90 font-medium">{user?.email}</p>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magic Link - Wichteln</title>
+  <title>Magic Link - Wichtel App</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa;">
   <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8f9fa; padding: 40px 20px;">
@@ -21,39 +21,139 @@
           <!-- Content -->
           <tr>
             <td style="padding: 40px 30px;">
-              <h2 style="margin: 0 0 20px 0; color: #212529; font-size: 24px; font-weight: 600;">Willkommen zurück!</h2>
-              <p style="margin: 0 0 30px 0; color: #495057; font-size: 16px; line-height: 1.6;">
-                Klicke auf den Button unten, um dich anzumelden:
-              </p>
 
-              <!-- Button -->
-              <table role="presentation" style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td align="center" style="padding: 0 0 30px 0;">
-                    <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #c92a2a 0%, #fa5252 100%); background-color: #c92a2a; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 18px;">Jetzt anmelden</a>
-                  </td>
-                </tr>
-              </table>
+              {{ if eq .Data.language "fr" }}
+                <!-- French -->
+                <h2 style="margin: 0 0 20px 0; color: #212529; font-size: 24px; font-weight: 600;">Bienvenue !</h2>
+                <p style="margin: 0 0 30px 0; color: #495057; font-size: 16px; line-height: 1.6;">
+                  Cliquez sur le bouton ci-dessous pour vous connecter :
+                </p>
 
-              <!-- Alternative Link -->
-              <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px; line-height: 1.5;">
-                Oder kopiere diesen Link in deinen Browser:
-              </p>
-              <p style="margin: 0; background-color: #f8f9fa; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #495057; font-family: 'Courier New', monospace;">
-                {{ .ConfirmationURL }}
-              </p>
+                <!-- Button -->
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 0 0 30px 0;">
+                      <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #c92a2a 0%, #fa5252 100%); background-color: #c92a2a; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 18px;">Se connecter</a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Alternative Link -->
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px; line-height: 1.5;">
+                  Ou copiez ce lien dans votre navigateur :
+                </p>
+                <p style="margin: 0; background-color: #f8f9fa; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #495057; font-family: 'Courier New', monospace;">
+                  {{ .ConfirmationURL }}
+                </p>
+
+              {{ else if eq .Data.language "it" }}
+                <!-- Italian -->
+                <h2 style="margin: 0 0 20px 0; color: #212529; font-size: 24px; font-weight: 600;">Benvenuto!</h2>
+                <p style="margin: 0 0 30px 0; color: #495057; font-size: 16px; line-height: 1.6;">
+                  Clicca sul pulsante qui sotto per accedere:
+                </p>
+
+                <!-- Button -->
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 0 0 30px 0;">
+                      <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #c92a2a 0%, #fa5252 100%); background-color: #c92a2a; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 18px;">Accedi ora</a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Alternative Link -->
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px; line-height: 1.5;">
+                  Oppure copia questo link nel tuo browser:
+                </p>
+                <p style="margin: 0; background-color: #f8f9fa; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #495057; font-family: 'Courier New', monospace;">
+                  {{ .ConfirmationURL }}
+                </p>
+
+              {{ else if eq .Data.language "en" }}
+                <!-- English -->
+                <h2 style="margin: 0 0 20px 0; color: #212529; font-size: 24px; font-weight: 600;">Welcome back!</h2>
+                <p style="margin: 0 0 30px 0; color: #495057; font-size: 16px; line-height: 1.6;">
+                  Click the button below to sign in:
+                </p>
+
+                <!-- Button -->
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 0 0 30px 0;">
+                      <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #c92a2a 0%, #fa5252 100%); background-color: #c92a2a; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 18px;">Sign in now</a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Alternative Link -->
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px; line-height: 1.5;">
+                  Or copy this link into your browser:
+                </p>
+                <p style="margin: 0; background-color: #f8f9fa; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #495057; font-family: 'Courier New', monospace;">
+                  {{ .ConfirmationURL }}
+                </p>
+
+              {{ else }}
+                <!-- German (default) -->
+                <h2 style="margin: 0 0 20px 0; color: #212529; font-size: 24px; font-weight: 600;">Willkommen zurück!</h2>
+                <p style="margin: 0 0 30px 0; color: #495057; font-size: 16px; line-height: 1.6;">
+                  Klicke auf den Button unten, um dich anzumelden:
+                </p>
+
+                <!-- Button -->
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td align="center" style="padding: 0 0 30px 0;">
+                      <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #c92a2a 0%, #fa5252 100%); background-color: #c92a2a; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 18px;">Jetzt anmelden</a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Alternative Link -->
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px; line-height: 1.5;">
+                  Oder kopiere diesen Link in deinen Browser:
+                </p>
+                <p style="margin: 0; background-color: #f8f9fa; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #495057; font-family: 'Courier New', monospace;">
+                  {{ .ConfirmationURL }}
+                </p>
+              {{ end }}
+
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
             <td style="padding: 30px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
-              <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
-                🔒 Diese Email wurde von wichteln.buchs.be gesendet
-              </p>
-              <p style="margin: 0; color: #868e96; font-size: 12px;">
-                Wenn du diese Email nicht angefordert hast, kannst du sie ignorieren.
-              </p>
+              {{ if eq .Data.language "fr" }}
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
+                  🔒 Cet e-mail a été envoyé par wichteln.buchs.be
+                </p>
+                <p style="margin: 0; color: #868e96; font-size: 12px;">
+                  Si vous n'avez pas demandé cet e-mail, vous pouvez l'ignorer.
+                </p>
+              {{ else if eq .Data.language "it" }}
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
+                  🔒 Questa e-mail è stata inviata da wichteln.buchs.be
+                </p>
+                <p style="margin: 0; color: #868e96; font-size: 12px;">
+                  Se non hai richiesto questa e-mail, puoi ignorarla.
+                </p>
+              {{ else if eq .Data.language "en" }}
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
+                  🔒 This email was sent by wichteln.buchs.be
+                </p>
+                <p style="margin: 0; color: #868e96; font-size: 12px;">
+                  If you didn't request this email, you can safely ignore it.
+                </p>
+              {{ else }}
+                <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
+                  🔒 Diese Email wurde von wichteln.buchs.be gesendet
+                </p>
+                <p style="margin: 0; color: #868e96; font-size: 12px;">
+                  Wenn du diese Email nicht angefordert hast, kannst du sie ignorieren.
+                </p>
+              {{ end }}
             </td>
           </tr>
 

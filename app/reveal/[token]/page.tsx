@@ -115,8 +115,9 @@ export default function RevealPage() {
             src="/logo-icon.png"
             alt="Wichtel App"
             width={80}
-            height={80}
+            height={0}
             className="animate-bounce-slow mx-auto mb-4 drop-shadow-lg"
+            style={{ height: 'auto', width: 'auto' }}
           />
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mx-auto mb-4"></div>
           <p className="text-xl">{t('loading')}</p>

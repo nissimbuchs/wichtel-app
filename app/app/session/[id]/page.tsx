@@ -13,11 +13,12 @@ import { WhatsAppList } from '@/components/sessions/WhatsAppList'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function SessionDetailPage() {
   const t = useTranslations('session')
   const tStatus = useTranslations('common.status')
+  const locale = useLocale()
   const params = useParams()
   const sessionId = params.id as string
   const { user } = useAuth()
@@ -245,8 +246,9 @@ export default function SessionDetailPage() {
               src="/logo-icon.png"
               alt="Wichtel App"
               width={80}
-              height={80}
+              height={0}
               className="animate-bounce-slow drop-shadow-lg"
+              style={{ height: 'auto', width: 'auto' }}
             />
           </div>
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-christmas-red border-t-transparent mx-auto"></div>
@@ -273,7 +275,10 @@ export default function SessionDetailPage() {
             <div>
               <h1 className="text-4xl font-bold text-white drop-shadow-lg">{session.name}</h1>
               <p className="text-sm text-white/80 mt-2 font-medium">
-                {t('sessionInfo', { id: session.id.substring(0, 8), count: participants.length })}
+                {t('sessionInfo', {
+                  shortId: session.id.substring(0, 8),
+                  count: participants.length
+                })}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -346,7 +351,7 @@ export default function SessionDetailPage() {
           <WhatsAppList
             sessionId={sessionId}
             sessionName={session.name}
-            sessionLanguage={session.language}
+            sessionLanguage={locale}
             participants={participants}
             onUpdate={loadParticipants}
           />

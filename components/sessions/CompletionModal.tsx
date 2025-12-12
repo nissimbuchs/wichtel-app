@@ -26,7 +26,7 @@ export function CompletionModal({ onClose }: CompletionModalProps) {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex gap-3">
               <WichtelIcon name="lock" size={20} className="flex-shrink-0 text-blue-600" />
-              <p className="text-sm">{t('privacy')}</p>
+              <p className="text-sm">{t('security')}</p>
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ export function CompletionModal({ onClose }: CompletionModalProps) {
           onClick={onClose}
           className="w-full bg-gradient-to-br from-christmas-red via-christmas-red to-christmas-red-dark text-white py-3 rounded-lg font-semibold shadow-frost-lg hover:shadow-glow-red hover:scale-105 transition-all duration-300 border border-white/20"
         >
-          {t('close')}
+          {t('done')}
         </button>
       </div>
     </div>

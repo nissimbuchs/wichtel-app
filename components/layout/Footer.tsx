@@ -1,10 +1,12 @@
+'use client'
+
 import Image from 'next/image'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import packageJson from '../../package.json'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
-export async function Footer() {
-  const t = await getTranslations('footer')
+export function Footer() {
+  const t = useTranslations('footer')
   // Build info from environment variables and package.json
   const version = packageJson.version
   const commitSha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || 'dev'
@@ -19,8 +21,9 @@ export async function Footer() {
               src="/logo-icon.png"
               alt="Wichtel App Logo"
               width={48}
-              height={48}
+              height={50}
               className="rounded-lg"
+              style={{ width: '48px', height: 'auto' }}
             />
             <div className="text-white">
               <p className="font-bold text-lg">{t('appName')}</p>
@@ -46,7 +49,7 @@ export async function Footer() {
             {t('message')}
           </p>
           <p className="text-white/50 text-xs mt-2 font-mono">
-            {t('buildLabel')}: {buildTag}
+            {t('buildLabel', { buildTag })}
           </p>
         </div>
       </div>

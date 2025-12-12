@@ -33,9 +33,10 @@ export default async function Home() {
               src="/logo-full.png"
               alt="Wichtel App"
               width={400}
-              height={200}
+              height={0}
               priority
               className="drop-shadow-2xl hover:scale-105 transition-transform duration-300"
+              style={{ height: 'auto', width: 'auto' }}
             />
           </div>
           <p className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 text-christmas-snow">

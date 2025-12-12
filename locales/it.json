@@ -66,17 +66,20 @@
   "auth": {
     "login": {
       "title": "Organizza il tuo Secret Santa in meno di 5 minuti!",
+      "subtitle": "Organizza il tuo Secret Santa in meno di 5 minuti!",
       "emailLabel": "Indirizzo e-mail",
       "emailPlaceholder": "tuo@email.it",
       "submitButton": "Invia link magico",
       "submittingButton": "Invio...",
       "infoText": "Nessuna password necessaria! Ti inviamo un link di accesso sicuro via e-mail.",
       "successMessage": "Controlla la tua e-mail! Ti abbiamo inviato un link magico. Il link è valido per 10 minuti.\n\n⚠️ Importante: Apri il link in {browserName}, in cui hai aperto questa pagina.",
-      "successMessageFallback": "questo browser"
+      "successMessageFallback": "questo browser",
+      "thisBrowser": "questo browser"
     },
     "errors": {
       "expiredLink": "Il link di accesso è scaduto o non è valido. Richiedi un nuovo link.",
       "wrongBrowser": "Il link di accesso è stato aperto in un altro browser. Apri il link in {browserName}, in cui l'hai richiesto, o richiedi un nuovo link.",
+      "sameBrowser": "Il link di accesso è stato aperto in un altro browser. Apri il link in {browserName}, in cui l'hai richiesto, o richiedi un nuovo link.",
       "expired": "Il link di accesso è scaduto. Richiedi un nuovo link.",
       "invalid": "Il link di accesso non è valido. Richiedi un nuovo link.",
       "used": "Questo link di accesso è già stato utilizzato. Richiedi un nuovo link."
@@ -91,10 +94,15 @@
     "logout": "Disconnetti",
     "loading": "Caricamento...",
     "empty": {
-      "noArchived": "Nessuna sessione archiviata",
-      "noSessions": "Nessuna sessione creata",
-      "archivedHelp": "Non hai ancora archiviato sessioni. Archivia le vecchie sessioni per mantenere la tua lista organizzata.",
-      "sessionsHelp": "Crea la tua prima sessione Secret Santa in meno di 5 minuti e regala gioia!"
+      "archived": {
+        "title": "Nessuna sessione archiviata",
+        "description": "Non hai ancora archiviato sessioni. Archivia le vecchie sessioni per mantenere la tua lista organizzata."
+      },
+      "active": {
+        "title": "Nessuna sessione creata",
+        "description": "Crea la tua prima sessione Secret Santa in meno di 5 minuti e regala gioia!",
+        "action": "Crea prima sessione"
+      }
     },
     "sessionInfo": {
       "sessionId": "ID sessione: {id}",
@@ -102,12 +110,14 @@
     }
   },
   "session": {
+    "loading": "Caricamento...",
+    "backToSessions": "Torna a tutte le sessioni",
     "nav": {
       "backToDashboard": "← Torna a tutte le sessioni",
       "backToSession": "← Indietro"
     },
     "title": "{name}",
-    "sessionInfo": "ID sessione: {shortId}... • {participants}",
+    "sessionInfo": "ID sessione: {shortId}... • {count, plural, =0 {Nessun partecipante} one {1 partecipante} other {# partecipanti}}",
     "actions": {
       "duplicate": "Copia come modello",
       "archive": "Archivia",
@@ -116,10 +126,14 @@
     },
     "sections": {
       "addParticipant": "Aggiungi partecipante",
-      "participants": "Partecipanti"
+      "participants": "Partecipanti",
+      "noParticipants": "Nessun partecipante aggiunto",
+      "minimumParticipants": "Aggiungi almeno 3 persone",
+      "drawRequirement": "Almeno 3 partecipanti richiesti per il sorteggio"
     },
     "alerts": {
       "noRemoveAfterDraw": "I partecipanti non possono più essere rimossi dopo il sorteggio!",
+      "cannotRemoveAfterDraw": "I partecipanti non possono più essere rimossi dopo il sorteggio!",
       "archiveError": "Errore durante l'archiviazione della sessione",
       "namePrompt": "Inserisci un nome per la nuova sessione",
       "duplicateError": "Errore durante la copia della sessione",
@@ -133,8 +147,10 @@
     "modals": {
       "duplicate": {
         "title": "Copia sessione",
-        "label": "Nome sessione *",
+        "nameLabel": "Nome sessione *",
         "description": "Inserisci un nome per la nuova sessione. Tutti i partecipanti verranno copiati, ma verrà effettuato un nuovo sorteggio.",
+        "nameRequired": "Il nome è obbligatorio",
+        "namePlaceholder": "es. Natale 2025",
         "cancel": "Annulla",
         "confirm": "Copia"
       },
@@ -151,11 +167,15 @@
       "nameLabel": "Nome sessione",
       "namePlaceholder": "es. Festa di Natale 2024",
       "nameHelp": "Dai un nome alla tua sessione per trovarla facilmente in seguito.",
-      "partnerExclusion": "Attiva esclusione partner",
-      "partnerExclusionHelp": "Impedisce che i partner vengano sorteggiati l'uno per l'altro. Puoi indicare chi è in coppia quando aggiungi i partecipanti.",
+      "back": "← Indietro",
+      "partnerExclusion": {
+        "label": "Attiva esclusione partner",
+        "description": "Impedisce che i partner vengano sorteggiati l'uno per l'altro. Puoi indicare chi è in coppia quando aggiungi i partecipanti."
+      },
       "defaultName": "Secret Santa {year}",
       "creating": "Creazione...",
-      "create": "Crea sessione"
+      "create": "Crea sessione",
+      "submitButton": "Crea sessione"
     },
     "participant": {
       "addTitle": "Aggiungi partecipante",
@@ -197,7 +217,9 @@
         "partnerInfo": "L'esclusione partner è attiva: i partner non verranno sorteggiati l'uno per l'altro.",
         "cancel": "Annulla",
         "running": "In corso...",
-        "confirm": "Capito, inizia"
+        "loading": "Sorteggio in corso...",
+        "confirm": "Capito, inizia",
+        "error": "Errore durante il sorteggio"
       }
     }
   },
@@ -237,10 +259,13 @@
     "errors": {
       "database": "Errore database: {message}",
       "invalidToken": "Link non valido o scaduto",
+      "invalidLink": "Link non valido o scaduto",
       "noAssignment": "Il sorteggio non è ancora stato effettuato",
+      "notDrawn": "Il sorteggio non è ancora stato effettuato",
       "assignedNotFound": "Persona assegnata non trovata",
       "sessionNotFound": "Sessione non trovata",
       "participantsError": "Errore durante il caricamento dei partecipanti",
+      "participantsLoadError": "Errore durante il caricamento dei partecipanti",
       "unknown": "Errore sconosciuto"
     },
     "sessionName": "{sessionName}",

@@ -6,11 +6,12 @@ import { createClient } from '@/services/supabase/client'
 import { Footer } from '@/components/layout/Footer'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 function LoginForm() {
   const t = useTranslations('auth.login')
   const tErrors = useTranslations('auth.errors')
+  const locale = useLocale()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -75,6 +76,9 @@ function LoginForm() {
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
         shouldCreateUser: true,
+        data: {
+          language: locale, // Store language in user metadata for email template
+        },
       },
     })
 
@@ -112,9 +116,10 @@ function LoginForm() {
               src="/logo-full.png"
               alt="Wichtel App"
               width={300}
-              height={150}
+              height={0}
               priority
               className="drop-shadow-2xl hover:scale-105 transition-transform duration-300"
+              style={{ height: 'auto', width: 'auto' }}
             />
           </div>
           <p className="text-gray-600 text-lg flex items-center justify-center gap-2">

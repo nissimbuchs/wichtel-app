@@ -126,9 +126,10 @@ export function SlotMachineReveal({
           src="/logo-full.png"
           alt="Wichtel App"
           width={80}
-          height={80}
+          height={0}
           priority
           className="drop-shadow-2xl"
+          style={{ height: 'auto', width: 'auto' }}
         />
       </motion.div>
 
