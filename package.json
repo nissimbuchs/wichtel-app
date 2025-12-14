@@ -17,11 +17,11 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "db:push:test": "cp .env.test .env.local && supabase db push",
-    "db:push:prod": "cp .env.production .env.local && supabase db push",
+    "db:push:test": "cp .env.test .env.local && supabase link --project-ref ltcntzxhboympudllfdx && supabase db push",
+    "db:push:prod": "cp .env.production .env.local && supabase link --project-ref yipiqauorprdzfkucxud && supabase db push",
     "db:reset:test": "cp .env.test .env.local && supabase db reset",
-    "types:generate:test": "cp .env.test .env.local && supabase gen types typescript --local > types/database.types.ts",
-    "types:generate:prod": "cp .env.production .env.local && supabase gen types typescript --local > types/database.types.ts"
+    "types:generate:test": "supabase link --project-ref ltcntzxhboympudllfdx && supabase gen types typescript --linked > types/database.types.ts",
+    "types:generate:prod": "supabase link --project-ref yipiqauorprdzfkucxud && supabase gen types typescript --linked > types/database.types.ts"
   },
   "repository": {
     "type": "git",
