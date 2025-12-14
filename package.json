@@ -8,13 +8,20 @@
   },
   "scripts": {
     "dev": "next dev",
+    "dev:test": "cp .env.test .env.local && next dev",
+    "dev:prod": "cp .env.production .env.local && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "db:push:test": "cp .env.test .env.local && supabase db push",
+    "db:push:prod": "cp .env.production .env.local && supabase db push",
+    "db:reset:test": "cp .env.test .env.local && supabase db reset",
+    "types:generate:test": "cp .env.test .env.local && supabase gen types typescript --local > types/database.types.ts",
+    "types:generate:prod": "cp .env.production .env.local && supabase gen types typescript --local > types/database.types.ts"
   },
   "repository": {
     "type": "git",

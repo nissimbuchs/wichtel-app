@@ -8,6 +8,11 @@
 .env*.local
 .env
 
+# Keep .env.test and .env.production for deployment documentation
+# But add them to .gitignore for security (use Vercel env vars instead)
+.env.test
+.env.production
+
 # Supabase
 .supabase
 .vercel

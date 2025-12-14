@@ -74,86 +74,156 @@ Multi-Layer Defense Strategy:
 
 ## 🌍 Production Deployment
 
+### Deployment-Strategie
+
+**Zwei-Umgebungs-Setup:**
+- **TEST** (Preview): Separate Supabase-Instanz für Development & Testing
+- **PROD** (Main): Production Supabase-Instanz für Live-Betrieb
+
 ### Voraussetzungen
 
-1. **Supabase Project**
-   - Erstelle ein kostenloses Supabase-Projekt auf [supabase.com](https://supabase.com)
-   - Region: Frankfurt (eu-central-1) empfohlen für Deutschland
+1. **Zwei Supabase Projects**
+   - **TEST**: Für Development/Preview (z.B. `wichtel-app-test`)
+   - **PROD**: Für Production (z.B. `wichtel-app`)
+   - Erstelle beide auf [supabase.com](https://supabase.com)
+   - Region: Frankfurt (eu-central-1) empfohlen für Deutschland/Schweiz
 
 2. **Vercel Account**
    - Kostenloser Account auf [vercel.com](https://vercel.com)
+   - GitHub Integration aktivieren
 
-### Deployment-Schritte
+### Setup-Schritte
 
-#### 1. Supabase Setup
+#### 1. Supabase Setup (TEST & PROD)
 
 ```bash
-# Supabase CLI installieren (falls noch nicht vorhanden)
+# Supabase CLI installieren
 npm install -g supabase
 
 # Login
 supabase login
 
-# Link zu deinem Projekt
-supabase link --project-ref YOUR_PROJECT_REF
+# Für TEST-Datenbank
+npm run db:push:test
 
-# Migrations ausführen
-supabase db push
+# Für PROD-Datenbank
+npm run db:push:prod
 ```
 
 Oder manuell in Supabase Dashboard:
 - SQL Editor öffnen
-- Migrations aus `/supabase/migrations/` ausführen
+- Migrations aus `/supabase/migrations/` ausführen (für beide Projekte)
 
-#### 2. Environment Variables
+#### 2. Environment Files (Lokal)
 
-Erstelle eine `.env.local` Datei mit deinen Supabase-Credentials:
+Erstelle `.env.test` und `.env.production` mit deinen Supabase-Credentials:
 
+**`.env.test`** (TEST Environment):
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+NEXT_PUBLIC_SUPABASE_URL=https://[test-project-ref].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[test-anon-key]
+SUPABASE_SERVICE_ROLE_KEY=[test-service-role-key]
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+DATABASE_URL=postgresql://postgres:[password]@db.[test-project-ref].supabase.co:5432/postgres
 ```
 
-Diese Werte findest du in Supabase Dashboard → Settings → API
+**`.env.production`** (PROD Environment):
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://[prod-project-ref].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[prod-anon-key]
+SUPABASE_SERVICE_ROLE_KEY=[prod-service-role-key]
+NEXT_PUBLIC_SITE_URL=https://wichteln.your-domain.com
+DATABASE_URL=postgresql://postgres:[password]@db.[prod-project-ref].supabase.co:5432/postgres
+```
+
+**⚠️ WICHTIG:** Diese Dateien sind in `.gitignore` - nicht committen!
 
 #### 3. Vercel Deployment
 
-**Option A: GitHub Integration (Empfohlen)**
+**GitHub Integration (Empfohlen)**
 
-1. Push Code zu GitHub Repository
-2. Gehe zu [vercel.com/new](https://vercel.com/new)
-3. Importiere dein GitHub Repository
-4. Füge Environment Variables hinzu:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-5. Deploy!
+1. **Repository Setup**:
+   ```bash
+   git push origin main
+   ```
 
-**Option B: Vercel CLI**
+2. **Vercel Project Import**:
+   - Gehe zu [vercel.com/new](https://vercel.com/new)
+   - Importiere dein GitHub Repository
 
-```bash
-# Vercel CLI installieren
-npm install -g vercel
+3. **Environment Variables konfigurieren**:
 
-# Deployment durchführen
-vercel --prod
+   **Production (main branch only):**
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=[PROD URL]
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=[PROD anon key]
+   SUPABASE_SERVICE_ROLE_KEY=[PROD service role key]
+   NEXT_PUBLIC_SITE_URL=https://wichteln.your-domain.com
+   ```
 
-# Environment Variables setzen (wird beim ersten Deploy gefragt)
-```
+   **Preview (all other branches):**
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=[TEST URL]
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=[TEST anon key]
+   SUPABASE_SERVICE_ROLE_KEY=[TEST service role key]
+   NEXT_PUBLIC_SITE_URL=[auto-generated preview URL]
+   ```
+
+4. **Deploy!**
 
 #### 4. Post-Deployment
 
-1. **Custom Domain** (optional):
+1. **Custom Domain**:
    - Vercel Dashboard → Settings → Domains
-   - Füge deine Domain hinzu (z.B. `wichteln.deine-domain.de`)
+   - Füge deine Domain hinzu (z.B. `wichteln.buchs.be`)
 
-2. **Supabase Auth Redirect URLs**:
-   - Supabase Dashboard → Authentication → URL Configuration
-   - Füge hinzu: `https://deine-domain.vercel.app/auth/callback`
+2. **Supabase Auth Redirect URLs** (beide Projekte):
+   - **PROD**: `https://wichteln.your-domain.com/auth/callback`
+   - **TEST**: `https://[preview-url].vercel.app/auth/callback`
 
 3. **Testing**:
-   - Erstelle Test-Session
-   - Teste WhatsApp-Links
-   - Teste Reveal-Animation
+   - **TEST**: Test auf Preview-Deployment
+   - **PROD**: Smoke-Test nach Production-Deploy
+
+### Development Workflow
+
+```bash
+# 1. Feature-Branch erstellen
+git checkout -b feature/my-feature
+
+# 2. Lokal gegen TEST entwickeln
+npm run dev:test
+
+# 3. Push → Vercel Preview Deployment (gegen TEST DB)
+git push origin feature/my-feature
+
+# 4. PR zu main → Review & Merge
+
+# 5. Main deployment → Production (gegen PROD DB)
+# Automatisch nach Merge
+```
+
+### Database Migration Workflow
+
+```bash
+# 1. Test lokal mit TEST DB
+npm run dev:test
+
+# 2. Migration zu TEST DB pushen
+npm run db:push:test
+
+# 3. Types regenerieren
+npm run types:generate:test
+
+# 4. Testen auf Preview
+git push origin feature/my-feature
+
+# 5. Nach Merge: Migration zu PROD
+npm run db:push:prod
+npm run types:generate:prod
+```
+
+**⚠️ CRITICAL**: Nie Migrationen direkt zu PROD pushen - immer zuerst auf TEST testen!
 
 ### Build Validierung
 

@@ -10,25 +10,140 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Development
 ```bash
-npm run dev        # Start development server on localhost:3000
-npm run build      # Build for production (validates types and build output)
-npm start          # Run production build locally
-npm run lint       # Run ESLint checks
+# Local Development (default: uses .env.local if exists, otherwise .env)
+npm run dev          # Start development server on localhost:3000
+
+# Local Development with specific environment
+npm run dev:test     # Run with TEST environment (.env.test → .env.local)
+npm run dev:prod     # Run with PROD environment (.env.production → .env.local)
+
+# Build & Lint
+npm run build        # Build for production (same build for all environments)
+npm start            # Run production build locally
+npm run lint         # Run ESLint checks
 ```
 
 ### Database Management
 ```bash
 # Using Supabase CLI (requires installation: npm install -g supabase)
+
+# TEST Database Operations
+npm run db:push:test        # Apply migrations to TEST database
+npm run db:reset:test       # Reset TEST database with migrations
+npm run types:generate:test # Generate TypeScript types from TEST schema
+
+# PRODUCTION Database Operations
+npm run db:push:prod        # Apply migrations to PROD database
+npm run types:generate:prod # Generate TypeScript types from PROD schema
+
+# Manual Supabase CLI (if needed)
 supabase login
 supabase link --project-ref YOUR_PROJECT_REF
-supabase db push                    # Apply migrations to remote database
-supabase db reset                   # Reset local database with migrations
-supabase gen types typescript       # Regenerate TypeScript types from schema
+supabase db push            # Apply migrations to linked database
+supabase gen types typescript --local > types/database.types.ts
 ```
 
 ### Testing
-- No automated tests currently implemented
-- Manual testing workflow: Create session → Add participants → Run draw → Test WhatsApp links → Test reveal page
+```bash
+npm test              # Run unit tests once
+npm run test:watch    # Run tests in watch mode
+npm run test:ui       # Run tests with UI
+npm run test:coverage # Run tests with coverage report
+```
+
+**Manual E2E Testing Workflow**:
+1. Create session → Add participants → Run draw
+2. Test WhatsApp links → Test reveal page
+3. Test partner exclusion → Test session duplication
+
+## Development & Deployment Workflow
+
+### Environment Setup
+
+**Two Supabase Projects:**
+- **TEST** (wichtel-app-test): `ltcntzxhboympudllfdx` - For preview/development
+- **PROD** (wichtel-app): `yipiqauorprdzfkucxud` - For production
+
+**Environment Files:**
+- `.env.test` - TEST environment variables (not committed, add to Vercel manually)
+- `.env.production` - PROD environment variables (not committed, add to Vercel manually)
+- `.env.local` - Local override (gitignored, copied from .env.test or .env.production)
+
+### Git Workflow
+
+```bash
+# 1. Development: Work on preview branch
+git checkout -b feature/my-feature
+# ... make changes ...
+git add .
+git commit -m "feat: My feature"
+git push origin feature/my-feature
+
+# 2. Preview Deployment: Push triggers Vercel preview deploy
+# Vercel automatically uses TEST environment variables for non-main branches
+
+# 3. Production: Create PR to main
+gh pr create --base main --head feature/my-feature
+# Review → Approve → Merge
+
+# 4. Production Deployment: Merge triggers Vercel production deploy
+# Vercel automatically uses PROD environment variables for main branch
+```
+
+### Vercel Configuration
+
+**Branch Configuration:**
+- **main** branch → Production deployment (uses PROD env vars)
+- **All other branches** → Preview deployment (uses TEST env vars)
+
+**Environment Variables (configured in Vercel dashboard):**
+
+**Production (main branch):**
+```
+NEXT_PUBLIC_SUPABASE_URL=https://yipiqauorprdzfkucxud.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[PROD anon key]
+SUPABASE_SERVICE_ROLE_KEY=[PROD service role key]
+NEXT_PUBLIC_SITE_URL=https://wichteln.buchs.be
+```
+
+**Preview (all other branches):**
+```
+NEXT_PUBLIC_SUPABASE_URL=https://ltcntzxhboympudllfdx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[TEST anon key]
+SUPABASE_SERVICE_ROLE_KEY=[TEST service role key]
+NEXT_PUBLIC_SITE_URL=[auto-generated preview URL]
+```
+
+### Database Migration Workflow
+
+**Always test migrations on TEST first:**
+
+```bash
+# 1. Create migration locally
+npm run dev:test
+# ... test locally with TEST database ...
+
+# 2. Apply to TEST database
+npm run db:push:test
+
+# 3. Regenerate types from TEST
+npm run types:generate:test
+
+# 4. Test on preview deployment
+git push origin feature/my-feature
+# ... verify on Vercel preview ...
+
+# 5. After PR merge, apply to PROD
+git checkout main
+git pull
+npm run db:push:prod
+npm run types:generate:prod
+git add types/database.types.ts
+git commit -m "chore: Update database types for production"
+git push origin main
+```
+
+**CRITICAL**: Never push migrations to PROD before testing on TEST!
 
 ## Architecture Overview
 
@@ -327,12 +442,33 @@ When modifying features, read these files first:
 
 ### Environment Variables
 
-Required in `.env.local`:
+**Local Development:**
+
+For local development, copy the appropriate environment file:
+```bash
+# For testing with TEST database
+npm run dev:test    # Copies .env.test → .env.local
+
+# For testing with PROD database (use with caution!)
+npm run dev:prod    # Copies .env.production → .env.local
+```
+
+**Required Variables** (in `.env.test` and `.env.production`):
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://[project-ref].supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key  # Server-side only
+NEXT_PUBLIC_SITE_URL=https://your-domain.com  # or http://localhost:3000 for local
+DATABASE_URL=postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres
 ```
+
+**Vercel Deployment:**
+
+Environment variables are configured in Vercel dashboard:
+- **Production** (main branch): Uses PROD Supabase project
+- **Preview** (all other branches): Uses TEST Supabase project
+
+See "Development & Deployment Workflow" section above for details.
 
 ### Post-MVP Enhancements (v1.1.0 - v1.2.0)
 
