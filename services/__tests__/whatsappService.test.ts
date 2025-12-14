@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { generateWhatsAppUrl, openWhatsApp } from '../whatsappService'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 
 describe('WhatsApp Service', () => {
   describe('generateWhatsAppUrl', () => {

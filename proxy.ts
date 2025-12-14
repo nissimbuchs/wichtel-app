@@ -11,7 +11,7 @@ const intlMiddleware = createMiddleware({
   localeDetection: true, // Auto-detect from browser/cookie
 })
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Handle i18n routing first (sets locale from cookie/browser)
   const i18nResponse = intlMiddleware(request)
 

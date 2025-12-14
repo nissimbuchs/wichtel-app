@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
-import type { Session } from '@/types/database.types'
+import type { Session } from '@/types'
 import { Footer } from '@/components/layout/Footer'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
@@ -192,7 +192,7 @@ export default function AppPage() {
                     </h3>
                     <p className="text-sm text-gray-500 flex items-center gap-2">
                       <WichtelIcon name="calendar" size={16} />
-                      {format.dateTime(new Date(session.created_at), {
+                      {format.dateTime(new Date(session.created_at || new Date()), {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric'

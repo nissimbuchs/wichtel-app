@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 // @ts-ignore - We're importing internal functions for testing
 import { performDraw } from '../drawAlgorithm'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 
 // Simple derangement validator for testing
 function isValidDerangement(assignments: Array<{ giverId: string; receiverId: string }>): boolean {
