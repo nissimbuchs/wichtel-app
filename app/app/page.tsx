@@ -84,35 +84,69 @@ export default function AppPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
-      <header className="relative bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
+      <header className="relative z-50 bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
         <div className="texture-overlay" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
-          <div>
-            <motion.div
-              layoutId="wichtel-logo"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src="/logo-full.png"
-                alt="Wichtel App"
-                width={80}
-                height={0}
-                className="drop-shadow-lg mb-2"
-                style={{ height: 'auto', width: 'auto' }}
-              />
-            </motion.div>
-            <p className="text-sm text-white/90 font-medium">{user?.email}</p>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+          {/* Mobile: Stack layout */}
+          <div className="flex flex-col gap-3 sm:hidden">
+            <div className="flex justify-between items-center">
+              <motion.div
+                layoutId="wichtel-logo"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="shrink-0"
+              >
+                <Image
+                  src="/logo-full.png"
+                  alt="Wichtel App"
+                  width={60}
+                  height={40}
+                  className="drop-shadow-lg h-auto"
+                />
+              </motion.div>
+              <div className="flex items-center gap-2">
+                <LanguageSwitcher />
+                <button
+                  onClick={signOut}
+                  className="glass-button px-4 py-2 rounded-xl text-white hover:text-white font-semibold text-sm"
+                >
+                  {t('logout')}
+                </button>
+              </div>
+            </div>
+            <p className="text-xs text-white/90 font-medium truncate">{user?.email}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher />
-            <button
-              onClick={signOut}
-              className="glass-button px-6 py-3 rounded-xl text-white hover:text-white font-semibold"
-            >
-              {t('logout')}
-            </button>
+
+          {/* Desktop: Horizontal layout */}
+          <div className="hidden sm:flex justify-between items-center">
+            <div>
+              <motion.div
+                layoutId="wichtel-logo"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Image
+                  src="/logo-full.png"
+                  alt="Wichtel App"
+                  width={80}
+                  height={0}
+                  className="drop-shadow-lg mb-2"
+                  style={{ height: 'auto', width: 'auto' }}
+                />
+              </motion.div>
+              <p className="text-sm text-white/90 font-medium">{user?.email}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+              <button
+                onClick={signOut}
+                className="glass-button px-6 py-3 rounded-xl text-white hover:text-white font-semibold"
+              >
+                {t('logout')}
+              </button>
+            </div>
           </div>
         </div>
       </header>
