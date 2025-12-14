@@ -1,6 +1,6 @@
 'use client'
 
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import { useTranslations } from 'next-intl'
 

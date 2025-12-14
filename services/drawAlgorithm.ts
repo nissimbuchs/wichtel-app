@@ -1,5 +1,5 @@
 import { createClient } from './supabase/client'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 
 /**
  * Validates that partner constraints don't make a solution impossible

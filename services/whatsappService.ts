@@ -1,4 +1,4 @@
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 import { normalizePhoneNumber } from './phoneValidation'
 
 // Import translation messages

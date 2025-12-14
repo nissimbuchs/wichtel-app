@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 import { isValidPhoneNumber, normalizePhoneNumber } from '@/services/phoneValidation'
 import { useTranslations } from 'next-intl'
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
-import type { Session, ParticipantAdmin } from '@/types/database.types'
+import type { Session, ParticipantAdmin } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 import { ParticipantList } from '@/components/sessions/ParticipantList'
 import { ParticipantForm } from '@/components/sessions/ParticipantForm'
@@ -70,7 +70,7 @@ export default function SessionDetailPage() {
     // CRITICAL: Do NOT select assigned_to_id to preserve anonymity
     const { data, error } = await supabase
       .from('participants')
-      .select('id, name, phone_number, participant_token, is_organizer, whatsapp_sent_at, reveal_viewed_at, partner_id, created_at')
+      .select('id, name, phone_number, participant_token, session_id, is_organizer, whatsapp_sent_at, reveal_viewed_at, partner_id, created_at, updated_at')
       .eq('session_id', sessionId)
       .order('created_at', { ascending: true })
 
@@ -369,7 +369,7 @@ export default function SessionDetailPage() {
                   onAdd={handleAddParticipant}
                   disabled={session.status !== 'planning'}
                   hasOrganizer={participants.some(p => p.is_organizer)}
-                  partnerExclusionEnabled={session.partner_exclusion_enabled}
+                  partnerExclusionEnabled={session.partner_exclusion_enabled ?? undefined}
                   existingParticipants={participants}
                 />
               </div>
@@ -406,7 +406,7 @@ export default function SessionDetailPage() {
                     participants={participants}
                     onRemove={handleRemoveParticipant}
                     canRemove={session.status === 'planning'}
-                    showPartnerInfo={session.partner_exclusion_enabled}
+                    showPartnerInfo={session.partner_exclusion_enabled ?? undefined}
                   />
                 )}
               </div>
@@ -418,7 +418,7 @@ export default function SessionDetailPage() {
                     sessionId={sessionId}
                     participants={participants}
                     canDraw={canDraw}
-                    partnerExclusionEnabled={session.partner_exclusion_enabled}
+                    partnerExclusionEnabled={session.partner_exclusion_enabled ?? false}
                     onDrawComplete={() => {
                       loadSession()
                       loadParticipants()

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/services/supabase/client'
-import type { Session } from '@/types/database.types'
+import type { Session } from '@/types'
 import { Footer } from '@/components/layout/Footer'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
@@ -84,7 +84,7 @@ export default function AppPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-christmas-snow via-white to-christmas-ice">
-      <header className="relative bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
+      <header className="relative z-50 bg-gradient-to-r from-christmas-red/90 to-christmas-red-light/90 backdrop-blur-lg shadow-frost-lg border-b border-white/20">
         <div className="texture-overlay" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
           <div>
@@ -192,7 +192,7 @@ export default function AppPage() {
                     </h3>
                     <p className="text-sm text-gray-500 flex items-center gap-2">
                       <WichtelIcon name="calendar" size={16} />
-                      {format.dateTime(new Date(session.created_at), {
+                      {format.dateTime(new Date(session.created_at || new Date()), {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric'

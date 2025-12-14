@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 import { performDraw } from '@/services/drawAlgorithm'
 import { WichtelIcon } from '@/components/icons/WichtelIcon'
 import { useTranslations } from 'next-intl'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { ParticipantAdmin } from '@/types/database.types'
+import type { ParticipantAdmin } from '@/types'
 import { generateWhatsAppUrl, openWhatsApp } from '@/services/whatsappService'
 import { createClient } from '@/services/supabase/client'
 import { CompletionModal } from './CompletionModal'
